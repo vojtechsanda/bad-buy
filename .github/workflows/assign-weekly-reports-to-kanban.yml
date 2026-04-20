@@ -8,7 +8,7 @@ on:
 
 permissions:
   issues: read
-  project: write
+  repository-projects: write
 
 jobs:
   assign-to-project:
@@ -255,5 +255,5 @@ PYEOF
 
       - name: Run assignment script
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PROJECT_TOKEN || secrets.GH_PROJECT_TOKEN || secrets.PERSONAL_ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
         run: python3 /tmp/assign_to_kanban.py

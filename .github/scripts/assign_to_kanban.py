@@ -240,11 +240,16 @@ def main():
             fail_count += 1
             continue
 
-        # Find matching sprint: issue start date falls within sprint date range
+        # Find matching sprint: any overlap between issue dates and sprint dates
         matching_sprint = None
         for iteration in all_iterations:
             sprint_start, sprint_end = parse_sprint_dates(iteration)
-            if sprint_start <= issue_start <= sprint_end or sprint_start <= issue_end <= sprint_end:
+            overlaps = (
+                sprint_start <= issue_start <= sprint_end
+                or sprint_start <= issue_end <= sprint_end
+                or (issue_start <= sprint_start and issue_end >= sprint_end)
+            )
+            if overlaps:
                 matching_sprint = iteration
                 break
 

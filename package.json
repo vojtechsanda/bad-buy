@@ -11,7 +11,8 @@
     "lint": "expo lint",
     "build:web": "expo export -p web",
     "build:android": "expo export -p android",
-    "build:ios": "expo export -p ios"
+    "build:ios": "expo export -p ios",
+    "prepare": "husky"
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^7.15.5",
@@ -53,5 +54,9 @@
     "typescript": "~5.9.2"
   },
   "private": true,
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@10.33.0",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,md}": "prettier --write",
+    "*.{js,jsx,ts,tsx}": "eslint --fix"
+  }
 }

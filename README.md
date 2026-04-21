@@ -10,7 +10,15 @@ Master your money by turning impulsive buys into conscious choices.
    pnpm install
    ```
 
-2. Start the app
+2. Set up Git hooks
+
+   ```bash
+   pnpm prepare
+   ```
+
+   This installs Husky Git hooks. On `pre-commit`, `lint-staged` runs Prettier and ESLint on staged files. On `commit-msg`, `commitlint` checks that your commit message follows the project's conventions.
+
+3. Start the app
 
    ```bash
    pnpm start

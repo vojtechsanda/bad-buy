@@ -114,6 +114,9 @@ importers:
       lint-staged:
         specifier: ^16.4.0
         version: 16.4.0
+      metro-cache:
+        specifier: ^0.84.3
+        version: 0.84.3
       prettier:
         specifier: ^3.8.3
         version: 3.8.3
@@ -3341,6 +3344,10 @@ packages:
     resolution: {integrity: sha512-DpvZE32feNkqfZkI4Fic7YI/Kw8QP9wdl1rC4YKPrA77wQbI9vXbxjmfkCT/EGwBTFOPKqvIXo+H3BNe93YyiQ==}
     engines: {node: '>=20.19.4'}
 
+  metro-cache@0.84.3:
+    resolution: {integrity: sha512-0QElxwLaHqLZf+Xqio8QrjVbuXP/8sJfQBGSPiITlKDVXrVLefuzYVSH9Sj+QL6lrPj2gYZd/iwQh1yZuVKnLA==}
+    engines: {node: ^20.19.4 || ^22.13.0 || ^24.3.0 || >= 25.0.0}
+
   metro-config@0.83.6:
     resolution: {integrity: sha512-G5622400uNtnAMlppEA5zkFAZltEf7DSGhOu09BkisCxOlVMWfdosD/oPyh4f2YVQsc1MBYyp4w6OzbExTYarg==}
     engines: {node: '>=20.19.4'}
@@ -3348,6 +3355,10 @@ packages:
   metro-core@0.83.6:
     resolution: {integrity: sha512-l+yQ2fuIgR//wszUlMrrAa9+Z+kbKazd0QOh0VQY7jC4ghb7yZBBSla/UMYRBZZ6fPg9IM+wD3+h+37a5f9etw==}
     engines: {node: '>=20.19.4'}
+
+  metro-core@0.84.3:
+    resolution: {integrity: sha512-cc0pvAa80ai1nDmqqz0P59a+0ZqCZ/YHU/3jEekZL6spFnYDfX8iDLdn9FR6kX+67rmzKxHNrbrSRFLX2AYocw==}
+    engines: {node: ^20.19.4 || ^22.13.0 || ^24.3.0 || >= 25.0.0}
 
   metro-file-map@0.83.6:
     resolution: {integrity: sha512-Jg3oN604C7GWbQwFAUXt8KsbMXeKfsxbZ5HFy4XFM3ggTS+ja9QgUmq9B613kgXv3G4M6rwiI6cvh9TRly4x3w==}
@@ -3360,6 +3371,10 @@ packages:
   metro-resolver@0.83.6:
     resolution: {integrity: sha512-lAwR/FsT1uJ5iCt4AIsN3boKfJ88aN8bjvDT5FwBS0tKeKw4/sbdSTWlFxc7W/MUTN5RekJ3nQkJRIWsvs28tA==}
     engines: {node: '>=20.19.4'}
+
+  metro-resolver@0.84.3:
+    resolution: {integrity: sha512-pjEzGDtoM8DTHAIPK/9u9ZxszEiuRohYUVImWvgbnB91V4gqYJpQcoEYUugf2NIm1lrX5HNu0OvNqWmPBnGYjA==}
+    engines: {node: ^20.19.4 || ^22.13.0 || ^24.3.0 || >= 25.0.0}
 
   metro-runtime@0.83.6:
     resolution: {integrity: sha512-WQPua1G2VgYbwRn6vSKxOhTX7CFbSf/JdUu6Nd8bZnPXckOf7HQ2y51NXNQHoEsiuawathrkzL8pBhv+zgZFmg==}
@@ -8412,6 +8427,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  metro-cache@0.84.3:
+    dependencies:
+      exponential-backoff: 3.1.3
+      flow-enums-runtime: 0.0.6
+      https-proxy-agent: 7.0.6
+      metro-core: 0.84.3
+    transitivePeerDependencies:
+      - supports-color
+
   metro-config@0.83.6:
     dependencies:
       connect: 3.7.0
@@ -8433,6 +8457,12 @@ snapshots:
       lodash.throttle: 4.1.1
       metro-resolver: 0.83.6
 
+  metro-core@0.84.3:
+    dependencies:
+      flow-enums-runtime: 0.0.6
+      lodash.throttle: 4.1.1
+      metro-resolver: 0.84.3
+
   metro-file-map@0.83.6:
     dependencies:
       debug: 4.4.3
@@ -8453,6 +8483,10 @@ snapshots:
       terser: 5.46.1
 
   metro-resolver@0.83.6:
+    dependencies:
+      flow-enums-runtime: 0.0.6
+
+  metro-resolver@0.84.3:
     dependencies:
       flow-enums-runtime: 0.0.6
 

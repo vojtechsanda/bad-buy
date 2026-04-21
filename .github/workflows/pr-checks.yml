@@ -2,13 +2,53 @@ name: PR Checks
 
 on:
   pull_request:
-    branches:
-      - main
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches: ['main']
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  placeholder:
+  check_prettier:
+    name: Prettier
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     steps:
-      - run: echo "PR Checks - to be implemented"
-      - run: echo "Don't forget to update 'PR requirements' ruleset and check 'Require status checks to pass'"
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm prettier --check .
+
+  check_eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+
+  build_web:
+    name: Build Web (PR Check)
+    runs-on: ubuntu-latest
+    needs: [check_prettier, check_eslint]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build:web

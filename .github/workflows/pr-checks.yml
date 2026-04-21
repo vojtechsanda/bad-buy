@@ -11,8 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check_prettier:
-    name: Prettier
+  analyze_code:
+    name: Code Analysis
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
@@ -23,26 +23,15 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm prettier --check .
-
-  check_eslint:
-    name: ESLint
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
+      - name: Prettier
+        run: pnpm prettier --check .
+      - name: ESLint
+        run: pnpm lint
 
   build_web:
-    name: Build Web (PR Check)
+    name: Build Web
     runs-on: ubuntu-latest
-    needs: [check_prettier, check_eslint]
+    needs: [analyze_code]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

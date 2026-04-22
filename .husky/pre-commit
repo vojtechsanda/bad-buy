@@ -1,1 +1,13 @@
-pnpm lint-staged
+#!/bin/bash
+
+pnpm lint-staged || exit 1
+
+echo -ne "\e[93m❯\e[0m Checking project versions..."
+
+if OUTPUT=$(node "./scripts/check-project-versions.js" 2>&1); then
+    echo -e "\r\e[32m✔\e[0m Checking project versions... \033[K"
+else
+    echo -e "\r\e[31m✖\e[0m Checking project versions... \033[K"
+    echo "$OUTPUT"
+    exit 1
+fi

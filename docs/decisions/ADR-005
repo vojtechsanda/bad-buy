@@ -1,0 +1,165 @@
+# ADR-005: UI Framework & Component Library Selection
+
+| Field        | Value                      |
+| ------------ | -------------------------- |
+| **Status**   | Proposed                   |
+| **Author**   | @minotavi11                |
+| **Date**     | 2026-04-20                 |
+| **Decision** | NativeWind + Gluestack UI v3 |
+
+## 1. Context
+
+With React Native + Expo selected as the mobile framework (ADR-002), we need a consistent approach to styling and a component library. The team has strong web frontend experience, meaning familiarity with utility-class CSS (Tailwind) and component-first libraries (shadcn/ui). We need tooling that minimizes the mental shift from web to mobile and lets us build a polished, consistent UI quickly within our 2-month timeline.
+
+### Constraints
+
+- **Timeline:** Less than 2 months — no room for learning entirely new styling paradigms.
+- **Team Skills:** Strong Tailwind/web CSS familiarity; prior shadcn/ui experience.
+- **Tech Stack:** React Native with Expo (Managed Workflow), Supabase backend.
+- **UX Goal:** Playful, consistent interface with reusable components and smooth theming.
+
+## 2. Considered Options
+
+The React Native ecosystem provides a list of varied options, we considered the following:
+
+- **Styling Frameworks:** StyleSheet API (built-in), NativeWind, Styled Components / Emotion
+- **Component Libraries:** React Native Paper / React Native Elements, React Native Reusables, Gluestack UI v3
+
+### 2.1 Styling Frameworks
+
+#### 2.1.1 StyleSheet API (React Native built-in)
+
+**Pros:**
+- Zero dependencies, always up to date.
+- Maximum flexibility.
+
+**Cons:**
+- Verbose and repetitive — no utility classes, every style is a named object.
+- No design token system out of the box.
+- Large context switch for a team used to Tailwind.
+
+**Verdict:** Too slow for our timeline given team familiarity with utility-class workflows.
+
+#### 2.1.2 Styled Components / Emotion
+
+**Pros:**
+- Familiar CSS-in-JS pattern for web developers.
+- Component-scoped styles.
+
+**Cons:**
+- Runtime overhead — styles are computed at render time, not ideal for animations.
+- No utility-class system; still requires writing custom styles for everything.
+- Adds complexity without strong upside over NativeWind for this team.
+
+**Verdict:** Adds a dependency without leveraging the team's existing Tailwind muscle memory.
+
+#### 2.1.3 NativeWind ✅ Selected (Styling)
+
+**Pros:**
+- Brings Tailwind CSS utility classes to React Native — directly leverages existing team knowledge.
+- Compile-time: classes are processed at build time, no runtime CSS overhead.
+- Consistent design tokens (spacing, color, typography) out of the box via `tailwind.config.js`.
+- Works seamlessly with Expo and supports dark mode via Tailwind's `dark:` variant.
+- Same mental model as web Tailwind — near-zero learning curve for the team.
+
+**Cons:**
+- Not all Tailwind classes map 1:1 to React Native (e.g., some layout/display properties behave differently).
+- Debugging can occasionally be confusing when a class silently has no effect on mobile.
+
+**Verdict:** Best fit — maximizes Tailwind knowledge transfer, minimal overhead, integrates cleanly with Expo.
+
+### 2.2 UI Component Libraries
+
+#### 2.2.1 React Native Paper / React Native Elements
+
+**Pros:**
+- Mature, well-documented component libraries.
+- Material Design (Paper) or neutral (Elements) component sets.
+
+**Cons:**
+- Opinionated visual style that fights against custom theming.
+- Not built to pair with NativeWind — styling overrides become a constant battle.
+- The team has no prior experience with either library.
+
+**Verdict:** Poor fit with NativeWind; heavy theming overhead works against our timeline.
+
+#### 2.2.2 React Native Reusables
+
+**Pros:**
+- Directly mirrors the shadcn/ui model — components are copied into the project, not imported from a package.
+- Full ownership, no version lock-in.
+- Team already knows shadcn/ui patterns from web projects, meaning components are immediately recognizable.
+- Built specifically to work with NativeWind — no styling conflicts.
+- Free and open source.
+- Components are unstyled primitives by default, making custom theming straightforward.
+
+**Cons:**
+- Smaller ecosystem and community than React Native Paper.
+- Fewer ready-made components than more established libraries — some may need to be built from scratch.
+- Copy-paste model means updates to upstream components must be manually applied.
+
+**Verdict:** Strong contender due to shadcn/ui familiarity, but loses out to Gluestack on coverage, reliability, and ease of use.
+
+#### 2.2.3 Gluestack UI v3 ✅ Selected (Component Library)
+
+**Pros:**
+- **Larger library** — broader component coverage out of the box means less building from scratch during a tight timeline.
+- **Better naming conventions** — component and prop names are more intuitive and straightforward than Reusables, reducing time spent reading docs.
+- **Easier to use** — CLI-first workflow, clearer documentation, and more community examples make day-to-day development faster.
+- **Company-backed reliability** — maintained by GeekyAnts, not a solo developer; lower risk of abandonment and consistent Expo SDK alignment.
+- NativeWind-native — no styling conflicts.
+- Universal — same components work across React Native and Next.js, enabling future web support.
+- Strong accessibility defaults out of the box.
+
+**Cons:**
+- Component APIs are close to shadcn/ui but not identical — minor convention differences.
+- CLI does not yet support Windows — requires manual installation on Windows machines.
+
+## 3. Decision
+
+We choose NativeWind for styling and Gluestack UI v3 as our component library.
+
+The decision is driven by team familiarity and the tight timeline. Both tools are direct mobile analogues of technologies the team already uses on the web (Tailwind CSS and shadcn/ui), meaning productive output from day one with minimal onboarding friction. In conclusion, the NativeWind + Gluestack UI pairing has the following advantages: naming conventions, ease of use, larger library, company backing — making it the best fit for our project.
+
+## 4. Risks and Mitigation
+
+### R1: Tailwind class parity gaps
+
+|                |                                                                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **Risk**       | Some Tailwind utility classes have no React Native equivalent or behave differently (e.g., `display`, `position`, certain flexbox nuances). |
+| **Likelihood** | High                                                                                                                                     |
+| **Impact**     | Low                                                                                                                                      |
+| **Mitigation** | Treat discrepancies as expected; fall back to inline `style` prop or `StyleSheet` for edge cases.                                        |
+
+### R2: Gluestack UI component coverage
+
+|                |                                                                                                                                    |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **Risk**       | A needed component may not exist in the library and requires building from scratch.                                                |
+| **Likelihood** | Low                                                                                                                                |
+| **Impact**     | Medium                                                                                                                             |
+| **Mitigation** | Audit required components early. For missing ones, build with NativeWind + RN primitives following the same copy-paste pattern.    |
+
+### R3: Manual upstream updates
+
+|                |                                                                                                                              |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **Risk**       | Gluestack UI follows the shadcn copy-paste model — upstream fixes/improvements must be manually applied.                     |
+| **Likelihood** | Low                                                                                                                          |
+| **Impact**     | Low                                                                                                                          |
+| **Mitigation** | Acceptable for a 1-month build. Revisit only if a critical bug fix is needed from upstream.                                  |
+
+## 5. Consequences
+
+**Positive:**
+- Near-zero styling learning curve — team writes Tailwind classes as on the web.
+- Consistent design tokens across the app via a single `tailwind.config.js`.
+- Component library that visually and structurally matches the team's shadcn/ui mental model.
+- NativeWind + Gluestack UI v3 pairing is architecturally coherent — no styling conflicts.
+- Dark mode support available out of the box.
+- Easy to learn, easy to use, easy to ship, flexible.
+
+**Negative:**
+- Not all Tailwind classes work on mobile — occasional fallback to native StyleSheet required.
+- Copy-paste component model means more files in the project and manual maintenance responsibility.

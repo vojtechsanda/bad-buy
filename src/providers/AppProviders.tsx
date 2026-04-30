@@ -1,8 +1,8 @@
 import { GluestackUIProvider } from '@providers/gluestack-ui-provider';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 type AppProvidersProps = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export function AppProviders({ children }: AppProvidersProps) {

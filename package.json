@@ -12,7 +12,8 @@
     "build:web": "expo export -p web",
     "build:android": "expo export -p android",
     "build:ios": "expo export -p ios",
-    "prepare": "husky"
+    "prepare": "husky",
+    "gluestack-add": "pnpm dlx gluestack-ui add --path ./src/shared/components/ui"
   },
   "dependencies": {
     "@expo/html-elements": "^0.10.1",
@@ -56,6 +57,7 @@
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^9.39.4",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "prettier-plugin-tailwindcss": "^0.5.11",
     "@types/react": "~19.2.2",
     "babel-plugin-module-resolver": "^5.0.0",
     "eslint": "^9.39.4",

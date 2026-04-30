@@ -1,6 +1,5 @@
+import { Button, ButtonText } from '@shared/components/ui/button';
 import { StyleSheet, View } from 'react-native';
-
-import { Button, ButtonText } from '@/components/ui/button';
 
 export default function Index() {
   return (
@@ -11,7 +10,7 @@ export default function Index() {
         size="md"
         action="primary"
         onPress={() => alert('Why did you click me?')}>
-        <ButtonText>{"Hey! Don't Click me Please!"}</ButtonText>
+        <ButtonText>{"Hello! Don't Click me Please!"}</ButtonText>
       </Button>
     </View>
   );

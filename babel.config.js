@@ -7,11 +7,14 @@ module.exports = function (api) {
       [
         'module-resolver',
         {
-          root: ['./'],
-
+          root: ['./src'],
           alias: {
-            '@': './',
-            'tailwind.config': './tailwind.config.js',
+            '@app': './src/app',
+            '@features': './src/features',
+            '@providers': './src/providers',
+            '@shared': './src/shared',
+            '@assets': './assets',
+            '@example': './example/src',
           },
         },
       ],

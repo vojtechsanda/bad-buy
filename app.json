@@ -8,9 +8,11 @@
     "scheme": "badbuy",
     "userInterfaceStyle": "automatic",
     "ios": {
+      "bundleIdentifier": "app.badbuy.mobile",
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "app.badbuy.mobile",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -34,11 +36,21 @@
             "imageWidth": 76
           }
         }
-      ]
+      ],
+      "expo-font",
+      "expo-image",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "fc2b4c3f-e2ef-489e-88bb-fa5bd011065d"
+      }
+    },
+    "owner": "minotaurthegreat11"
   }
 }

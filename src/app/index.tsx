@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 
 export default function Index() {
   return (
-    <View className="bg-red-900" style={styles.container}>
+    <View className="bg-red-950" style={styles.container}>
       <Image
         size="2xl"
         source={{

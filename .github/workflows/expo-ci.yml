@@ -1,0 +1,194 @@
+name: Expo Analyze and Build
+
+on:
+  push:
+    branches: ['feature/expo-pipeline-main']
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze_code:
+    name: Code Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          packager: pnpm
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: pnpm install --frozen-lockfile
+      - run: npx expo-doctor
+      - run: pnpm prettier --check .
+      - run: pnpm lint
+
+  build_web:
+    name: Build Web
+    runs-on: ubuntu-latest
+    needs: analyze_code
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - uses: expo/expo-github-action@v8
+        with:
+          packager: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/metro
+          key: ${{ runner.os }}-metro-web-${{ hashFiles('.nvmrc') }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-metro-web-${{ hashFiles('.nvmrc') }}-
+      - run: pnpm build:web
+
+  build_android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    needs: analyze_code
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('pnpm-lock.yaml', 'app.json') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
+      - uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/metro
+          key: ${{ runner.os }}-metro-android-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-metro-android-
+
+      - uses: actions/cache@v4
+        with:
+          path: android
+          key: ${{ runner.os }}-android-${{ hashFiles('app.json', 'package.json', 'pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-android-
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          packager: pnpm
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Check if android/ exists
+        id: android-exists
+        run: echo "exists=$(test -f android/build.gradle && echo true || echo false)" >> $GITHUB_OUTPUT
+
+      - run: pnpm dlx expo prebuild --platform android --non-interactive
+        if: steps.android-exists.outputs.exists == 'false'
+
+      - name: Build Android APK
+        run: |
+          cd android
+          ./gradlew assembleDebug \
+            --build-cache \
+            --parallel \
+            --configure-on-demand \
+            -Dorg.gradle.daemon=false \
+            -Dorg.gradle.workers.max=2 \
+            -Dorg.gradle.caching=true
+        env:
+          GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+          retention-days: 7
+
+  build_ios:
+    name: Build iOS (Simulator)
+    runs-on: macos-latest
+    needs: analyze_code
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/metro
+          key: ${{ runner.os }}-metro-ios-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-metro-ios-
+
+      - uses: actions/cache@v4
+        with:
+          path: ios
+          key: ${{ runner.os }}-ios-${{ hashFiles('app.json', 'package.json', 'pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-ios-
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          packager: pnpm
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Check if ios/ exists
+        id: ios-exists
+        run: echo "exists=$(test -d ios/badbuy.xcworkspace && echo true || echo false)" >> $GITHUB_OUTPUT
+
+      - run: pnpm dlx expo prebuild --platform ios --non-interactive
+        if: steps.ios-exists.outputs.exists == 'false'
+
+      - name: Install CocoaPods
+        if: steps.ios-exists.outputs.exists == 'false'
+        run: |
+          cd ios
+          pod install --repo-update
+        env:
+          NO_FLIPPER: 1
+
+      - name: Build iOS Simulator
+        run: |
+          set -o pipefail 
+
+          xcodebuild \
+            -workspace ios/badbuy.xcworkspace \
+            -scheme badbuy \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -derivedDataPath ios/build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            | xcpretty
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator-build
+          path: ios/build/Build/Products/Release-iphonesimulator/*.app
+          retention-days: 7

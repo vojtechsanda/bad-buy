@@ -2,7 +2,7 @@ name: Expo Analyze and Build
 
 on:
   push:
-    branches: ['feature/expo-pipeline-main']
+    branches: ['main']
   workflow_dispatch:
 
 concurrency:

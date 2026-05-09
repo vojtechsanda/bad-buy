@@ -87,18 +87,20 @@ The single exception is the **skip celebration page**, which goes joyful and bol
 
 ### 2.2 Additional Stack Choices (this document)
 
-| Concern              | Choice                                                                                                                            | Reason                                                            |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| Routing              | Expo Router (file-based)                                                                                                          | Mandated by ADR-003                                               |
-| State management     | Zustand                                                                                                                           | Simple, hooks-based, no boilerplate                               |
-| Server state / cache | TanStack Query                                                                                                                    | Pairs well with Supabase calls, handles loading/error/refetch     |
-| Icons                | Lucide React Native                                                                                                               | Matches Gluestack mental model, free, comprehensive               |
-| Animations           | `react-native-reanimated` (UI thread), `lottie-react-native` (confetti, hero animations), `moti` (declarative micro-interactions) | Per ADR-002                                                       |
-| Haptics              | `expo-haptics`                                                                                                                    | Built-in to Expo, used for swipe-to-unlock feedback               |
-| Push notifications   | `expo-notifications`                                                                                                              | Built-in to Expo, scheduled local notifications for freeze timers |
-| Image input (future) | `expo-image-picker`                                                                                                               | Out of scope for v1                                               |
-| Theme                | Light theme only for v1                                                                                                           | Dark theme deferred to v2                                         |
-| Localization         | English only for v1                                                                                                               | i18n deferred to v2                                               |
+| Concern              | Choice                                                                                                                            | Reason                                                                                                  |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Routing              | Expo Router (file-based)                                                                                                          | Mandated by ADR-003                                                                                     |
+| State management     | Zustand                                                                                                                           | Simple, hooks-based, no boilerplate                                                                     |
+| Server state / cache | TanStack Query                                                                                                                    | Pairs well with Supabase calls, handles loading/error/refetch                                           |
+| Schema validation    | Zod                                                                                                                               | Single source of truth for shapes; pairs with TanStack Form, TanStack Query, and Edge Function payloads |
+| Forms                | TanStack Form (`@tanstack/react-form`) with the Zod adapter                                                                       | Headless, framework-agnostic, type-safe; integrates cleanly with Gluestack `FormControl` primitives     |
+| Icons                | Lucide React Native                                                                                                               | Matches Gluestack mental model, free, comprehensive                                                     |
+| Animations           | `react-native-reanimated` (UI thread), `lottie-react-native` (confetti, hero animations), `moti` (declarative micro-interactions) | Per ADR-002                                                                                             |
+| Haptics              | `expo-haptics`                                                                                                                    | Built-in to Expo, used for swipe-to-unlock feedback                                                     |
+| Push notifications   | `expo-notifications`                                                                                                              | Built-in to Expo, scheduled local notifications for freeze timers                                       |
+| Image input (future) | `expo-image-picker`                                                                                                               | Out of scope for v1                                                                                     |
+| Theme                | Light theme only for v1                                                                                                           | Dark theme deferred to v2                                                                               |
+| Localization         | English only for v1                                                                                                               | i18n deferred to v2                                                                                     |
 
 ### 2.3 Folder Structure
 
@@ -1591,6 +1593,166 @@ Using `expo-haptics`:
 | Code redemption success          | `Haptics.notificationAsync(Success)`                          |
 | Hobby chip toggle                | (none — too noisy)                                            |
 | Bottom sheet open/close          | (none — handled by Gluestack)                                 |
+
+### 11.4 Forms & Validation
+
+All user-input flows in v1 are built on the same two-library combination: **Zod** owns the shape and the rules; **TanStack Form** (`@tanstack/react-form`) owns the field state, the lifecycle, and the wiring into Gluestack's `FormControl` primitives. There is no other validation library, no manual `useState`-driven form, and no ad-hoc regex scattered across screens.
+
+#### 11.4.1 Why this stack
+
+- **One source of truth.** A Zod schema describes the form's shape, the per-field rules, and the resulting TypeScript type. The same schema can validate the client payload before submit and the Edge Function payload on the server (re-imported, or duplicated on the server side from the same definition file checked into `supabase/functions/<fn>/schema.ts`). No drift between UI rules and backend rules.
+- **Type-safe field paths.** TanStack Form's API is fully generic over the schema's inferred type. Field names autocomplete; misspellings are compile errors. This matters in onboarding step 2 (compound wage + currency fields) and the freeze sheet (name + chosen duration of two possible shapes), where field paths are non-trivial.
+- **Headless, no UI lock-in.** TanStack Form ships no components — it gives hooks. Each field renders inside a Gluestack `FormControl` / `Input` / `Actionsheet` exactly as Section 11.2 already specifies. There is no "form library look" to override.
+- **Async-ready.** Code redemption, custom-hobby submission, and the `redeem-code` Edge Function call all need to surface server-side validation errors back into specific fields. TanStack Form's `setFieldMeta` / `validators.onSubmitAsync` make this a single code path.
+
+#### 11.4.2 Schema location and naming
+
+Per the hybrid-vertical structure (ADR-003):
+
+- **Feature-local schemas** live with their feature slice: `src/features/<slice>/schemas.ts`. Example: `src/features/auth/schemas.ts` (login, register). A schema is feature-local if only that feature uses it.
+- **Shared schemas** — primitives and any composite reused across features — live in `src/shared/schemas/`, one file per schema (or per cohesive group), e.g., `src/shared/schemas/email.ts`, `src/shared/schemas/currency.ts`. Feature schemas import from `@/shared/schemas/<name>`. Promotion rule: if a second feature needs a schema that currently lives in a feature slice, lift it to `src/shared/schemas/` rather than cross-importing between features (the same import rule that ADR-003 already enforces for components).
+- Each schema file exports both the Zod schema and the inferred TypeScript type:
+
+  ```ts
+  export const RegisterSchema = z.object({
+    /* … */
+  });
+  export type RegisterInput = z.infer<typeof RegisterSchema>;
+  ```
+
+  Components and hooks consume the inferred type; nobody hand-writes a parallel interface.
+
+#### 11.4.3 Relationship to Supabase-generated types
+
+DB row types are **not** written by hand and **not** derived from Zod. They come from `supabase gen types typescript`, which emits `Database` (and its `Tables`, `Enums`, etc.) into `src/shared/types/supabase.ts`. That file is the source of truth for the _storage_ shape.
+
+Zod schemas describe the _input_ shape — what the user types in the form, what the Edge Function receives over the wire. The two shapes are deliberately different:
+
+- A Zod schema for the price input has `amount` in display currency; the corresponding `tracked_item` row has `price_usd` plus `conversion_rate_snapshot`. The submit handler maps one to the other (Section 8.6).
+- A Zod schema for personal-info edit has a flat `wage` + `wageCurrency`; the `user` row has only `hourly_wage_usd`. Again, the handler does the conversion.
+- Server response schemas (e.g., `RedeemCodeResponseSchema`) describe the function's response envelope, not the underlying tables.
+
+When a value does match a generated type 1:1 (e.g., a `tracked_item.status` enum), the Zod schema reuses the generated type rather than redefining the literal union:
+
+```ts
+import type { Database } from '@/shared/types/supabase';
+
+type TrackedItemStatus = Database['public']['Enums']['tracked_item_status'];
+export const TrackedItemStatusSchema = z.enum([
+  'frozen',
+  'bought',
+  'skipped',
+]) satisfies z.ZodType<TrackedItemStatus>;
+```
+
+The `satisfies` clause is the guard: if the DB enum changes and the generated types regenerate, the Zod schema fails to compile until it's brought in line.
+
+The generated `supabase.ts` is regenerated on every migration and is checked into the repo (so CI compiles without a Supabase connection).
+
+#### 11.4.4 Shared Zod primitives (`src/shared/schemas/`)
+
+The minimum set v1 needs:
+
+| Primitive         | Definition (sketch)                                                | Used by                                                                                     |
+| ----------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `Email`           | `z.string().trim().email()`                                        | Login, Register                                                                             |
+| `Password`        | `z.string().min(8, "At least 8 characters")`                       | Register; Login uses a relaxed `z.string().min(1)` (server is the authority on correctness) |
+| `IsoCurrencyCode` | `z.string().regex(/^[A-Z]{3}$/)`                                   | Onboarding money, Personal info, Home price input, Freeze sheet                             |
+| `IsoCountryCode`  | `z.string().regex(/^[A-Z]{2}$/)`                                   | Onboarding identity, Personal info                                                          |
+| `MonetaryAmount`  | `z.number().positive().multipleOf(0.01)` (max 2 decimals enforced) | Wage, price input, custom freeze numeric input                                              |
+| `WorkHoursPerDay` | `z.number().min(1).max(16)`                                        | Onboarding money, Personal info                                                             |
+| `IsoDate`         | `z.string().regex(/^\d{4}-\d{2}-\d{2}$/).pipe(z.coerce.date())`    | Onboarding identity (birthdate)                                                             |
+| `RedemptionCode`  | `z.string().trim().toUpperCase().regex(/^[A-Z0-9]{1,16}$/)`        | Onboarding promo step, Profile redemption sheet, Premium upsell sheet                       |
+| `HobbyName`       | `z.string().trim().min(2).max(40)`                                 | Custom hobby input                                                                          |
+| `ItemName`        | `z.string().trim().min(1).max(60)`                                 | Freeze sheet                                                                                |
+
+`MonetaryAmount` is the canonical example for the rule "schemas describe the shape the user sees, not the storage shape." The user enters a price in display currency; the conversion to USD happens in the submit handler, not in the schema.
+
+#### 11.4.5 Per-form schema inventory
+
+Every form in Section 10 maps to exactly one schema. The inventory:
+
+| Screen / Sheet                               | Schema               | Fields                                                                                                                                                                                            |
+| -------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 10.2 Login                                   | `LoginSchema`        | `email: Email`, `password: z.string().min(1)`                                                                                                                                                     |
+| 10.3 Register                                | `RegisterSchema`     | `email: Email`, `password: Password`, `passwordRepeat: z.string()` — refined with `.refine(v => v.password === v.passwordRepeat, { path: ["passwordRepeat"], message: "Passwords don't match" })` |
+| 10.4 Onboarding step 1 (Identity)            | `IdentitySchema`     | `name: z.string().trim().min(1).max(40)`, `birthdate: IsoDate`, `country: IsoCountryCode`                                                                                                         |
+| 10.5 Onboarding step 2 (Money)               | `MoneySchema`        | `displayCurrency: IsoCurrencyCode`, `wage: MonetaryAmount`, `wageCurrency: IsoCurrencyCode`, `workHoursPerDay: WorkHoursPerDay`                                                                   |
+| 10.6 Onboarding step 3 (Hobbies)             | `HobbiesSchema`      | `hobbyIds: z.array(z.string().uuid()).min(3, "Pick at least 3")`                                                                                                                                  |
+| 10.7 Onboarding step 4 (Promo)               | `PromoSchema`        | `code: RedemptionCode`                                                                                                                                                                            |
+| 10.8 Home price input                        | `PriceInputSchema`   | `amount: MonetaryAmount`, `currency: IsoCurrencyCode`                                                                                                                                             |
+| 10.12 Freeze sheet                           | `FreezeSchema`       | `name: ItemName`, `duration: DurationSchema` (discriminated union — see below)                                                                                                                    |
+| 10.16 / 10.17 Redemption (sheet, both forms) | `RedemptionSchema`   | `code: RedemptionCode`                                                                                                                                                                            |
+| 10.19 Personal info edit                     | `PersonalInfoSchema` | Same as `MoneySchema` plus `country: IsoCountryCode`                                                                                                                                              |
+| 10.20 Custom hobby input (premium)           | `CustomHobbySchema`  | `name: HobbyName`                                                                                                                                                                                 |
+
+**`DurationSchema`** is the only non-trivial composite. It models the freeze-sheet rule that the user picked _either_ a predefined chip _or_ a custom value (premium):
+
+```ts
+const DurationSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('preset'), preset: z.enum(['30m', '6h', '1d', '1w']) }),
+  z.object({
+    kind: z.literal('custom'),
+    value: z.number().int().positive(),
+    unit: z.enum(['minutes', 'hours', 'days']),
+  }),
+]);
+```
+
+The submit handler resolves either branch to a `freeze_until` timestamp.
+
+#### 11.4.6 TanStack Form ↔ Gluestack `FormControl` integration
+
+A single thin adapter component, `<FormField>` (in `src/shared/components/`), is the bridge. It takes a TanStack Form `field` API, a label, an optional info-tooltip string, and the input element to render, and emits a Gluestack `FormControl` with `FormControlLabel`, the input, and a `FormControlError` wired to the field's first validation error. This collapses the per-field boilerplate from ~12 lines to ~5 and ensures every form respects the patterns in Section 11.2 (label style, info icon placement, inline error copy).
+
+Pattern (illustrative — not exhaustive):
+
+```tsx
+const form = useForm({
+  defaultValues: { email: '', password: '' } as LoginInput,
+  validators: { onChange: LoginSchema },
+  onSubmit: async ({ value }) => {
+    const { error } = await supabase.auth.signInWithPassword(value);
+    if (error)
+      form.setErrorMap({
+        onSubmit: { fields: { email: { message: 'Email or password is incorrect.' } } },
+      });
+  },
+});
+
+<form.Field name="email">
+  {(field) => (
+    <FormField field={field} label="Email">
+      <Input>
+        <InputField
+          value={field.state.value}
+          onChangeText={field.handleChange}
+          onBlur={field.handleBlur}
+          autoCapitalize="none"
+          autoComplete="email"
+          keyboardType="email-address"
+        />
+      </Input>
+    </FormField>
+  )}
+</form.Field>;
+```
+
+Conventions that apply across every form in the app:
+
+- **Validation timing.** `validators.onChange` for fast feedback on simple shape rules (length, format); `validators.onBlur` on text fields where on-change errors would feel noisy (the password "8 characters" rule is shown on blur, not on every keystroke); `validators.onSubmit` for the final gate. Network-dependent rules (email already exists, code not recognized, can't redeem your own code) are validated server-side and surfaced via `setErrorMap`.
+- **Error display.** Errors render inside `FormControlError` per Section 11.2 — `body-sm`, `danger` color, no icon, directly below the field. The first error from Zod is shown; later errors only surface after the first is cleared.
+- **Error copy comes from the schema.** Every `.min` / `.max` / `.regex` / `.refine` carries an explicit `{ message: "…" }` that matches the copy in Sections 10.x and 12.3 verbatim. The screen never overrides this string at render time.
+- **Submit button binding.** The primary CTA uses `form.Subscribe` to read `state.canSubmit && !state.isSubmitting`, mapping directly to "disabled until valid" + "spinner during submit" per Section 11.2.
+- **Reset on success.** Forms inside bottom sheets (freeze, redemption, custom hobby, personal info) call `form.reset()` on close so reopening the sheet starts clean.
+
+#### 11.4.7 Non-form Zod usage
+
+Zod also guards non-form boundaries:
+
+- **`currency_rate` API response.** The daily cron (`sync-currency-rates`) parses the upstream API's JSON with a Zod schema before upserting into the `currency_rate` table. A schema mismatch is logged and the previous rates are kept (per ADR-004 R1).
+
+Search params (`/audit?price=…&currency=…`) and AsyncStorage cached values are explicitly out of scope for Zod in v1 — the values are written by trusted code paths in the same app and parsing them adds noise without catching real bugs.
 
 ---
 

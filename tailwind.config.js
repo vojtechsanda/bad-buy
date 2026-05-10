@@ -13,12 +13,27 @@ module.exports = {
   safelist: [
     {
       pattern:
-        /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|error|success|warning|info|typography|outline|background|indicator)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark|primary)/,
+        /(bg|border|text|stroke|fill)-(primary|secondary|tertiary|accent|error|success|warning|info|typography|outline|background|indicator)-(0|50|100|200|300|400|500|600|700|800|900|950|white|gray|black|error|warning|muted|success|info|light|dark|primary)/,
+    },
+    {
+      pattern: /(bg|border|text)-(celebrate)-(yellow|pink|teal)/,
     },
   ],
   theme: {
     extend: {
       colors: {
+        // Brand alias: accent = tertiary (coral/peach). Use bg-accent-* / text-accent-* in component code.
+        accent: {
+          100: 'rgb(var(--color-tertiary-100)/<alpha-value>)',
+          500: 'rgb(var(--color-tertiary-500)/<alpha-value>)',
+          700: 'rgb(var(--color-tertiary-700)/<alpha-value>)',
+        },
+        // Celebration palette — skip page only, never elsewhere
+        celebrate: {
+          yellow: '#F9C846',
+          pink: '#F47BA0',
+          teal: '#5DC9B6',
+        },
         primary: {
           0: 'rgb(var(--color-primary-0)/<alpha-value>)',
           50: 'rgb(var(--color-primary-50)/<alpha-value>)',
@@ -178,6 +193,13 @@ module.exports = {
         heading: undefined,
         body: undefined,
         mono: undefined,
+        // Nunito — loaded via @expo-google-fonts/nunito in _layout.tsx.
+        // On React Native, font weights do NOT auto-select variants — each weight
+        // needs an explicit fontFamily pointing to the correct loaded asset.
+        nunito: ['Nunito_400Regular'],
+        'nunito-semibold': ['Nunito_600SemiBold'],
+        'nunito-bold': ['Nunito_700Bold'],
+        'nunito-extrabold': ['Nunito_800ExtraBold'],
         jakarta: ['var(--font-plus-jakarta-sans)'],
         roboto: ['var(--font-roboto)'],
         code: ['var(--font-source-code-pro)'],
@@ -189,6 +211,23 @@ module.exports = {
       },
       fontSize: {
         '2xs': '10px',
+        // BadBuy design system typography scale (size / line-height / weight notes in tech-docs §4.3)
+        'display-xl': ['36px', { lineHeight: '44px' }],
+        'display-lg': ['28px', { lineHeight: '36px' }],
+        'display-md': ['22px', { lineHeight: '30px' }],
+        heading: ['18px', { lineHeight: '26px' }],
+        'body-lg': ['16px', { lineHeight: '24px' }],
+        body: ['15px', { lineHeight: '22px' }],
+        'body-sm': ['13px', { lineHeight: '20px' }],
+        caption: ['11px', { lineHeight: '16px' }],
+        mono: ['14px', { lineHeight: '22px' }],
+      },
+      // BadBuy radius scale — overrides Tailwind defaults to match §4.5
+      borderRadius: {
+        sm: '8px',
+        md: '12px',
+        lg: '20px',
+        xl: '28px',
       },
       boxShadow: {
         'hard-1': '-2px 2px 8px 0px rgba(38, 38, 38, 0.20)',
@@ -200,6 +239,9 @@ module.exports = {
         'soft-2': '0px 0px 20px rgba(38, 38, 38, 0.2)',
         'soft-3': '0px 0px 30px rgba(38, 38, 38, 0.1)',
         'soft-4': '0px 0px 40px rgba(38, 38, 38, 0.1)',
+        // BadBuy elevation scale — §4.6
+        raised: '0px 2px 8px 0px rgba(44, 42, 38, 0.06)',
+        floating: '0px 8px 24px 0px rgba(44, 42, 38, 0.10)',
       },
     },
   },

@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BadBuy — Onboarding Step 3</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="stage-bg">
+    <a class="back-to-index" href="index.html" title="Back to all screens"
+      ><svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M15 6l-6 6 6 6" /></svg
+      >All screens</a
+    >
+    <div class="stage">
+      <div class="ios-device">
+        <div class="ios-island"></div>
+        <div class="ios-status-bar">
+          <div class="time">9:41</div>
+          <div class="icons"></div>
+        </div>
+        <div class="ios-content">
+          <div class="screen">
+            <div style="height: 54px; flex-shrink: 0"></div>
+            <div style="padding: 12px 20px 0; display: flex; align-items: center; gap: 12px">
+              <button
+                style="
+                  width: 32px;
+                  height: 32px;
+                  border-radius: 8px;
+                  border: 0;
+                  background: transparent;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  cursor: pointer;
+                  color: var(--bb-text-primary);
+                  margin-left: -6px;
+                ">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M15 6l-6 6 6 6" />
+                </svg>
+              </button>
+              <div style="flex: 1">
+                <div class="step-progress">
+                  <span class="done"></span><span class="done"></span><span class="done"></span>
+                </div>
+              </div>
+            </div>
+            <div style="flex: 1; overflow: auto; padding: 32px 20px 24px">
+              <div
+                style="
+                  font: 700 32px/1.15 var(--bb-font-sans);
+                  letter-spacing: -0.01em;
+                  color: var(--bb-text-primary);
+                ">
+                What are you into?
+              </div>
+              <div
+                style="
+                  font: 400 15px/1.45 var(--bb-font-sans);
+                  color: var(--bb-text-secondary);
+                  margin-top: 6px;
+                ">
+                Pick at least 3. We'll use these to suggest alternatives — like "this jacket = 4
+                climbing-gym sessions".
+              </div>
+
+              <div class="sp-6"></div>
+              <div
+                style="
+                  text-align: right;
+                  font: 700 13px/1 var(--bb-font-sans);
+                  color: var(--bb-primary-500);
+                ">
+                4 / minimum 3 selected
+              </div>
+              <div class="sp-4"></div>
+
+              <div>
+                <div class="caption-up" style="margin-bottom: 12px">Sports</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <button class="chip selected">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="6" cy="17" r="3.5" />
+                        <circle cx="18" cy="17" r="3.5" />
+                        <path d="M6 17l4-9h5l3 9" />
+                        <path d="M10 8h-2" /></svg></span
+                    >Cycling
+                  </button>
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M4 4c-2 3 1 6 2 7c1-1 2-3 2-5s-2-3-4-2z" />
+                        <path d="M14 14c-2 3 1 6 2 7c1-1 2-3 2-5s-2-3-4-2z" />
+                        <path d="M16 4c2 3-1 6-2 7c-1-1-2-3-2-5s2-3 4-2z" />
+                        <path d="M6 14c2 3-1 6-2 7c-1-1-2-3-2-5s2-3 4-2z" /></svg></span
+                    >Running
+                  </button>
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg></span
+                    >Yoga
+                  </button>
+                  <button class="chip selected">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M3 20l6-9 4 6 3-4 5 7H3z" /></svg></span
+                    >Hiking
+                  </button>
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M3 20l6-9 4 6 3-4 5 7H3z" /></svg></span
+                    >Climbing
+                  </button>
+                </div>
+              </div>
+
+              <div class="sp-6"></div>
+
+              <div>
+                <div class="caption-up" style="margin-bottom: 12px">Music</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <button class="chip selected">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M9 18V5l11-2v13" />
+                        <circle cx="6" cy="18" r="3" />
+                        <circle cx="17" cy="16" r="3" /></svg></span
+                    >Guitar
+                  </button>
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="8" cy="18" r="4" />
+                        <path d="M12 18V2l7 4" /></svg></span
+                    >Piano
+                  </button>
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="9" y="2" width="6" height="12" rx="3" />
+                        <path d="M5 10v2a7 7 0 0 0 14 0v-2" />
+                        <path d="M12 19v3" /></svg></span
+                    >Singing
+                  </button>
+                </div>
+              </div>
+
+              <div class="sp-6"></div>
+
+              <div>
+                <div class="caption-up" style="margin-bottom: 12px">Food</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M6 14h12v6a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-6z" />
+                        <path d="M6 14a4 4 0 1 1 1-7 5 5 0 0 1 10 0 4 4 0 1 1 1 7" /></svg></span
+                    >Cooking
+                  </button>
+                  <button class="chip selected">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M17 8h1a3 3 0 0 1 0 6h-1" />
+                        <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z" />
+                        <path d="M6 1v3M10 1v3M14 1v3" /></svg></span
+                    >Coffee
+                  </button>
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M8 22h8" />
+                        <path d="M12 17v5" />
+                        <path d="M5 2h14l-1 8a6 6 0 0 1-12 0L5 2z" /></svg></span
+                    >Wine
+                  </button>
+                </div>
+              </div>
+
+              <div class="sp-6"></div>
+
+              <div>
+                <div class="caption-up" style="margin-bottom: 12px">Creative</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                          d="M3 8a2 2 0 0 1 2-2h2l2-3h6l2 3h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z" />
+                        <circle cx="12" cy="13" r="4" /></svg></span
+                    >Photography
+                  </button>
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                          d="M12 2a10 10 0 1 0 10 10 4 4 0 0 0-4-4h-2a3 3 0 0 1-3-3 3 3 0 0 0-1-3z" /></svg></span
+                    >Painting
+                  </button>
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M4 4v15a2 2 0 0 1 2-2h14V2H6a2 2 0 0 0-2 2z" />
+                        <path d="M20 17H6a2 2 0 0 0 0 4h14" /></svg></span
+                    >Reading
+                  </button>
+                </div>
+              </div>
+
+              <div class="sp-6"></div>
+
+              <div>
+                <div class="caption-up" style="margin-bottom: 12px">Tech</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                          d="M5 19c-1 0-2-1-2-2 0-1 1-3 2-7 1-2 2-3 5-3h8c3 0 4 1 5 3 1 4 2 6 2 7 0 1-1 2-2 2" /></svg></span
+                    >Gaming
+                  </button>
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M9 7l-5 5 5 5" />
+                        <path d="M15 7l5 5-5 5" /></svg></span
+                    >Coding
+                  </button>
+                </div>
+              </div>
+
+              <div class="sp-6"></div>
+
+              <div>
+                <div class="caption-up" style="margin-bottom: 12px">Outdoors</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                          d="M22 12l-9-9v5L4 13v3l9-2v5l-2 2v2l4-2 4 2v-2l-2-2v-5z" /></svg></span
+                    >Travel
+                  </button>
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M12 2l5 7h-3l4 6h-4l4 6H6l4-6H6l4-6H7z" />
+                        <path d="M12 21v-4" /></svg></span
+                    >Camping
+                  </button>
+                  <button class="chip">
+                    <span class="chip-icon"
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M7 13a5 5 0 0 1 5-5" />
+                        <path d="M17 13a5 5 0 0 0-5-5" />
+                        <path d="M12 22V8" /></svg></span
+                    >Gardening
+                  </button>
+                </div>
+              </div>
+
+              <div class="sp-8"></div>
+              <div style="text-align: center">
+                <button class="btn-link">I have a promo code</button>
+              </div>
+            </div>
+
+            <div class="sticky-bottom">
+              <button class="btn btn-primary">Continue</button>
+            </div>
+            <div style="height: 8px; flex-shrink: 0"></div>
+          </div>
+        </div>
+        <div class="ios-home-indicator"><div class="bar"></div></div>
+      </div>
+      <div class="stage-label">Onboarding · 3 of 3 — What are you into?</div>
+    </div>
+  </body>
+</html>

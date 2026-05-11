@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BadBuy — Personal Info Edit</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="stage-bg">
+    <a class="back-to-index" href="index.html" title="Back to all screens"
+      ><svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M15 6l-6 6 6 6" /></svg
+      >All screens</a
+    >
+    <div class="stage">
+      <div class="ios-device">
+        <div class="ios-island"></div>
+        <div class="ios-status-bar">
+          <div class="time">9:41</div>
+          <div class="icons"></div>
+        </div>
+        <div class="ios-content">
+          <div class="screen" style="position: relative; overflow: hidden">
+            <div style="height: 100%; background: var(--bb-bg); padding: 56px 20px 0">
+              <div
+                style="
+                  font: 700 22px/1.2 var(--bb-font-sans);
+                  color: var(--bb-text-primary);
+                  letter-spacing: -0.01em;
+                ">
+                Profile
+              </div>
+              <div class="sp-6"></div>
+              <div class="card" style="height: 88px; margin-bottom: 12px"></div>
+              <div class="caption-up" style="margin: 12px 0 10px">Account</div>
+              <div class="card bordered" style="height: 220px"></div>
+            </div>
+
+            <div class="sheet-backdrop"></div>
+            <div class="sheet" style="height: 85%">
+              <div class="handle"></div>
+
+              <div
+                style="
+                  font: 700 24px/1.25 var(--bb-font-sans);
+                  letter-spacing: -0.01em;
+                  color: var(--bb-text-primary);
+                ">
+                Personal info
+              </div>
+              <div class="sp-6"></div>
+
+              <div style="flex: 1; overflow: auto; display: flex; flex-direction: column">
+                <div>
+                  <div
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      gap: 6px;
+                      font: 400 14px/1.45 var(--bb-font-sans);
+                      color: var(--bb-text-secondary);
+                      margin-bottom: 8px;
+                    ">
+                    Country
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--bb-info)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 8h.01" />
+                      <path d="M11 12h1v4h1" />
+                    </svg>
+                  </div>
+                  <div class="select-field filled">
+                    <span class="value" style="font-weight: 500">France</span>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--bb-text-tertiary)"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="sp-4"></div>
+
+                <div>
+                  <div
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      gap: 6px;
+                      font: 400 14px/1.45 var(--bb-font-sans);
+                      color: var(--bb-text-secondary);
+                      margin-bottom: 8px;
+                    ">
+                    Show prices in
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--bb-info)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 8h.01" />
+                      <path d="M11 12h1v4h1" />
+                    </svg>
+                  </div>
+                  <div class="select-field filled">
+                    <span class="value" style="font-weight: 500">EUR · Euro</span>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--bb-text-tertiary)"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="sp-4"></div>
+
+                <div>
+                  <div
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      gap: 6px;
+                      font: 400 14px/1.45 var(--bb-font-sans);
+                      color: var(--bb-text-secondary);
+                      margin-bottom: 8px;
+                    ">
+                    Your hourly wage
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--bb-info)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 8h.01" />
+                      <path d="M11 12h1v4h1" />
+                    </svg>
+                  </div>
+                  <div style="display: flex; gap: 10px">
+                    <div class="text-input" style="flex: 0 0 70%">
+                      <input
+                        value="25"
+                        inputmode="numeric"
+                        style="font: 700 18px/1.4 var(--bb-font-sans)" />
+                    </div>
+                    <div class="pill-select" style="flex: 1">
+                      EUR
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="var(--bb-text-secondary)"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M6 9l6 6 6-6" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div class="sp-4"></div>
+
+                <div>
+                  <div
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      gap: 6px;
+                      font: 400 14px/1.45 var(--bb-font-sans);
+                      color: var(--bb-text-secondary);
+                      margin-bottom: 8px;
+                    ">
+                    Average work hours per day
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--bb-info)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 8h.01" />
+                      <path d="M11 12h1v4h1" />
+                    </svg>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      height: 52px;
+                      padding: 0 8px 0 16px;
+                      background: var(--bb-surface);
+                      border: 1px solid var(--bb-border);
+                      border-radius: 12px;
+                    ">
+                    <input
+                      value="8"
+                      inputmode="numeric"
+                      style="
+                        flex: 1;
+                        min-width: 0;
+                        border: 0;
+                        outline: 0;
+                        background: transparent;
+                        font: 700 18px/1.4 var(--bb-font-sans);
+                        color: var(--bb-text-primary);
+                      " />
+                    <div style="display: flex; gap: 6px">
+                      <button
+                        style="
+                          width: 36px;
+                          height: 36px;
+                          border-radius: 10px;
+                          border: 0;
+                          background: var(--bb-primary-50);
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          cursor: pointer;
+                        ">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="var(--bb-primary-500)"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round">
+                          <path d="M5 12h14" />
+                        </svg>
+                      </button>
+                      <button
+                        style="
+                          width: 36px;
+                          height: 36px;
+                          border-radius: 10px;
+                          border: 0;
+                          background: var(--bb-primary-50);
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          cursor: pointer;
+                        ">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="var(--bb-primary-500)"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round">
+                          <path d="M12 5v14" />
+                          <path d="M5 12h14" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div style="flex: 1; min-height: 16px"></div>
+              </div>
+
+              <button class="btn btn-primary" style="margin-top: 12px">Save</button>
+            </div>
+          </div>
+        </div>
+        <div class="ios-home-indicator"><div class="bar"></div></div>
+      </div>
+      <div class="stage-label">Personal info · bottom sheet</div>
+    </div>
+  </body>
+</html>

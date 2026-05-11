@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BadBuy — All Screens (Claude Design)</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 48px 32px;
+        background: #efeae0;
+        font-family: var(--bb-font-sans);
+        color: var(--bb-text-primary);
+      }
+      h1 {
+        margin: 0 0 8px;
+        font: 800 32px/1.1 var(--bb-font-sans);
+        letter-spacing: -0.01em;
+      }
+      p.lead {
+        margin: 0 0 32px;
+        font: 400 16px/1.5 var(--bb-font-sans);
+        color: var(--bb-text-secondary);
+        max-width: 640px;
+      }
+      h2 {
+        margin: 32px 0 12px;
+        font: 700 13px/1 var(--bb-font-sans);
+        color: var(--bb-text-tertiary);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 12px;
+      }
+      .card-link {
+        display: block;
+        padding: 16px 18px;
+        background: var(--bb-surface);
+        border-radius: 12px;
+        box-shadow: var(--bb-shadow-raised);
+        text-decoration: none;
+        color: var(--bb-text-primary);
+        transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .card-link:hover {
+        transform: translateY(-2px);
+      }
+      .card-link .name {
+        font: 600 16px/1.3 var(--bb-font-sans);
+        color: var(--bb-text-primary);
+      }
+      .card-link .desc {
+        margin-top: 4px;
+        font: 400 13px/1.4 var(--bb-font-sans);
+        color: var(--bb-text-secondary);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>BadBuy — Design Screens (Claude Design)</h1>
+    <p class="lead">
+      Standalone HTML/CSS recreations of the BadBuy UI designs. Open any screen directly from your
+      file explorer — no server, no JavaScript framework required.
+    </p>
+
+    <h2>Auth & onboarding</h2>
+    <div class="grid">
+      <a class="card-link" href="landing.html"
+        ><div class="name">Landing</div>
+        <div class="desc">Unauthenticated entry</div></a
+      >
+      <a class="card-link" href="login.html"
+        ><div class="name">Login</div>
+        <div class="desc">Returning user</div></a
+      >
+      <a class="card-link" href="register.html"
+        ><div class="name">Register</div>
+        <div class="desc">New user signup</div></a
+      >
+      <a class="card-link" href="onboarding-step-1.html"
+        ><div class="name">Onboarding · Step 1</div>
+        <div class="desc">Tell us about you</div></a
+      >
+      <a class="card-link" href="onboarding-step-2.html"
+        ><div class="name">Onboarding · Step 2</div>
+        <div class="desc">Your money basics</div></a
+      >
+      <a class="card-link" href="onboarding-step-3.html"
+        ><div class="name">Onboarding · Step 3</div>
+        <div class="desc">What are you into?</div></a
+      >
+      <a class="card-link" href="onboarding-step-4.html"
+        ><div class="name">Onboarding · Step 4</div>
+        <div class="desc">Promo code (optional)</div></a
+      >
+    </div>
+
+    <h2>Core app</h2>
+    <div class="grid">
+      <a class="card-link" href="home-screen.html"
+        ><div class="name">Home</div>
+        <div class="desc">Greeting + price input</div></a
+      >
+      <a class="card-link" href="audit-screen.html"
+        ><div class="name">Audit</div>
+        <div class="desc">Cost reality + decision</div></a
+      >
+      <a class="card-link" href="freeze-sheet.html"
+        ><div class="name">Freeze sheet</div>
+        <div class="desc">Choose duration</div></a
+      >
+      <a class="card-link" href="buy-sendoff.html"
+        ><div class="name">Buy send-off</div>
+        <div class="desc">Calm confirmation</div></a
+      >
+      <a class="card-link" href="skip-celebration.html"
+        ><div class="name">Skip celebration</div>
+        <div class="desc">Bold confetti moment</div></a
+      >
+    </div>
+
+    <h2>Vault</h2>
+    <div class="grid">
+      <a class="card-link" href="vault-screen.html"
+        ><div class="name">Vault</div>
+        <div class="desc">Frozen + thawed items</div></a
+      >
+      <a class="card-link" href="vault-detail.html"
+        ><div class="name">Vault detail</div>
+        <div class="desc">Thawed item — decide</div></a
+      >
+    </div>
+
+    <h2>Profile & settings</h2>
+    <div class="grid">
+      <a class="card-link" href="profile-screen.html"
+        ><div class="name">Profile</div>
+        <div class="desc">Identity, level, settings</div></a
+      >
+      <a class="card-link" href="hobbies.html"
+        ><div class="name">Hobbies</div>
+        <div class="desc">Edit interests</div></a
+      >
+      <a class="card-link" href="personal-info-edit.html"
+        ><div class="name">Personal info</div>
+        <div class="desc">Country, wage, hours</div></a
+      >
+      <a class="card-link" href="premium-upsell.html"
+        ><div class="name">Premium upsell</div>
+        <div class="desc">Referral / promo</div></a
+      >
+      <a class="card-link" href="redeem-code.html"
+        ><div class="name">Redeem code</div>
+        <div class="desc">Profile entry</div></a
+      >
+      <a class="card-link" href="redemption-celebration.html"
+        ><div class="name">Redemption celebration</div>
+        <div class="desc">3 months unlocked</div></a
+      >
+      <a class="card-link" href="log-out.html"
+        ><div class="name">Log out</div>
+        <div class="desc">Confirmation</div></a
+      >
+      <a class="card-link" href="delete-account.html"
+        ><div class="name">Delete account</div>
+        <div class="desc">Destructive confirmation</div></a
+      >
+    </div>
+
+    <h2>Notifications</h2>
+    <div class="grid">
+      <a class="card-link" href="notifications.html"
+        ><div class="name">In-app notifications</div>
+        <div class="desc">Bottom sheet feed</div></a
+      >
+      <a class="card-link" href="badbuy-notifications.html"
+        ><div class="name">Push notifications</div>
+        <div class="desc">iOS lock screen</div></a
+      >
+    </div>
+  </body>
+</html>

@@ -1,0 +1,763 @@
+/* BadBuy design tokens + iOS device frame + shared component styles. */
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('fonts/Nunito-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 200 1000;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bb-primary-50: #f0f7f5;
+  --bb-primary-100: #d9ebe5;
+  --bb-primary-300: #7fb8a7;
+  --bb-primary-500: #3e8f7c;
+  --bb-primary-700: #2a6557;
+  --bb-primary-900: #1a3f36;
+
+  --bb-accent-100: #fce9e0;
+  --bb-accent-500: #e89b7a;
+  --bb-accent-700: #c97554;
+
+  --bb-celebrate-yellow: #f9c846;
+  --bb-celebrate-pink: #f47ba0;
+  --bb-celebrate-teal: #5dc9b6;
+
+  --bb-bg: #fbf9f5;
+  --bb-surface: #ffffff;
+  --bb-surface-alt: #f4f1eb;
+  --bb-border: #e8e2d6;
+  --bb-text-primary: #2c2a26;
+  --bb-text-secondary: #6b6660;
+  --bb-text-tertiary: #9a938a;
+  --bb-text-inverse: #fbf9f5;
+
+  --bb-success: #3e8f7c;
+  --bb-warning: #e5a93c;
+  --bb-danger: #c45757;
+  --bb-info: #5b8db8;
+
+  --bb-font-sans: 'Nunito', ui-rounded, -apple-system, system-ui, sans-serif;
+  --bb-font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --bb-shadow-raised: 0 2px 8px rgba(44, 42, 38, 0.06);
+  --bb-shadow-floating: 0 8px 24px rgba(44, 42, 38, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--bb-font-sans);
+  color: var(--bb-text-primary);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ─── Preview stage (page wrapper around the iOS frame) ────────── */
+body.stage-bg {
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: #efeae0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Fixed back-to-index button ───────────────────────────────── */
+.back-to-index {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px 0 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 2px 8px rgba(44, 42, 38, 0.1),
+    0 0 0 0.5px rgba(0, 0, 0, 0.06);
+  color: var(--bb-text-primary);
+  text-decoration: none;
+  font: 600 14px/1 var(--bb-font-sans);
+  transition:
+    transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 160ms;
+}
+.back-to-index:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+.back-to-index:active {
+  transform: translateY(0);
+}
+.back-to-index svg {
+  color: var(--bb-primary-500);
+}
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.stage-label {
+  font: 700 11px/1 var(--bb-font-sans);
+  color: #6b6660;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ─── iOS device frame ─────────────────────────────────────────── */
+.ios-device {
+  width: 390px;
+  height: 780px;
+  border-radius: 48px;
+  overflow: hidden;
+  position: relative;
+  background: #f2f2f7;
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(0, 0, 0, 0.12);
+  font-family: -apple-system, system-ui, sans-serif;
+}
+.ios-device.dark {
+  background: #000;
+}
+
+.ios-island {
+  position: absolute;
+  top: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 126px;
+  height: 37px;
+  border-radius: 24px;
+  background: #000;
+  z-index: 50;
+}
+
+.ios-status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  gap: 154px;
+  align-items: center;
+  justify-content: center;
+  padding: 21px 24px 19px;
+  width: 100%;
+}
+.ios-status-bar .time {
+  flex: 1;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1.5px;
+  font-family: -apple-system, 'SF Pro', system-ui;
+  font-weight: 590;
+  font-size: 17px;
+  line-height: 22px;
+  color: #000;
+}
+.ios-status-bar .icons {
+  flex: 1;
+  height: 22px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='73' height='12' viewBox='0 0 73 12'><rect x='0' y='7.5' width='3.2' height='4.5' rx='0.7' fill='black'/><rect x='4.8' y='5' width='3.2' height='7' rx='0.7' fill='black'/><rect x='9.6' y='2.5' width='3.2' height='9.5' rx='0.7' fill='black'/><rect x='14.4' y='0' width='3.2' height='12' rx='0.7' fill='black'/><g transform='translate(24 0)'><path d='M8.5 3.2C10.8 3.2 12.9 4.1 14.4 5.6L15.5 4.5C13.7 2.7 11.2 1.5 8.5 1.5C5.8 1.5 3.3 2.7 1.5 4.5L2.6 5.6C4.1 4.1 6.2 3.2 8.5 3.2Z' fill='black'/><path d='M8.5 6.8C9.9 6.8 11.1 7.3 12 8.2L13.1 7.1C11.8 5.9 10.2 5.1 8.5 5.1C6.8 5.1 5.2 5.9 3.9 7.1L5 8.2C5.9 7.3 7.1 6.8 8.5 6.8Z' fill='black'/><circle cx='8.5' cy='10.5' r='1.5' fill='black'/></g><g transform='translate(46 0)'><rect x='0.5' y='0.5' width='23' height='12' rx='3.5' stroke='black' stroke-opacity='0.35' fill='none'/><rect x='2' y='2' width='20' height='9' rx='2' fill='black'/><path d='M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z' fill='black' fill-opacity='0.4'/></g></svg>");
+  background-repeat: no-repeat;
+  background-position: center right 1px;
+  background-size: 73px 13px;
+}
+.ios-device.dark .ios-status-bar .time {
+  color: #fff;
+}
+.ios-device.dark .ios-status-bar .icons {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='73' height='12' viewBox='0 0 73 12'><rect x='0' y='7.5' width='3.2' height='4.5' rx='0.7' fill='white'/><rect x='4.8' y='5' width='3.2' height='7' rx='0.7' fill='white'/><rect x='9.6' y='2.5' width='3.2' height='9.5' rx='0.7' fill='white'/><rect x='14.4' y='0' width='3.2' height='12' rx='0.7' fill='white'/><g transform='translate(24 0)'><path d='M8.5 3.2C10.8 3.2 12.9 4.1 14.4 5.6L15.5 4.5C13.7 2.7 11.2 1.5 8.5 1.5C5.8 1.5 3.3 2.7 1.5 4.5L2.6 5.6C4.1 4.1 6.2 3.2 8.5 3.2Z' fill='white'/><path d='M8.5 6.8C9.9 6.8 11.1 7.3 12 8.2L13.1 7.1C11.8 5.9 10.2 5.1 8.5 5.1C6.8 5.1 5.2 5.9 3.9 7.1L5 8.2C5.9 7.3 7.1 6.8 8.5 6.8Z' fill='white'/><circle cx='8.5' cy='10.5' r='1.5' fill='white'/></g><g transform='translate(46 0)'><rect x='0.5' y='0.5' width='23' height='12' rx='3.5' stroke='white' stroke-opacity='0.35' fill='none'/><rect x='2' y='2' width='20' height='9' rx='2' fill='white'/><path d='M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z' fill='white' fill-opacity='0.4'/></g></svg>");
+}
+
+.ios-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ios-home-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 8px;
+  pointer-events: none;
+}
+.ios-home-indicator .bar {
+  width: 139px;
+  height: 5px;
+  border-radius: 100px;
+  background: rgba(0, 0, 0, 0.25);
+}
+.ios-device.dark .ios-home-indicator .bar {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* ─── Screen background (app surface inside the frame) ─────────── */
+.screen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bb-bg);
+  position: relative;
+}
+
+/* ─── App bar (top of shell B screens) ─────────────────────────── */
+.app-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 56px 20px 8px;
+  background: var(--bb-bg);
+}
+.app-bar .title {
+  font: 700 22px/1.2 var(--bb-font-sans);
+  color: var(--bb-text-primary);
+  letter-spacing: -0.01em;
+}
+.app-bar .icon-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--bb-surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--bb-text-primary);
+}
+.app-bar .icon-btn .dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bb-accent-500);
+  border: 2px solid var(--bb-surface-alt);
+}
+
+/* Variant: app bar with back button on left + title centered */
+.app-bar-back {
+  display: flex;
+  align-items: center;
+  padding: 56px 12px 8px;
+  background: var(--bb-bg);
+}
+.app-bar-back .back {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--bb-text-primary);
+}
+.app-bar-back .center-title {
+  flex: 1;
+  text-align: center;
+  font: 700 18px/1.2 var(--bb-font-sans);
+  color: var(--bb-text-primary);
+  letter-spacing: -0.01em;
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.app-bar-back .right-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--bb-surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 8px;
+  color: var(--bb-text-primary);
+}
+.app-bar-back .right-btn .dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bb-accent-500);
+  border: 2px solid var(--bb-surface-alt);
+}
+
+/* ─── Tab bar (bottom of shell B) ──────────────────────────────── */
+.tab-bar {
+  display: flex;
+  border-top: 1px solid var(--bb-border);
+  background: var(--bb-surface);
+  padding: 8px 0 18px;
+}
+.tab-bar .tab {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0;
+  color: var(--bb-text-tertiary);
+  font: 600 11px/1 var(--bb-font-sans);
+}
+.tab-bar .tab.active {
+  color: var(--bb-primary-500);
+}
+
+/* ─── Body container (scroll area) ─────────────────────────────── */
+.screen-body {
+  flex: 1;
+  overflow: auto;
+  padding: 8px 20px 24px;
+}
+
+/* ─── Typography ───────────────────────────────────────────────── */
+.h-greeting {
+  font: 700 32px/1.15 var(--bb-font-sans);
+  letter-spacing: -0.01em;
+  color: var(--bb-text-primary);
+}
+.h-title-lg {
+  font: 800 28px/1.2 var(--bb-font-sans);
+  letter-spacing: -0.01em;
+  color: var(--bb-text-primary);
+}
+.h-section {
+  font: 700 20px/1.25 var(--bb-font-sans);
+  color: var(--bb-text-primary);
+  letter-spacing: -0.01em;
+}
+.body-text {
+  font: 400 15px/1.45 var(--bb-font-sans);
+  color: var(--bb-text-secondary);
+}
+.body-text-primary {
+  font: 400 15px/1.45 var(--bb-font-sans);
+  color: var(--bb-text-primary);
+}
+.caption-up {
+  font: 700 11px/1 var(--bb-font-sans);
+  color: var(--bb-text-tertiary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ─── Buttons ──────────────────────────────────────────────────── */
+.btn {
+  height: 52px;
+  width: 100%;
+  border-radius: 12px;
+  border: 0;
+  cursor: pointer;
+  font: 700 16px/1 var(--bb-font-sans);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.btn:active {
+  transform: translateY(1px) scale(0.998);
+}
+.btn-primary {
+  background: var(--bb-primary-500);
+  color: var(--bb-text-inverse);
+  box-shadow: 0 2px 8px rgba(62, 143, 124, 0.18);
+}
+.btn-primary[disabled] {
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
+}
+.btn-danger {
+  background: var(--bb-danger);
+  color: var(--bb-text-inverse);
+  box-shadow: 0 2px 8px rgba(196, 87, 87, 0.22);
+}
+.btn-outline {
+  height: 48px;
+  background: var(--bb-surface);
+  border: 1.5px solid var(--bb-primary-500);
+  color: var(--bb-primary-500);
+  font: 600 16px/1 var(--bb-font-sans);
+}
+.btn-ghost {
+  height: 44px;
+  background: transparent;
+  color: var(--bb-primary-500);
+  font: 600 16px/1 var(--bb-font-sans);
+}
+.btn-link {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--bb-primary-500);
+  font: 600 14px/1 var(--bb-font-sans);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 8px;
+}
+
+/* ─── Cards ────────────────────────────────────────────────────── */
+.card {
+  background: var(--bb-surface);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--bb-shadow-raised);
+}
+.card.alt {
+  background: var(--bb-surface-alt);
+  box-shadow: none;
+}
+.card.bordered {
+  border: 1px solid var(--bb-border);
+  box-shadow: none;
+}
+
+/* ─── Chips ────────────────────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  border: 1px solid var(--bb-border);
+  background: var(--bb-surface);
+  color: var(--bb-text-primary);
+  font: 600 14px/1 var(--bb-font-sans);
+  cursor: pointer;
+  transition: all 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.chip.selected {
+  background: var(--bb-primary-500);
+  color: var(--bb-text-inverse);
+  border-color: transparent;
+  box-shadow: var(--bb-shadow-raised);
+}
+.chip .chip-icon {
+  color: var(--bb-primary-500);
+  display: inline-flex;
+}
+.chip.selected .chip-icon {
+  color: var(--bb-text-inverse);
+}
+
+/* ─── Inputs ───────────────────────────────────────────────────── */
+.text-input {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  padding: 0 16px;
+  background: var(--bb-surface);
+  border: 1px solid var(--bb-border);
+  border-radius: 12px;
+}
+.text-input input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: 500 16px/1.4 var(--bb-font-sans);
+  color: var(--bb-text-primary);
+}
+.text-input .trailing-btn {
+  width: 32px;
+  height: 32px;
+  margin-left: 8px;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--bb-text-tertiary);
+}
+.field-label {
+  font: 400 14px/1.45 var(--bb-font-sans);
+  color: var(--bb-text-secondary);
+  margin-bottom: 8px;
+}
+.field-helper {
+  font: 400 13px/1.4 var(--bb-font-sans);
+  color: var(--bb-text-tertiary);
+  margin-top: 6px;
+}
+
+/* Select-like tap field */
+.select-field {
+  height: 52px;
+  padding: 0 16px;
+  background: var(--bb-surface);
+  border: 1px solid var(--bb-border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  color: var(--bb-text-tertiary);
+  font: 400 16px/1 var(--bb-font-sans);
+}
+.select-field.filled {
+  color: var(--bb-text-primary);
+}
+.select-field span.value {
+  flex: 1;
+}
+
+/* Pill currency selector */
+.pill-select {
+  height: 52px;
+  padding: 0 14px;
+  background: var(--bb-surface-alt);
+  border: 0;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  font: 700 14px/1 var(--bb-font-sans);
+  color: var(--bb-text-primary);
+  letter-spacing: 0.02em;
+}
+
+/* ─── Step progress bar ────────────────────────────────────────── */
+.step-progress {
+  display: flex;
+  gap: 6px;
+  height: 6px;
+}
+.step-progress span {
+  flex: 1;
+  border-radius: 3px;
+  background: var(--bb-border);
+}
+.step-progress span.done {
+  background: var(--bb-primary-500);
+}
+
+/* ─── Level badge ──────────────────────────────────────────────── */
+.level-badge {
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bb-text-inverse);
+  font-family: var(--bb-font-sans);
+  font-weight: 800;
+}
+
+/* ─── PRO pill ─────────────────────────────────────────────────── */
+.pro-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  background: var(--bb-accent-500);
+  color: var(--bb-text-inverse);
+  font: 800 10px/1 var(--bb-font-sans);
+  letter-spacing: 0.06em;
+}
+
+/* ─── Sheets ───────────────────────────────────────────────────── */
+.sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(44, 42, 38, 0.4);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  background: var(--bb-surface);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -8px 24px rgba(44, 42, 38, 0.14);
+  display: flex;
+  flex-direction: column;
+  padding: 12px 20px 24px;
+  overflow: hidden;
+}
+.sheet .handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--bb-border);
+  margin: 0 auto 12px;
+}
+
+/* ─── Toggle switch ────────────────────────────────────────────── */
+.toggle {
+  width: 44px;
+  height: 26px;
+  border-radius: 9999px;
+  background: var(--bb-border);
+  position: relative;
+  transition: background 200ms;
+  flex-shrink: 0;
+}
+.toggle.on {
+  background: var(--bb-primary-500);
+}
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: left 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.toggle.on::after {
+  left: 21px;
+}
+
+/* ─── Settings list ────────────────────────────────────────────── */
+.settings-list {
+  background: var(--bb-surface);
+  border-radius: 12px;
+  box-shadow: var(--bb-shadow-raised);
+  overflow: hidden;
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--bb-border);
+  cursor: pointer;
+}
+.settings-row:last-child {
+  border-bottom: 0;
+}
+.settings-row .label {
+  flex: 1;
+  font: 600 15px/1.2 var(--bb-font-sans);
+  color: var(--bb-text-primary);
+}
+.settings-row.danger .label {
+  color: var(--bb-danger);
+}
+
+/* ─── Spacers ──────────────────────────────────────────────────── */
+.sp-2 {
+  height: 8px;
+}
+.sp-3 {
+  height: 12px;
+}
+.sp-4 {
+  height: 16px;
+}
+.sp-6 {
+  height: 24px;
+}
+.sp-8 {
+  height: 32px;
+}
+.sp-12 {
+  height: 48px;
+}
+.grow {
+  flex: 1;
+}
+
+/* ─── Sticky bottom CTA region ─────────────────────────────────── */
+.sticky-bottom {
+  padding: 16px 20px 24px;
+  background: var(--bb-bg);
+}
+
+/* ─── Decision block on Audit / Vault Detail ───────────────────── */
+.decision-block {
+  background: var(--bb-bg);
+  padding: 16px 20px;
+  box-shadow: 0 -8px 24px rgba(44, 42, 38, 0.06);
+  position: relative;
+  z-index: 2;
+}
+.decision-row {
+  display: flex;
+  gap: 12px;
+}
+
+/* ─── Swipe-to-skip track (static visual) ──────────────────────── */
+.swipe-track {
+  position: relative;
+  height: 56px;
+  border-radius: 20px;
+  background: var(--bb-primary-100);
+  padding: 4px;
+  overflow: hidden;
+}
+.swipe-track .label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 600 16px/1 var(--bb-font-sans);
+  color: var(--bb-primary-700);
+  pointer-events: none;
+}
+.swipe-track .handle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--bb-primary-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bb-text-inverse);
+  box-shadow: var(--bb-shadow-raised);
+}

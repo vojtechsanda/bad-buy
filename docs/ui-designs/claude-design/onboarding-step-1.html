@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BadBuy — Onboarding Step 1</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="stage-bg">
+    <a class="back-to-index" href="index.html" title="Back to all screens"
+      ><svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M15 6l-6 6 6 6" /></svg
+      >All screens</a
+    >
+    <div class="stage">
+      <div class="ios-device">
+        <div class="ios-island"></div>
+        <div class="ios-status-bar">
+          <div class="time">9:41</div>
+          <div class="icons"></div>
+        </div>
+        <div class="ios-content">
+          <div class="screen">
+            <div style="height: 54px; flex-shrink: 0"></div>
+            <div style="padding: 12px 20px 0">
+              <div class="step-progress"><span class="done"></span><span></span><span></span></div>
+            </div>
+            <div style="flex: 1; overflow: auto; padding: 32px 20px 24px">
+              <div
+                style="
+                  font: 700 32px/1.15 var(--bb-font-sans);
+                  letter-spacing: -0.01em;
+                  color: var(--bb-text-primary);
+                ">
+                Tell us about you
+              </div>
+              <div
+                style="
+                  font: 400 15px/1.45 var(--bb-font-sans);
+                  color: var(--bb-text-secondary);
+                  margin-top: 6px;
+                ">
+                We'll personalize your experience.
+              </div>
+              <div class="sp-8"></div>
+
+              <div style="display: flex; flex-direction: column; gap: 24px">
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <div style="display: flex; align-items: center; gap: 6px">
+                    <span
+                      style="font: 600 14px/1.2 var(--bb-font-sans); color: var(--bb-text-primary)"
+                      >Your name</span
+                    >
+                  </div>
+                  <div class="text-input">
+                    <input
+                      placeholder="How should we call you?"
+                      style="font-weight: 400; color: var(--bb-text-primary)" />
+                  </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <div style="display: flex; align-items: center; gap: 6px">
+                    <span
+                      style="font: 600 14px/1.2 var(--bb-font-sans); color: var(--bb-text-primary)"
+                      >Birthdate</span
+                    >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--bb-text-tertiary)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 16v-4" />
+                      <circle cx="12" cy="8" r="0.5" fill="var(--bb-text-tertiary)" />
+                    </svg>
+                  </div>
+                  <button class="select-field">
+                    <span class="value">Select date</span>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--bb-text-secondary)"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <div style="display: flex; align-items: center; gap: 6px">
+                    <span
+                      style="font: 600 14px/1.2 var(--bb-font-sans); color: var(--bb-text-primary)"
+                      >Country</span
+                    >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--bb-text-tertiary)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M12 16v-4" />
+                      <circle cx="12" cy="8" r="0.5" fill="var(--bb-text-tertiary)" />
+                    </svg>
+                  </div>
+                  <button class="select-field">
+                    <span class="value">Select your country</span>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--bb-text-secondary)"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="sticky-bottom">
+              <button class="btn btn-primary" disabled>Continue</button>
+            </div>
+            <div style="height: 8px; flex-shrink: 0"></div>
+          </div>
+        </div>
+        <div class="ios-home-indicator"><div class="bar"></div></div>
+      </div>
+      <div class="stage-label">Onboarding · 1 of 3 — Tell us about you</div>
+    </div>
+  </body>
+</html>

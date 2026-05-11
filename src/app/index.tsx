@@ -91,6 +91,43 @@ function ElevationCard({
   );
 }
 
+function FontComparisonCard() {
+  return (
+    <View className="gap-3 rounded-lg border border-outline-200 bg-background-0 p-4 shadow-raised">
+      <View className="gap-1">
+        <Text className="font-nunito-semibold text-body-sm text-typography-700">
+          Font comparison
+        </Text>
+        <Text className="font-nunito text-2xs text-typography-400">
+          I swear to god I think I have eye problems because I can&apos;t tell the difference
+          between these two paragraphs without looking at the CSS classes. One of them is using the
+          Nunito font and the other is using the system font, but I have no idea which is which.
+          They look exactly the same to me. Is this a trick question? Am I going crazy? Please help.
+        </Text>
+      </View>
+
+      <View className="gap-3">
+        <View className="gap-2 rounded-md bg-background-50 p-3">
+          <Text className=" text-2xs uppercase tracking-wider text-typography-400">
+            System font
+          </Text>
+          <Text className="text-body text-typography-900">
+            Buy less, choose well, and keep your cart intentionally small.
+          </Text>
+        </View>
+        <View className="gap-2 rounded-md  bg-background-50 p-3">
+          <Text className="font-nunito  text-2xs uppercase tracking-wider text-typography-400">
+            Nunito font
+          </Text>
+          <Text className="font-nunito text-body text-typography-900">
+            Buy less, choose well, and keep your cart intentionally small.
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+
 // ─── screen ──────────────────────────────────────────────────────────────────
 
 export default function Index() {
@@ -104,6 +141,8 @@ export default function Index() {
             Design system · §4 full reference
           </Text>
         </View>
+
+        <FontComparisonCard />
 
         <Divider />
 

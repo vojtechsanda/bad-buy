@@ -1,0 +1,279 @@
+<!doctype html>
+
+<html lang="en" style="width: 390px">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Profile - Financial Wellness App</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'outline-variant': '#bec9c4',
+              'on-tertiary-fixed-variant': '#733429',
+              'on-primary-fixed': '#00201a',
+              'secondary-fixed': '#ffdbcd',
+              'secondary-container': '#feae8c',
+              'primary-fixed': '#a1f2dc',
+              'on-error': '#ffffff',
+              'on-background': '#181c1b',
+              primary: '#056857',
+              'tertiary-container': '#aa6053',
+              'surface-container': '#ebefec',
+              tertiary: '#8d483c',
+              'surface-container-highest': '#e0e3e0',
+              background: '#f7faf7',
+              'on-surface-variant': '#3f4945',
+              secondary: '#8c4e33',
+              'surface-bright': '#f7faf7',
+              'primary-container': '#2f826f',
+              'error-container': '#ffdad6',
+              'on-primary': '#ffffff',
+              'inverse-on-surface': '#eef2ee',
+              'on-tertiary-container': '#fffbff',
+              'tertiary-fixed-dim': '#ffb4a6',
+              'surface-variant': '#e0e3e0',
+              error: '#ba1a1a',
+              'on-surface': '#181c1b',
+              'secondary-fixed-dim': '#ffb596',
+              'tertiary-fixed': '#ffdad4',
+              'surface-container-low': '#f1f4f1',
+              outline: '#6f7975',
+              'surface-dim': '#d7dbd8',
+              'surface-container-lowest': '#ffffff',
+              'on-primary-fixed-variant': '#005143',
+              'on-secondary-container': '#793f25',
+              'on-tertiary-fixed': '#3a0a04',
+              'surface-tint': '#0c6b59',
+              surface: '#f7faf7',
+              'surface-container-high': '#e6e9e6',
+              'on-secondary-fixed': '#360f00',
+              'inverse-surface': '#2d3130',
+              'on-secondary': '#ffffff',
+              'on-error-container': '#93000a',
+              'on-primary-container': '#f4fffa',
+              'on-tertiary': '#ffffff',
+              'on-secondary-fixed-variant': '#6f371e',
+              'inverse-primary': '#86d6c0',
+              'primary-fixed-dim': '#86d6c0',
+            },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px',
+            },
+            spacing: {
+              xs: '4px',
+              xl: '48px',
+              sm: '8px',
+              md: '16px',
+              lg: '24px',
+            },
+            fontFamily: {
+              'body-sm': ['Manrope'],
+              'display-lg': ['Manrope'],
+              'display-md': ['Manrope'],
+              body: ['Manrope'],
+              caption: ['Manrope'],
+            },
+            fontSize: {
+              'body-sm': ['13px', { lineHeight: '20px', fontWeight: '400' }],
+              'display-lg': ['28px', { lineHeight: '36px', fontWeight: '800' }],
+              'display-md': ['22px', { lineHeight: '30px', fontWeight: '700' }],
+              body: ['15px', { lineHeight: '22px', fontWeight: '400' }],
+              caption: ['11px', { lineHeight: '16px', letterSpacing: '0.08em', fontWeight: '600' }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #fbf9f5;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+      .material-symbols-outlined.fill {
+        font-variation-settings:
+          'FILL' 1,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="text-on-surface min-h-screen pb-[90px] antialiased">
+    <!-- Top App Bar (Web / Desktop Hidden, Mobile Only) -->
+    <header
+      class="docked full-width sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-[#E8E2D6] bg-white px-4 dark:border-stone-800 dark:bg-stone-950 md:hidden">
+      <h1
+        class="font-manrope text-lg font-semibold tracking-tight text-[#3E8F7C] dark:text-teal-400">
+        Profile
+      </h1>
+      <span class="material-symbols-outlined text-[#3E8F7C] dark:text-teal-400">notifications</span>
+    </header>
+    <!-- Main Content Container -->
+    <main class="pt-lg space-y-lg mx-auto w-full max-w-[1200px] px-[20px]">
+      <!-- Top App Bar (Desktop / Web) -->
+      <header
+        class="docked full-width mb-xl top-0 hidden h-16 w-full items-center justify-between rounded-xl border-b border-[#E8E2D6] bg-white px-4 dark:border-stone-800 dark:bg-stone-950 md:flex">
+        <h1
+          class="font-manrope text-lg font-semibold tracking-tight text-[#3E8F7C] dark:text-teal-400">
+          Profile
+        </h1>
+        <span
+          class="material-symbols-outlined cursor-pointer rounded-full p-2 text-[#3E8F7C] transition-colors hover:bg-stone-50 dark:text-teal-400 dark:hover:bg-stone-900"
+          >notifications</span
+        >
+      </header>
+      <!-- Identity Block -->
+      <section class="pt-md pb-sm flex flex-col items-center">
+        <div
+          class="bg-surface-container-high border-outline-variant mb-md flex h-[96px] w-[96px] items-center justify-center overflow-hidden rounded-full border">
+          <img
+            alt="User avatar"
+            class="h-full w-full object-cover"
+            data-alt="A minimalist vector illustration of a human face in a clean, modern flat design style. The avatar features simple geometric shapes, soft pastel colors, and a calm, mindful expression. It perfectly aligns with a warm, organic financial wellness app aesthetic, using gentle earth tones and a soft blue background."
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlFtwwQeVaBXmQcMACYW8GlT7Hg2y_EP32Wupxk4E3SBE7PJw1tXGTcvgvh3vZOZit9NGrfK5nzJ2uTqMBHU2GodLuLJmmRJOK5vwaaRzE4YSnjuehI5L5o_AJi7Sat1zEE7IYkI4RmoaSANSMVC30k9XkSGVzjX04Y_zKKbLL3eQ7-Wz7Nt67RRw1RdtmSV_Adkzhp4q_MyucUFMuZoNA-n0mkRfDjrWj1PrbpLnXl3TFvkicL47Grsd5HiKdRyim2H6cWYsFuA" />
+        </div>
+        <h2 class="font-display-md text-on-surface mb-xs text-display-md">Vojta</h2>
+        <div class="flex items-center gap-2">
+          <div class="bg-primary h-2 w-2 rounded-full"></div>
+          <p class="font-body text-on-surface-variant text-body">L6 · Mindful</p>
+        </div>
+      </section>
+      <!-- Progress Block -->
+      <section class="space-y-sm px-sm">
+        <div
+          class="bg-surface-container-high h-2 w-full overflow-hidden rounded-full border border-[#E8E2D6]">
+          <div class="bg-primary h-full rounded-full" style="width: 35%"></div>
+        </div>
+        <div class="px-xs flex items-center justify-between">
+          <span class="font-caption text-on-surface-variant text-caption uppercase"
+            >20 more to L7</span
+          >
+          <span class="font-caption text-on-surface-variant text-caption uppercase"
+            >L7: Mindful</span
+          >
+        </div>
+      </section>
+      <!-- Total Saved Card -->
+      <section
+        class="p-md py-xl flex flex-col items-center justify-center rounded-xl border border-[#E8E2D6] bg-[#F4F1EB]">
+        <h3
+          class="font-caption text-on-surface-variant mb-xs text-caption uppercase tracking-wider">
+          Total Saved
+        </h3>
+        <p class="font-display-lg text-on-surface text-display-lg">€1,247.00</p>
+      </section>
+      <!-- Premium Block -->
+      <section
+        class="bg-surface-container-lowest p-md hover:bg-surface-container-low flex cursor-pointer items-center justify-between rounded-xl border border-[#E8E2D6] shadow-sm transition-colors">
+        <span
+          class="font-caption text-on-surface-variant bg-surface-container-lowest rounded-full border border-[#E8E2D6] px-3 py-1 text-caption uppercase"
+          >Free</span
+        >
+        <span class="font-body flex items-center gap-1 text-body font-semibold text-[#3E8F7C]"
+          >Get Premium <span class="material-symbols-outlined text-sm">arrow_forward</span></span
+        >
+      </section>
+      <!-- Referral Block -->
+      <section
+        class="bg-surface-container-lowest p-md space-y-md flex flex-col items-center rounded-xl border border-[#E8E2D6] text-center shadow-sm">
+        <h3 class="font-caption text-on-surface-variant text-caption uppercase tracking-wider">
+          Your Referral Code
+        </h3>
+        <p class="font-mono text-on-surface text-[22px] font-bold tracking-[0.1em]">K7M2QP</p>
+        <button
+          class="px-md font-body hover:bg-surface-container-low flex items-center gap-2 rounded-lg border-[1.5px] border-[#3E8F7C] py-2 text-body font-semibold text-[#3E8F7C] transition-colors">
+          <span class="material-symbols-outlined text-sm">content_copy</span>
+          Copy code
+        </button>
+        <p class="font-caption text-on-surface-variant text-caption normal-case tracking-normal">
+          Share with a friend to get 3 months of Premium free.
+        </p>
+      </section>
+      <!-- Settings List -->
+      <section
+        class="bg-surface-container-lowest mb-xl overflow-hidden rounded-xl border border-[#E8E2D6] shadow-sm">
+        <div
+          class="px-md hover:bg-surface-container-low flex h-[56px] cursor-pointer items-center justify-between border-b border-[#E8E2D6] transition-colors">
+          <span class="font-body text-on-surface text-body">Personal info</span>
+          <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+        </div>
+        <div
+          class="px-md hover:bg-surface-container-low flex h-[56px] cursor-pointer items-center justify-between border-b border-[#E8E2D6] transition-colors">
+          <span class="font-body text-on-surface text-body">Hobbies</span>
+          <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+        </div>
+        <div
+          class="px-md hover:bg-surface-container-low flex h-[56px] cursor-pointer items-center justify-between border-b border-[#E8E2D6] transition-colors">
+          <span class="font-body text-on-surface text-body">Redeem code</span>
+          <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+        </div>
+        <div class="px-md flex h-[56px] items-center justify-between border-b border-[#E8E2D6]">
+          <span class="font-body text-on-surface text-body">Notifications</span>
+          <div
+            class="relative h-6 w-10 cursor-pointer rounded-full border border-[#3E8F7C] bg-[#3E8F7C]">
+            <div class="absolute right-1 top-1 h-4 w-4 rounded-full bg-white"></div>
+          </div>
+        </div>
+        <div
+          class="px-md hover:bg-surface-container-low flex h-[56px] cursor-pointer items-center justify-between border-b border-[#E8E2D6] transition-colors">
+          <span class="font-body text-on-surface text-body">Log out</span>
+          <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+        </div>
+        <div
+          class="px-md hover:bg-error-container/20 flex h-[56px] cursor-pointer items-center justify-between transition-colors">
+          <span class="font-body text-body text-[#C45757]">Delete account</span>
+          <span class="material-symbols-outlined text-[#C45757]">chevron_right</span>
+        </div>
+      </section>
+    </main>
+    <!-- Bottom Nav Bar (Mobile Only) -->
+    <nav
+      class="pb-safe fixed bottom-0 left-0 z-50 flex w-full items-center justify-around border-t border-[#E8E2D6] bg-white/80 px-2 py-3 backdrop-blur-md dark:border-stone-800 dark:bg-stone-950/80 md:hidden">
+      <a
+        class="flex scale-95 flex-col items-center justify-center px-4 py-1.5 text-stone-400 transition-transform duration-200 hover:text-[#3E8F7C] active:scale-90 dark:text-stone-500 dark:hover:text-teal-400"
+        href="#">
+        <span class="material-symbols-outlined mb-1 text-[24px]">account_balance_wallet</span>
+        <span class="font-manrope text-[10px] font-medium">Vault</span>
+      </a>
+      <a
+        class="flex scale-95 flex-col items-center justify-center px-4 py-1.5 text-stone-400 transition-transform duration-200 hover:text-[#3E8F7C] active:scale-90 dark:text-stone-500 dark:hover:text-teal-400"
+        href="#">
+        <span class="material-symbols-outlined mb-1 text-[24px]">home</span>
+        <span class="font-manrope text-[10px] font-medium">Home</span>
+      </a>
+      <a
+        class="flex scale-95 flex-col items-center justify-center rounded-2xl bg-teal-50 px-4 py-1.5 text-[#3E8F7C] transition-transform duration-200 active:scale-90 dark:bg-teal-900/20 dark:text-teal-300"
+        href="#">
+        <span class="material-symbols-outlined fill mb-1 text-[24px]">person</span>
+        <span class="font-manrope text-[10px] font-bold font-medium">Profile</span>
+      </a>
+    </nav>
+  </body>
+</html>

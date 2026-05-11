@@ -1,0 +1,172 @@
+<!doctype html>
+
+<html lang="en" style="width: 390px">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Delete Account Confirmation</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'surface-container': '#ebefec',
+              'on-tertiary-fixed': '#3a0a04',
+              'on-error': '#ffffff',
+              'surface-bright': '#f7faf7',
+              'on-error-container': '#93000a',
+              'on-primary': '#ffffff',
+              'surface-variant': '#e0e3e0',
+              'surface-container-lowest': '#ffffff',
+              'primary-fixed': '#a1f2dc',
+              'on-primary-fixed': '#00201a',
+              'surface-container-high': '#e6e9e6',
+              'secondary-container': '#feae8c',
+              'surface-tint': '#0c6b59',
+              'primary-fixed-dim': '#86d6c0',
+              'on-tertiary-fixed-variant': '#733429',
+              'on-primary-container': '#f4fffa',
+              'inverse-primary': '#86d6c0',
+              'surface-container-highest': '#e0e3e0',
+              'on-tertiary-container': '#fffbff',
+              background: '#f7faf7',
+              secondary: '#8c4e33',
+              'on-secondary-fixed': '#360f00',
+              'on-surface': '#181c1b',
+              primary: '#056857',
+              'on-secondary-container': '#793f25',
+              'secondary-fixed': '#ffdbcd',
+              'on-primary-fixed-variant': '#005143',
+              'tertiary-fixed-dim': '#ffb4a6',
+              'on-surface-variant': '#3f4945',
+              outline: '#6f7975',
+              'inverse-surface': '#2d3130',
+              surface: '#f7faf7',
+              'surface-container-low': '#f1f4f1',
+              'on-background': '#181c1b',
+              'tertiary-fixed': '#ffdad4',
+              'tertiary-container': '#aa6053',
+              'primary-container': '#2f826f',
+              'on-secondary-fixed-variant': '#6f371e',
+              'inverse-on-surface': '#eef2ee',
+              'surface-dim': '#d7dbd8',
+              'on-secondary': '#ffffff',
+              'on-tertiary': '#ffffff',
+              error: '#ba1a1a',
+              tertiary: '#8d483c',
+              'error-container': '#ffdad6',
+              'secondary-fixed-dim': '#ffb596',
+              'outline-variant': '#bec9c4',
+            },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px',
+            },
+            spacing: {
+              xl: '48px',
+              lg: '24px',
+              xs: '4px',
+              sm: '8px',
+              md: '16px',
+            },
+            fontFamily: {
+              body: ['Manrope'],
+              caption: ['Manrope'],
+              'display-md': ['Manrope'],
+              'body-sm': ['Manrope'],
+              'display-lg': ['Manrope'],
+            },
+            fontSize: {
+              body: ['15px', { lineHeight: '22px', fontWeight: '400' }],
+              caption: ['11px', { lineHeight: '16px', letterSpacing: '0.08em', fontWeight: '600' }],
+              'display-md': ['22px', { lineHeight: '30px', fontWeight: '700' }],
+              'body-sm': ['13px', { lineHeight: '20px', fontWeight: '400' }],
+              'display-lg': ['28px', { lineHeight: '36px', fontWeight: '800' }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background font-body relative flex min-h-screen items-center justify-center text-body antialiased">
+    <!-- Mock Background Content to show overlay effect -->
+    <div class="p-lg absolute inset-0 z-0 mx-auto w-full max-w-[1200px] opacity-30">
+      <header class="mb-xl flex items-center justify-between">
+        <div class="bg-surface-container h-8 w-32 rounded"></div>
+        <div class="bg-surface-container h-10 w-10 rounded-full"></div>
+      </header>
+      <div class="gap-md grid grid-cols-1 md:grid-cols-2">
+        <div class="bg-surface-container h-64 rounded-xl"></div>
+        <div class="bg-surface-container h-64 rounded-xl"></div>
+      </div>
+    </div>
+    <!-- Backdrop Overlay -->
+    <div
+      aria-hidden="true"
+      class="bg-primary/40 fixed inset-0 z-40 backdrop-blur-sm transition-opacity"></div>
+    <!-- Bottom Sheet Container -->
+    <div
+      class="bg-surface-container-lowest pt-sm pb-xl px-lg fixed inset-x-0 bottom-0 z-50 mx-auto flex w-full max-w-lg flex-col items-center rounded-t-[20px] shadow-2xl">
+      <!-- Drag Handle -->
+      <div class="bg-outline-variant mb-lg h-1 w-9 rounded-full opacity-60"></div>
+      <!-- Content Area -->
+      <div class="flex w-full flex-col items-center text-center">
+        <!-- Warning Icon (Optional Enhancement based on Danger context) -->
+        <div
+          class="bg-error-container/50 mb-md flex h-12 w-12 items-center justify-center rounded-full">
+          <span class="material-symbols-outlined text-error text-[24px]">warning</span>
+        </div>
+        <!-- Title -->
+        <h2 class="font-display-md text-error mb-sm text-display-md">Delete your account?</h2>
+        <!-- Caption -->
+        <p class="font-body text-on-surface-variant mb-xl max-w-[320px] text-body">
+          This will permanently delete your profile, your decisions history, your hobbies, and any
+          Premium time you have left. This cannot be undone.
+        </p>
+        <!-- Actions -->
+        <div class="gap-sm flex w-full flex-col">
+          <!-- Primary CTA (Danger) -->
+          <button
+            class="bg-error text-on-error font-body hover:bg-error/90 flex h-[52px] w-full items-center justify-center rounded-xl text-body font-semibold transition-all active:scale-[0.98]"
+            type="button">
+            Delete account
+          </button>
+          <!-- Secondary CTA (Ghost) -->
+          <button
+            class="text-primary font-body hover:bg-surface-container-low flex h-[52px] w-full items-center justify-center rounded-xl bg-transparent text-body font-semibold transition-all active:scale-[0.98]"
+            type="button">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

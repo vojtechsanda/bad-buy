@@ -1,0 +1,303 @@
+<!doctype html>
+
+<html lang="en" style="width: 390px">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Financial Wellness - Audit</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'on-secondary': '#ffffff',
+              'outline-variant': '#bec9c4',
+              'primary-fixed-dim': '#86d6c0',
+              primary: '#056857',
+              'on-surface-variant': '#3f4945',
+              'surface-dim': '#d7dbd8',
+              'secondary-fixed': '#ffdbcd',
+              'tertiary-fixed': '#ffdad4',
+              'surface-bright': '#f7faf7',
+              'on-primary-fixed-variant': '#005143',
+              'tertiary-fixed-dim': '#ffb4a6',
+              'primary-container': '#2f826f',
+              'surface-tint': '#0c6b59',
+              'surface-container-low': '#f1f4f1',
+              'surface-container-high': '#e6e9e6',
+              'surface-container': '#ebefec',
+              'on-tertiary-container': '#fffbff',
+              'surface-container-highest': '#e0e3e0',
+              surface: '#f7faf7',
+              'secondary-fixed-dim': '#ffb596',
+              'on-surface': '#181c1b',
+              error: '#ba1a1a',
+              'on-primary': '#ffffff',
+              'surface-container-lowest': '#ffffff',
+              'on-secondary-fixed': '#360f00',
+              'tertiary-container': '#aa6053',
+              'on-background': '#181c1b',
+              outline: '#6f7975',
+              'inverse-surface': '#2d3130',
+              background: '#f7faf7',
+              'primary-fixed': '#a1f2dc',
+              'on-primary-fixed': '#00201a',
+              'surface-variant': '#e0e3e0',
+              secondary: '#8c4e33',
+              'on-secondary-fixed-variant': '#6f371e',
+              'on-primary-container': '#f4fffa',
+              'error-container': '#ffdad6',
+              'on-tertiary-fixed': '#3a0a04',
+              'on-secondary-container': '#793f25',
+              'inverse-on-surface': '#eef2ee',
+              tertiary: '#8d483c',
+              'on-tertiary': '#ffffff',
+              'secondary-container': '#feae8c',
+              'on-error': '#ffffff',
+              'inverse-primary': '#86d6c0',
+              'on-tertiary-fixed-variant': '#733429',
+              'on-error-container': '#93000a',
+            },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px',
+            },
+            spacing: {
+              lg: '24px',
+              xs: '4px',
+              sm: '8px',
+              xl: '48px',
+              md: '16px',
+            },
+            fontFamily: {
+              'display-lg': ['Manrope'],
+              caption: ['Manrope'],
+              body: ['Manrope'],
+              'display-md': ['Manrope'],
+              'body-sm': ['Manrope'],
+            },
+            fontSize: {
+              'display-lg': ['28px', { lineHeight: '36px', fontWeight: '800' }],
+              caption: ['11px', { lineHeight: '16px', letterSpacing: '0.08em', fontWeight: '600' }],
+              body: ['15px', { lineHeight: '22px', fontWeight: '400' }],
+              'display-md': ['22px', { lineHeight: '30px', fontWeight: '700' }],
+              'body-sm': ['13px', { lineHeight: '20px', fontWeight: '400' }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #fbf9f5;
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="font-body text-on-background relative mx-auto flex min-h-screen max-w-[390px] flex-col bg-[#FBF9F5] text-body antialiased">
+    <!-- TopAppBar -->
+    <header
+      class="docked full-width sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-[#E8E2D6] bg-white px-4 dark:border-stone-800 dark:bg-stone-900">
+      <button
+        class="flex items-center justify-center rounded-full p-2 text-[#3E8F7C] transition-colors transition-transform hover:bg-stone-50 active:scale-95 dark:text-[#3E8F7C] dark:hover:bg-stone-800">
+        <span class="material-symbols-outlined" data-icon="arrow_back" data-weight="regular"
+          >arrow_back</span
+        >
+      </button>
+      <h1
+        class="font-['Manrope'] text-lg font-semibold tracking-tight text-[#2C2A26] dark:text-[#2C2A26]">
+        Audit
+      </h1>
+      <button
+        class="relative flex items-center justify-center rounded-full p-2 text-[#3E8F7C] transition-colors transition-transform hover:bg-stone-50 active:scale-95 dark:text-[#3E8F7C] dark:hover:bg-stone-800">
+        <span class="material-symbols-outlined" data-icon="account_circle" data-weight="regular"
+          >account_circle</span
+        >
+      </button>
+    </header>
+    <!-- Main Content Canvas -->
+    <main class="hide-scrollbar pt-lg flex-1 overflow-y-auto px-[20px] pb-[180px]">
+      <!-- Price Block -->
+      <section class="mb-xl flex flex-col items-center justify-center">
+        <h2 class="font-caption mb-xs text-caption uppercase tracking-widest text-[#6B6660]">
+          PRICE
+        </h2>
+        <div class="font-display-lg text-display-lg text-[#2C2A26]">€89.00</div>
+      </section>
+      <!-- Work Hours Block -->
+      <section
+        class="p-lg mb-xl flex flex-col items-center rounded-xl border border-[#E8E2D6] bg-[#F4F1EB] text-center">
+        <div class="font-display-md mb-sm text-display-md text-[#2A6557]">4.5 hours</div>
+        <p class="font-body text-body text-[#6B6660]">More than half your workday</p>
+      </section>
+      <!-- Alternatives Section -->
+      <section class="mb-lg">
+        <div class="mb-md flex items-center justify-between">
+          <h3 class="font-display-md text-on-surface text-display-md">What else this could buy</h3>
+          <div class="gap-xs flex items-center">
+            <span
+              class="font-caption rounded-full bg-[#E89B7A] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"
+              >PRO</span
+            >
+            <button
+              class="text-primary hover:bg-surface-variant rounded-full p-1 transition-colors active:scale-95">
+              <span class="material-symbols-outlined text-[20px]">refresh</span>
+            </button>
+          </div>
+        </div>
+        <div class="flex flex-col overflow-hidden rounded-xl border border-[#E8E2D6] bg-white">
+          <!-- Item 1 -->
+          <div
+            class="p-md flex items-center justify-between border-b border-[#E8E2D6] last:border-b-0">
+            <div class="gap-md flex items-center">
+              <span class="text-[24px]">🚲</span>
+              <span class="font-body text-on-surface text-body font-semibold">Bike inner tube</span>
+            </div>
+            <span class="font-body text-on-surface-variant text-body">€8.50</span>
+          </div>
+          <!-- Item 2 -->
+          <div
+            class="p-md flex items-center justify-between border-b border-[#E8E2D6] last:border-b-0">
+            <div class="gap-md flex items-center">
+              <span class="text-[24px]">🎸</span>
+              <span class="font-body text-on-surface text-body font-semibold"
+                >Guitar strings set</span
+              >
+            </div>
+            <span class="font-body text-on-surface-variant text-body">€18.00</span>
+          </div>
+          <!-- Item 3 -->
+          <div
+            class="p-md flex items-center justify-between border-b border-[#E8E2D6] last:border-b-0">
+            <div class="gap-md flex items-center">
+              <span class="text-[24px]">☕</span>
+              <span class="font-body text-on-surface text-body font-semibold"
+                >Specialty coffee subscription (1 mo)</span
+              >
+            </div>
+            <span class="font-body text-on-surface-variant text-body">€32.00</span>
+          </div>
+          <!-- Item 4 -->
+          <div
+            class="p-md flex items-center justify-between border-b border-[#E8E2D6] last:border-b-0">
+            <div class="gap-md flex items-center">
+              <span class="text-[24px]">🥾</span>
+              <span class="font-body text-on-surface text-body font-semibold"
+                >Hiking socks (3-pack)</span
+              >
+            </div>
+            <span class="font-body text-on-surface-variant text-body">€24.00</span>
+          </div>
+          <!-- Item 5 -->
+          <div
+            class="p-md bg-surface-bright flex items-center justify-between border-b border-[#E8E2D6] last:border-b-0">
+            <div class="gap-md flex items-center">
+              <span class="text-[24px]">🎧</span>
+              <span class="font-body text-on-surface text-body font-semibold">Cycling earbuds</span>
+            </div>
+            <span class="font-body text-on-surface-variant text-body">€55.00</span>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Decision Block & Nav Area -->
+    <div
+      class="pt-md fixed bottom-0 left-0 z-50 mx-auto w-full max-w-[390px] rounded-t-xl bg-white/90 pb-0 backdrop-blur-md"
+      style="box-shadow: 0 -4px 20px rgba(5, 104, 87, 0.04)">
+      <!-- Action Buttons -->
+      <div class="mb-md gap-md flex px-[20px]">
+        <button
+          class="border-primary text-primary font-body gap-sm hover:bg-surface-variant flex h-[48px] flex-1 items-center justify-center rounded-xl border-[1.5px] bg-white text-body font-semibold transition-colors active:scale-95">
+          <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+          Buy
+        </button>
+        <button
+          class="border-primary text-primary font-body gap-sm hover:bg-surface-variant flex h-[48px] flex-1 items-center justify-center rounded-xl border-[1.5px] bg-white text-body font-semibold transition-colors active:scale-95">
+          <span class="material-symbols-outlined text-[20px]">ac_unit</span>
+          Freeze
+        </button>
+      </div>
+      <!-- Swipe to Skip -->
+      <div class="mb-md px-[20px]">
+        <div
+          class="relative flex h-[56px] items-center justify-center overflow-hidden rounded-[20px] bg-[#D9EBE5]">
+          <div
+            class="bg-primary absolute bottom-1 left-1 top-1 z-10 flex w-[48px] cursor-pointer items-center justify-center rounded-full shadow-sm transition-all hover:brightness-110">
+            <span class="material-symbols-outlined text-white">check</span>
+          </div>
+          <span class="font-body text-primary/70 pointer-events-none pl-8 text-body font-semibold"
+            >Swipe to skip →</span
+          >
+        </div>
+      </div>
+      <!-- BottomNavBar -->
+      <nav
+        class="pb-safe flex w-full items-center justify-around border-t border-[#E8E2D6] bg-white px-2 py-3 dark:border-stone-800 dark:bg-stone-900">
+        <!-- Home (Inactive) -->
+        <button
+          class="flex flex-1 flex-col items-center justify-center text-stone-400 transition-colors transition-transform hover:text-[#3E8F7C] active:scale-90 dark:text-stone-500">
+          <span class="material-symbols-outlined mb-1" data-icon="home" data-weight="regular"
+            >home</span
+          >
+          <span class="font-['Manrope'] text-[10px] font-medium">Home</span>
+        </button>
+        <!-- Audit (Active) -->
+        <button
+          class="flex flex-1 flex-col items-center justify-center rounded-xl bg-[#3E8F7C]/10 px-3 py-1 text-[#3E8F7C] transition-colors transition-transform hover:text-[#3E8F7C] active:scale-90 dark:text-[#3E8F7C]">
+          <span
+            class="material-symbols-outlined mb-1"
+            data-icon="analytics"
+            data-weight="fill"
+            style="font-variation-settings: 'FILL' 1"
+            >analytics</span
+          >
+          <span class="font-['Manrope'] text-[10px] font-medium">Audit</span>
+        </button>
+        <!-- Savings (Inactive) -->
+        <button
+          class="flex flex-1 flex-col items-center justify-center text-stone-400 transition-colors transition-transform hover:text-[#3E8F7C] active:scale-90 dark:text-stone-500">
+          <span
+            class="material-symbols-outlined mb-1"
+            data-icon="account_balance_wallet"
+            data-weight="regular"
+            >account_balance_wallet</span
+          >
+          <span class="font-['Manrope'] text-[10px] font-medium">Savings</span>
+        </button>
+        <!-- Settings (Inactive) -->
+        <button
+          class="flex flex-1 flex-col items-center justify-center text-stone-400 transition-colors transition-transform hover:text-[#3E8F7C] active:scale-90 dark:text-stone-500">
+          <span class="material-symbols-outlined mb-1" data-icon="settings" data-weight="regular"
+            >settings</span
+          >
+          <span class="font-['Manrope'] text-[10px] font-medium">Settings</span>
+        </button>
+      </nav>
+    </div>
+  </body>
+</html>

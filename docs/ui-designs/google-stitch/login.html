@@ -1,0 +1,235 @@
+<!doctype html>
+
+<html lang="en" style="width: 390px">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Financial Wellness - Login</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'outline-variant': '#bec9c4',
+              surface: '#f7faf7',
+              error: '#ba1a1a',
+              background: '#f7faf7',
+              outline: '#6f7975',
+              'inverse-surface': '#2d3130',
+              'surface-variant': '#e0e3e0',
+              'secondary-container': '#feae8c',
+              'on-secondary-fixed-variant': '#6f371e',
+              'primary-container': '#2f826f',
+              'secondary-fixed-dim': '#ffb596',
+              'on-error': '#ffffff',
+              'on-tertiary-container': '#fffbff',
+              'on-secondary-container': '#793f25',
+              'tertiary-container': '#aa6053',
+              tertiary: '#8d483c',
+              'primary-fixed': '#a1f2dc',
+              'surface-container-high': '#e6e9e6',
+              'inverse-on-surface': '#eef2ee',
+              'on-primary': '#ffffff',
+              'surface-tint': '#0c6b59',
+              'surface-dim': '#d7dbd8',
+              'error-container': '#ffdad6',
+              'on-surface-variant': '#3f4945',
+              'on-tertiary-fixed': '#3a0a04',
+              'surface-container-highest': '#e0e3e0',
+              secondary: '#8c4e33',
+              'surface-container-lowest': '#ffffff',
+              'inverse-primary': '#86d6c0',
+              'primary-fixed-dim': '#86d6c0',
+              'surface-bright': '#f7faf7',
+              'on-secondary': '#ffffff',
+              'on-secondary-fixed': '#360f00',
+              'secondary-fixed': '#ffdbcd',
+              'on-primary-fixed': '#00201a',
+              'on-error-container': '#93000a',
+              'tertiary-fixed-dim': '#ffb4a6',
+              'on-tertiary': '#ffffff',
+              'surface-container-low': '#f1f4f1',
+              'on-surface': '#181c1b',
+              'on-primary-container': '#f4fffa',
+              'tertiary-fixed': '#ffdad4',
+              'surface-container': '#ebefec',
+              primary: '#056857',
+              'on-background': '#181c1b',
+              'on-tertiary-fixed-variant': '#733429',
+              'on-primary-fixed-variant': '#005143',
+            },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px',
+            },
+            spacing: {
+              xl: '48px',
+              md: '16px',
+              xs: '4px',
+              sm: '8px',
+              lg: '24px',
+            },
+            fontFamily: {
+              'body-sm': ['Manrope'],
+              'display-md': ['Manrope'],
+              body: ['Manrope'],
+              caption: ['Manrope'],
+              'display-lg': ['Manrope'],
+            },
+            fontSize: {
+              'body-sm': [
+                '13px',
+                {
+                  lineHeight: '20px',
+                  fontWeight: '400',
+                },
+              ],
+              'display-md': [
+                '22px',
+                {
+                  lineHeight: '30px',
+                  fontWeight: '700',
+                },
+              ],
+              body: [
+                '15px',
+                {
+                  lineHeight: '22px',
+                  fontWeight: '400',
+                },
+              ],
+              caption: [
+                '11px',
+                {
+                  lineHeight: '16px',
+                  letterSpacing: '0.08em',
+                  fontWeight: '600',
+                },
+              ],
+              'display-lg': [
+                '28px',
+                {
+                  lineHeight: '36px',
+                  fontWeight: '800',
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #fbf9f5; /* Specific override for the requested background */
+      }
+      /* Hide scrollbar for a cleaner look */
+      ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="font-body text-on-background flex min-h-screen flex-col items-center justify-center antialiased">
+    <!-- Mobile Container to enforce standard width constraints -->
+    <main class="px-md relative mx-auto flex h-screen w-full max-w-md flex-col">
+      <!-- TopAppBar (Minimal for Transactional Screen) -->
+      <header
+        class="pt-sm pb-sm px-md absolute left-0 top-0 flex h-14 w-full items-center justify-between">
+        <button
+          aria-label="Go back"
+          class="hover:bg-surface-container-high text-on-surface flex items-center justify-center rounded-full p-2 transition-colors">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0"
+            >arrow_back_ios</span
+          >
+        </button>
+      </header>
+      <!-- Spacer for Header -->
+      <div class="h-24"></div>
+      <!-- Main Content Area -->
+      <div class="pb-xl flex flex-1 flex-col justify-center">
+        <div class="mb-lg">
+          <h1 class="font-display-md text-on-surface text-display-md">Welcome back</h1>
+        </div>
+        <!-- Login Form -->
+        <form class="gap-md flex flex-col">
+          <!-- Email Field -->
+          <div class="gap-xs flex flex-col">
+            <label class="font-body-sm text-on-surface-variant text-body-sm" for="email"
+              >Email</label
+            >
+            <input
+              class="px-sm bg-surface-container-lowest border-outline-variant font-body text-on-surface focus:ring-primary focus:border-primary h-12 w-full rounded-[12px] border text-body shadow-sm transition-all focus:outline-none focus:ring-1"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              type="email"
+              value="you@example.com" />
+          </div>
+          <!-- Password Field -->
+          <div class="gap-xs mt-sm relative flex flex-col">
+            <label class="font-body-sm text-on-surface-variant text-body-sm" for="password"
+              >Password</label
+            >
+            <div class="relative w-full">
+              <input
+                class="px-sm bg-surface-container-lowest border-outline-variant font-body text-on-surface focus:ring-primary focus:border-primary h-12 w-full rounded-[12px] border pr-12 text-body shadow-sm transition-all focus:outline-none focus:ring-1"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                type="password"
+                value="••••••••••" />
+              <button
+                aria-label="Toggle password visibility"
+                class="text-on-surface-variant hover:text-on-surface absolute right-3 top-1/2 -translate-y-1/2 p-1 focus:outline-none"
+                type="button">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0"
+                  >visibility</span
+                >
+              </button>
+            </div>
+          </div>
+          <!-- Spacer -->
+          <div class="h-sm"></div>
+          <!-- Primary CTA -->
+          <button
+            class="bg-primary text-on-primary font-body hover:bg-surface-tint focus:ring-primary flex h-[52px] w-full items-center justify-center rounded-md text-body font-semibold shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
+            type="submit">
+            Log in
+          </button>
+        </form>
+        <!-- Footer Link -->
+        <div class="mt-lg text-center">
+          <p class="font-body-sm text-on-surface-variant text-body-sm">
+            Don't have an account?
+            <a
+              class="text-primary decoration-primary font-semibold underline-offset-4 hover:underline"
+              href="#"
+              >Sign up</a
+            >
+          </p>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

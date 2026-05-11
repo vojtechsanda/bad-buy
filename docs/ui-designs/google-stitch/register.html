@@ -1,0 +1,221 @@
+<!doctype html>
+
+<html lang="en" style="width: 390px">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Register - Mindful Celebration</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'tertiary-fixed-dim': '#ffb4a6',
+              'surface-variant': '#e0e3e0',
+              'on-tertiary-container': '#fffbff',
+              'tertiary-fixed': '#ffdad4',
+              'surface-container-low': '#f1f4f1',
+              'secondary-fixed-dim': '#ffb596',
+              'on-surface': '#181c1b',
+              error: '#ba1a1a',
+              'error-container': '#ffdad6',
+              'surface-bright': '#f7faf7',
+              'primary-container': '#2f826f',
+              secondary: '#8c4e33',
+              'on-surface-variant': '#3f4945',
+              'inverse-on-surface': '#eef2ee',
+              'on-primary': '#ffffff',
+              tertiary: '#8d483c',
+              'surface-container-highest': '#e0e3e0',
+              background: '#f7faf7',
+              'secondary-fixed': '#ffdbcd',
+              'outline-variant': '#bec9c4',
+              'on-tertiary-fixed-variant': '#733429',
+              'on-primary-fixed': '#00201a',
+              'tertiary-container': '#aa6053',
+              'surface-container': '#ebefec',
+              primary: '#056857',
+              'secondary-container': '#feae8c',
+              'primary-fixed': '#a1f2dc',
+              'on-error': '#ffffff',
+              'on-background': '#181c1b',
+              'on-tertiary': '#ffffff',
+              'on-primary-container': '#f4fffa',
+              'primary-fixed-dim': '#86d6c0',
+              'on-secondary-fixed-variant': '#6f371e',
+              'inverse-primary': '#86d6c0',
+              'surface-container-high': '#e6e9e6',
+              surface: '#f7faf7',
+              'on-error-container': '#93000a',
+              'on-secondary': '#ffffff',
+              'on-secondary-fixed': '#360f00',
+              'inverse-surface': '#2d3130',
+              'on-secondary-container': '#793f25',
+              'on-primary-fixed-variant': '#005143',
+              'surface-tint': '#0c6b59',
+              'on-tertiary-fixed': '#3a0a04',
+              'surface-dim': '#d7dbd8',
+              outline: '#6f7975',
+              'surface-container-lowest': '#ffffff',
+            },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px',
+            },
+            spacing: {
+              lg: '24px',
+              md: '16px',
+              xs: '4px',
+              xl: '48px',
+              sm: '8px',
+            },
+            fontFamily: {
+              body: ['Manrope', 'sans-serif'],
+              caption: ['Manrope', 'sans-serif'],
+              'display-lg': ['Manrope', 'sans-serif'],
+              'body-sm': ['Manrope', 'sans-serif'],
+              'display-md': ['Manrope', 'sans-serif'],
+            },
+            fontSize: {
+              body: ['15px', { lineHeight: '22px', fontWeight: '400' }],
+              caption: ['11px', { lineHeight: '16px', letterSpacing: '0.08em', fontWeight: '600' }],
+              'display-lg': ['28px', { lineHeight: '36px', fontWeight: '800' }],
+              'body-sm': ['13px', { lineHeight: '20px', fontWeight: '400' }],
+              'display-md': ['22px', { lineHeight: '30px', fontWeight: '700' }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background text-on-background font-body selection:bg-primary-fixed selection:text-on-primary-fixed flex min-h-screen justify-center antialiased">
+    <!-- Mobile Container Wrapper -->
+    <div
+      class="shadow-surface-variant bg-background relative flex min-h-screen w-full max-w-[430px] flex-col overflow-hidden shadow-2xl">
+      <!-- Top App Bar -->
+      <header
+        class="pt-safe bg-background sticky top-0 z-10 flex h-[56px] w-full items-center justify-between px-5">
+        <button
+          class="text-on-surface hover:bg-surface-container focus:ring-primary flex h-10 w-10 items-center justify-start rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2">
+          <span aria-hidden="true" class="material-symbols-outlined text-[24px]">chevron_left</span>
+        </button>
+      </header>
+      <!-- Main Content -->
+      <main class="pb-xl flex flex-1 flex-col overflow-y-auto px-5 pt-8">
+        <h1 class="font-display-md text-on-surface mb-8 text-display-md">Create Account</h1>
+        <form action="#" class="space-y-md flex flex-col" method="POST">
+          <!-- Email Field -->
+          <div class="space-y-xs flex flex-col">
+            <label class="font-caption text-on-surface-variant text-caption" for="email"
+              >Email</label
+            >
+            <div class="relative">
+              <input
+                class="bg-surface-container-lowest border-outline-variant font-body text-on-surface focus:border-primary focus:ring-primary placeholder:text-outline h-12 w-full rounded-lg border px-4 text-body transition-colors focus:outline-none focus:ring-1"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                required=""
+                type="email"
+                value="you@example.com" />
+            </div>
+          </div>
+          <!-- Password Field -->
+          <div class="space-y-xs flex flex-col">
+            <label class="font-caption text-on-surface-variant text-caption" for="password"
+              >Password</label
+            >
+            <div class="relative flex items-center">
+              <input
+                class="bg-surface-container-lowest border-outline-variant font-body text-on-surface focus:border-primary focus:ring-primary placeholder:text-outline h-12 w-full rounded-lg border pl-4 pr-12 text-body transition-colors focus:outline-none focus:ring-1"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required=""
+                type="password"
+                value="••••••••••" />
+              <button
+                class="text-outline hover:text-on-surface absolute right-3 rounded-full p-1 transition-colors focus:outline-none"
+                type="button">
+                <span aria-hidden="true" class="material-symbols-outlined text-[20px]"
+                  >visibility</span
+                >
+              </button>
+            </div>
+            <p class="font-body-sm text-on-surface-variant pt-1 text-body-sm">
+              At least 8 characters
+            </p>
+          </div>
+          <!-- Confirm Password Field -->
+          <div class="space-y-xs pb-lg flex flex-col">
+            <label class="font-caption text-on-surface-variant text-caption" for="confirm_password"
+              >Repeat password</label
+            >
+            <div class="relative flex items-center">
+              <input
+                class="bg-surface-container-lowest border-outline-variant font-body text-on-surface focus:border-primary focus:ring-primary placeholder:text-outline h-12 w-full rounded-lg border pl-4 pr-12 text-body transition-colors focus:outline-none focus:ring-1"
+                id="confirm_password"
+                name="confirm_password"
+                placeholder="Repeat your password"
+                required=""
+                type="password"
+                value="••••••••••" />
+              <button
+                class="text-outline hover:text-on-surface absolute right-3 rounded-full p-1 transition-colors focus:outline-none"
+                type="button">
+                <span aria-hidden="true" class="material-symbols-outlined text-[20px]"
+                  >visibility</span
+                >
+              </button>
+            </div>
+          </div>
+          <!-- CTA Button -->
+          <button
+            class="bg-primary hover:bg-surface-tint text-on-primary font-body focus:ring-primary focus:ring-offset-background flex h-[52px] w-full items-center justify-center rounded-xl text-body font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
+            type="submit">
+            Create account
+          </button>
+        </form>
+        <!-- Login Link -->
+        <div class="mt-md text-center">
+          <p class="font-body text-on-surface-variant text-body">
+            Already have an account?
+            <a
+              class="text-primary focus:ring-primary rounded-sm font-semibold decoration-2 underline-offset-4 hover:underline focus:outline-none focus:ring-2"
+              href="#"
+              >Log in</a
+            >
+          </p>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

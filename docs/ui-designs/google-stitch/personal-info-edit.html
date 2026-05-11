@@ -1,0 +1,225 @@
+<!doctype html>
+
+<html lang="en" style="width: 390px">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Edit Personal Info</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'tertiary-fixed': '#ffdad4',
+              'surface-container-lowest': '#ffffff',
+              surface: '#f7faf7',
+              'on-background': '#181c1b',
+              'secondary-fixed-dim': '#ffb596',
+              'surface-container': '#ebefec',
+              background: '#f7faf7',
+              'surface-bright': '#f7faf7',
+              'primary-container': '#2f826f',
+              'on-tertiary-container': '#fffbff',
+              'on-surface-variant': '#3f4945',
+              'on-primary': '#ffffff',
+              'surface-container-high': '#e6e9e6',
+              'on-secondary-fixed-variant': '#6f371e',
+              'on-primary-fixed-variant': '#005143',
+              'surface-container-highest': '#e0e3e0',
+              'on-tertiary-fixed-variant': '#733429',
+              'on-tertiary-fixed': '#3a0a04',
+              'surface-container-low': '#f1f4f1',
+              'tertiary-fixed-dim': '#ffb4a6',
+              'secondary-fixed': '#ffdbcd',
+              'primary-fixed': '#a1f2dc',
+              'surface-dim': '#d7dbd8',
+              'surface-variant': '#e0e3e0',
+              'surface-tint': '#0c6b59',
+              secondary: '#8c4e33',
+              tertiary: '#8d483c',
+              'on-error': '#ffffff',
+              'on-secondary-fixed': '#360f00',
+              'inverse-surface': '#2d3130',
+              'on-tertiary': '#ffffff',
+              'outline-variant': '#bec9c4',
+              'on-primary-fixed': '#00201a',
+              'primary-fixed-dim': '#86d6c0',
+              'on-secondary': '#ffffff',
+              'on-error-container': '#93000a',
+              'error-container': '#ffdad6',
+              'inverse-on-surface': '#eef2ee',
+              outline: '#6f7975',
+              'on-surface': '#181c1b',
+              'on-secondary-container': '#793f25',
+              'inverse-primary': '#86d6c0',
+              'tertiary-container': '#aa6053',
+              'on-primary-container': '#f4fffa',
+              'secondary-container': '#feae8c',
+              error: '#ba1a1a',
+              primary: '#056857',
+            },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px',
+              sheet: '20px',
+            },
+            spacing: {
+              lg: '24px',
+              xs: '4px',
+              md: '16px',
+              xl: '48px',
+              sm: '8px',
+              'sheet-handle': '36px',
+            },
+            fontFamily: {
+              caption: ['Manrope'],
+              'display-md': ['Manrope'],
+              body: ['Manrope'],
+              'body-sm': ['Manrope'],
+              'display-lg': ['Manrope'],
+            },
+            fontSize: {
+              caption: ['11px', { lineHeight: '16px', letterSpacing: '0.08em', fontWeight: '600' }],
+              'display-md': ['22px', { lineHeight: '30px', fontWeight: '700' }],
+              body: ['15px', { lineHeight: '22px', fontWeight: '400' }],
+              'body-sm': ['13px', { lineHeight: '20px', fontWeight: '400' }],
+              'display-lg': ['28px', { lineHeight: '36px', fontWeight: '800' }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-surface-container-lowest font-body text-on-surface relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
+    <!-- Mobile Container Frame (for simulation purposes) -->
+    <div
+      class="bg-background relative mx-auto flex h-full w-full max-w-md flex-col overflow-hidden shadow-2xl">
+      <!-- Underlying Content Blur/Backdrop -->
+      <div class="absolute inset-0 z-40 bg-[#2C2A26]/40 transition-opacity"></div>
+      <!-- Bottom Sheet -->
+      <div
+        class="bg-surface-container-lowest absolute bottom-0 left-0 right-0 z-50 flex h-[85%] translate-y-0 transform flex-col rounded-t-[20px] shadow-[0_-4px_24px_rgba(0,0,0,0.08)] transition-transform duration-300">
+        <!-- Drag Handle Container -->
+        <div class="pt-md pb-sm flex w-full justify-center">
+          <div class="h-xs w-sheet-handle bg-surface-variant rounded-full"></div>
+        </div>
+        <!-- Header -->
+        <div class="px-md pb-md">
+          <h2 class="text-on-surface text-[18px] font-bold">Personal info</h2>
+        </div>
+        <!-- Scrollable Content Area -->
+        <div class="px-md pb-xl space-y-lg flex-1 overflow-y-auto">
+          <!-- Field A: Country -->
+          <div class="space-y-sm flex flex-col">
+            <div class="space-x-xs flex items-center">
+              <label class="font-caption text-on-surface-variant uppercase">Country</label>
+              <span class="material-symbols-outlined text-outline text-[14px]">info</span>
+            </div>
+            <div class="relative">
+              <div
+                class="bg-surface-container-low px-md active:border-primary-container flex w-full items-center justify-between rounded-xl border border-transparent py-[14px] transition-colors">
+                <span class="font-body text-on-surface">France</span>
+                <span class="material-symbols-outlined text-on-surface-variant"
+                  >keyboard_arrow_down</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Field B: Display Currency -->
+          <div class="space-y-sm flex flex-col">
+            <div class="space-x-xs flex items-center">
+              <label class="font-caption text-on-surface-variant uppercase">Show prices in</label>
+              <span class="material-symbols-outlined text-outline text-[14px]">info</span>
+            </div>
+            <div class="relative">
+              <div
+                class="bg-surface-container-low px-md active:border-primary-container flex w-full items-center justify-between rounded-xl border border-transparent py-[14px] transition-colors">
+                <span class="font-body text-on-surface">EUR · Euro</span>
+                <span class="material-symbols-outlined text-on-surface-variant"
+                  >keyboard_arrow_down</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Field C: Hourly Wage -->
+          <div class="space-y-sm flex flex-col">
+            <div class="space-x-xs flex items-center">
+              <label class="font-caption text-on-surface-variant uppercase">Your hourly wage</label>
+              <span class="material-symbols-outlined text-outline text-[14px]">info</span>
+            </div>
+            <div class="space-x-sm flex">
+              <!-- Left Input -->
+              <div
+                class="bg-surface-container-low px-md focus-within:border-primary w-[70%] rounded-xl border border-transparent py-[14px] transition-colors">
+                <input
+                  class="text-on-surface font-body w-full border-none bg-transparent p-0 focus:ring-0"
+                  placeholder="0.00"
+                  type="text"
+                  value="25" />
+              </div>
+              <!-- Right Currency Chip -->
+              <div
+                class="bg-surface-container space-x-xs px-sm border-surface-variant active:bg-surface-container-highest flex w-[30%] cursor-pointer items-center justify-center rounded-xl border py-[14px] transition-colors">
+                <span class="font-body text-on-surface font-semibold">EUR</span>
+                <span class="material-symbols-outlined text-on-surface-variant text-[18px]"
+                  >keyboard_arrow_down</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Field D: Work Hours -->
+          <div class="space-y-sm flex flex-col">
+            <div class="space-x-xs flex items-center">
+              <label class="font-caption text-on-surface-variant uppercase"
+                >Average work hours per day</label
+              >
+              <span class="material-symbols-outlined text-outline text-[14px]">info</span>
+            </div>
+            <div
+              class="bg-surface-container-low px-sm py-sm flex w-full items-center justify-between rounded-xl border border-transparent">
+              <button
+                class="text-primary hover:bg-surface-container-high flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
+                <span class="material-symbols-outlined">remove</span>
+              </button>
+              <input
+                class="text-on-surface font-body flex-1 border-none bg-transparent p-0 text-center focus:ring-0"
+                readonly=""
+                type="text"
+                value="8" />
+              <button
+                class="text-primary hover:bg-surface-container-high flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
+                <span class="material-symbols-outlined">add</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Sticky Save Button -->
+        <div class="p-md bg-surface-container-lowest border-surface-variant pb-safe border-t">
+          <button
+            class="bg-primary text-on-primary font-body flex h-[52px] w-full items-center justify-center rounded-xl font-semibold shadow-sm transition-transform active:scale-[0.98]">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

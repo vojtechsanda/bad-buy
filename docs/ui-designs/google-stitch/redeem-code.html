@@ -1,0 +1,193 @@
+<!doctype html>
+
+<html lang="en" style="width: 390px">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Redeem Code</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'on-surface': '#181c1b',
+              'error-container': '#ffdad6',
+              secondary: '#8c4e33',
+              'tertiary-fixed': '#ffdad4',
+              'on-surface-variant': '#3f4945',
+              'inverse-surface': '#2d3130',
+              'surface-container-low': '#f1f4f1',
+              error: '#ba1a1a',
+              'surface-tint': '#0c6b59',
+              outline: '#6f7975',
+              'on-tertiary-fixed': '#3a0a04',
+              'on-primary-container': '#f4fffa',
+              'on-primary-fixed': '#00201a',
+              'on-error-container': '#93000a',
+              'surface-container-high': '#e6e9e6',
+              'primary-fixed': '#a1f2dc',
+              background: '#f7faf7',
+              'on-primary-fixed-variant': '#005143',
+              'inverse-on-surface': '#eef2ee',
+              tertiary: '#8d483c',
+              'secondary-fixed-dim': '#ffb596',
+              'on-tertiary': '#ffffff',
+              'on-secondary-container': '#793f25',
+              'on-primary': '#ffffff',
+              'surface-container-lowest': '#ffffff',
+              'tertiary-container': '#aa6053',
+              'surface-variant': '#e0e3e0',
+              'primary-fixed-dim': '#86d6c0',
+              'on-error': '#ffffff',
+              'secondary-container': '#feae8c',
+              'surface-container-highest': '#e0e3e0',
+              'inverse-primary': '#86d6c0',
+              primary: '#056857',
+              'surface-container': '#ebefec',
+              'primary-container': '#2f826f',
+              'outline-variant': '#bec9c4',
+              surface: '#f7faf7',
+              'surface-bright': '#f7faf7',
+              'on-tertiary-container': '#fffbff',
+              'on-secondary-fixed': '#360f00',
+              'tertiary-fixed-dim': '#ffb4a6',
+              'on-secondary-fixed-variant': '#6f371e',
+              'on-background': '#181c1b',
+              'secondary-fixed': '#ffdbcd',
+              'on-tertiary-fixed-variant': '#733429',
+              'surface-dim': '#d7dbd8',
+              'on-secondary': '#ffffff',
+            },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px',
+            },
+            spacing: {
+              md: '16px',
+              lg: '24px',
+              xs: '4px',
+              xl: '48px',
+              sm: '8px',
+            },
+            fontFamily: {
+              'display-lg': ['Manrope'],
+              body: ['Manrope'],
+              'display-md': ['Manrope'],
+              caption: ['Manrope'],
+              'body-sm': ['Manrope'],
+            },
+            fontSize: {
+              'display-lg': ['28px', { lineHeight: '36px', fontWeight: '800' }],
+              body: ['15px', { lineHeight: '22px', fontWeight: '400' }],
+              'display-md': ['22px', { lineHeight: '30px', fontWeight: '700' }],
+              caption: ['11px', { lineHeight: '16px', letterSpacing: '0.08em', fontWeight: '600' }],
+              'body-sm': ['13px', { lineHeight: '20px', fontWeight: '400' }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-feature-settings: 'liga';
+        -webkit-font-smoothing: antialiased;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background font-body text-on-background relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
+    <!-- Mock Background App Content (to show dimming effect) -->
+    <div class="bg-surface absolute inset-0 mx-auto flex h-full w-full max-w-[400px] flex-col">
+      <!-- TopAppBar -->
+      <header
+        class="mx-auto flex h-16 w-full max-w-7xl items-center justify-between border-b border-stone-200 bg-white px-4">
+        <button
+          class="flex h-10 w-10 items-center justify-center rounded-full text-stone-500 transition-colors hover:bg-stone-100">
+          <span class="material-symbols-outlined" data-icon="close">close</span>
+        </button>
+        <h1 class="font-manrope text-lg font-extrabold font-semibold tracking-tight text-teal-700">
+          Redeem Code
+        </h1>
+        <div class="h-10 w-10"></div>
+        <!-- Spacer for centering -->
+      </header>
+      <!-- Main Content Area -->
+      <main class="p-md gap-lg flex flex-1 flex-col items-center justify-center opacity-30">
+        <div
+          class="bg-surface-variant border-outline-variant/30 flex h-32 w-full items-center justify-center rounded-xl border">
+          <span class="font-body text-on-surface-variant">App Content</span>
+        </div>
+        <div
+          class="bg-surface-variant border-outline-variant/30 flex h-48 w-full items-center justify-center rounded-xl border">
+          <span class="font-body text-on-surface-variant">More Content</span>
+        </div>
+      </main>
+    </div>
+    <!-- Backdrop Overlay -->
+    <div class="bg-on-surface/40 absolute inset-0 z-40 mx-auto w-full max-w-[400px]"></div>
+    <!-- Bottom Sheet -->
+    <div
+      class="bg-surface-container-lowest absolute bottom-0 left-0 right-0 z-50 mx-auto flex max-h-[442px] w-full max-w-[400px] translate-y-0 transform flex-col rounded-t-[20px] shadow-[0_-8px_30px_rgba(0,0,0,0.12)] transition-transform duration-300 ease-out">
+      <!-- Drag Handle -->
+      <div class="pt-sm pb-md flex w-full justify-center">
+        <div class="bg-outline-variant h-[4px] w-[36px] rounded-full"></div>
+      </div>
+      <!-- Sheet Content Container -->
+      <div class="px-lg pb-lg flex flex-1 flex-col overflow-y-auto">
+        <!-- Header Section -->
+        <div class="mb-lg">
+          <h2 class="font-display-md text-primary mb-xs text-display-md">Redeem a code</h2>
+          <p class="font-body text-on-surface-variant text-body">
+            Enter a referral or promo code to unlock 3 months of Premium.
+          </p>
+        </div>
+        <!-- Input Section -->
+        <div class="mb-xl flex flex-1 flex-col justify-center">
+          <div class="relative w-full">
+            <input
+              class="bg-surface-container-lowest border-outline-variant font-mono text-on-surface focus:border-primary focus:ring-primary h-[56px] w-full rounded-xl border text-center text-[14px] uppercase tracking-[0.2em] transition-colors focus:outline-none focus:ring-1"
+              placeholder="ENTER CODE"
+              type="text"
+              value="K7M2QP" />
+          </div>
+        </div>
+        <!-- Action Section -->
+        <div class="pt-md mt-auto">
+          <button
+            class="bg-primary text-on-primary font-body hover:bg-primary-container hover:text-on-primary-container flex h-[52px] w-full items-center justify-center rounded-[12px] text-body font-semibold shadow-sm transition-colors active:scale-[0.98]">
+            Redeem
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

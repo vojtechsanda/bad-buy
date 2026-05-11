@@ -1,0 +1,203 @@
+<!doctype html>
+
+<html lang="en" style="width: 390px">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Premium Upsell</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'surface-container-highest': '#e0e3e0',
+              surface: '#f7faf7',
+              'secondary-fixed-dim': '#ffb596',
+              'surface-tint': '#0c6b59',
+              'surface-container-low': '#f1f4f1',
+              'surface-container-high': '#e6e9e6',
+              'surface-container': '#ebefec',
+              'on-tertiary-container': '#fffbff',
+              'outline-variant': '#bec9c4',
+              'primary-fixed-dim': '#86d6c0',
+              primary: '#056857',
+              'on-surface-variant': '#3f4945',
+              'surface-dim': '#d7dbd8',
+              'secondary-fixed': '#ffdbcd',
+              'tertiary-fixed': '#ffdad4',
+              'surface-bright': '#f7faf7',
+              'on-primary-fixed-variant': '#005143',
+              'tertiary-fixed-dim': '#ffb4a6',
+              'primary-container': '#2f826f',
+              'on-secondary': '#ffffff',
+              'on-secondary-container': '#793f25',
+              'inverse-on-surface': '#eef2ee',
+              tertiary: '#8d483c',
+              'on-tertiary': '#ffffff',
+              'secondary-container': '#feae8c',
+              'on-error': '#ffffff',
+              'inverse-primary': '#86d6c0',
+              'on-tertiary-fixed-variant': '#733429',
+              'on-error-container': '#93000a',
+              'surface-variant': '#e0e3e0',
+              secondary: '#8c4e33',
+              'on-secondary-fixed-variant': '#6f371e',
+              'on-primary-container': '#f4fffa',
+              'error-container': '#ffdad6',
+              'on-tertiary-fixed': '#3a0a04',
+              'tertiary-container': '#aa6053',
+              'on-background': '#181c1b',
+              outline: '#6f7975',
+              'inverse-surface': '#2d3130',
+              background: '#f7faf7',
+              'primary-fixed': '#a1f2dc',
+              'on-primary-fixed': '#00201a',
+              'on-surface': '#181c1b',
+              error: '#ba1a1a',
+              'on-primary': '#ffffff',
+              'surface-container-lowest': '#ffffff',
+              'on-secondary-fixed': '#360f00',
+            },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px',
+            },
+            spacing: {
+              xs: '4px',
+              sm: '8px',
+              lg: '24px',
+              xl: '48px',
+              md: '16px',
+            },
+            fontFamily: {
+              'display-md': ['Manrope'],
+              body: ['Manrope'],
+              'body-sm': ['Manrope'],
+              'display-lg': ['Manrope'],
+              caption: ['Manrope'],
+            },
+            fontSize: {
+              'display-md': ['22px', { lineHeight: '30px', fontWeight: '700' }],
+              body: ['15px', { lineHeight: '22px', fontWeight: '400' }],
+              'body-sm': ['13px', { lineHeight: '20px', fontWeight: '400' }],
+              'display-lg': ['28px', { lineHeight: '36px', fontWeight: '800' }],
+              caption: ['11px', { lineHeight: '16px', letterSpacing: '0.08em', fontWeight: '600' }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background text-on-background font-body relative flex h-screen w-full flex-col justify-end overflow-hidden antialiased">
+    <!-- Backdrop -->
+    <div aria-hidden="true" class="absolute inset-0 z-10 bg-black/40"></div>
+    <!-- Bottom Sheet -->
+    <div
+      class="bg-surface-container-lowest px-lg pt-sm pb-xl relative z-20 flex h-[663px] w-full flex-col rounded-t-[20px] shadow-[0_-4px_24px_rgba(0,0,0,0.08)]">
+      <!-- Drag Handle -->
+      <div class="mb-lg flex w-full justify-center">
+        <div class="bg-outline-variant h-[4px] w-[36px] rounded-full"></div>
+      </div>
+      <!-- Content Scroll Area -->
+      <div class="pb-lg flex-1 overflow-y-auto overflow-x-hidden">
+        <!-- Header Section -->
+        <div class="mb-xl flex flex-col items-center">
+          <!-- Icon -->
+          <div
+            class="bg-secondary-container/20 text-secondary-container mb-md flex h-12 w-12 items-center justify-center rounded-full">
+            <span class="material-symbols-outlined" data-icon="auto_awesome" style="font-size: 32px"
+              >auto_awesome</span
+            >
+          </div>
+          <!-- Title & Subtitle -->
+          <h2 class="font-display-md text-on-background mb-sm text-center text-display-md">
+            Unlock Premium
+          </h2>
+          <p class="font-body text-on-surface-variant px-md text-center text-body">
+            Refresh suggestions, set custom freeze times, and add your own hobbies.
+          </p>
+        </div>
+        <!-- Benefits List -->
+        <div class="gap-md mb-xl flex flex-col">
+          <div class="gap-md flex items-start">
+            <span
+              class="material-symbols-outlined text-primary mt-xs"
+              data-icon="check_circle"
+              data-weight="fill"
+              style="font-size: 20px"
+              >check_circle</span
+            >
+            <span class="font-body text-on-background text-[16px] font-semibold leading-[24px]"
+              >Unlimited refresh of suggestions</span
+            >
+          </div>
+          <div class="gap-md flex items-start">
+            <span
+              class="material-symbols-outlined text-primary mt-xs"
+              data-icon="check_circle"
+              data-weight="fill"
+              style="font-size: 20px"
+              >check_circle</span
+            >
+            <span class="font-body text-on-background text-[16px] font-semibold leading-[24px]"
+              >Custom freeze durations</span
+            >
+          </div>
+          <div class="gap-md flex items-start">
+            <span
+              class="material-symbols-outlined text-primary mt-xs"
+              data-icon="check_circle"
+              data-weight="fill"
+              style="font-size: 20px"
+              >check_circle</span
+            >
+            <span class="font-body text-on-background text-[16px] font-semibold leading-[24px]"
+              >Add your own custom hobbies</span
+            >
+          </div>
+        </div>
+        <!-- Code Entry Section -->
+        <div class="gap-sm mb-lg flex flex-col">
+          <h3 class="font-body text-on-background text-[18px] font-bold leading-[26px]">
+            Get Premium with a code
+          </h3>
+          <p class="font-body text-on-surface-variant mb-sm text-body">
+            Get a referral code from a friend, or use a promo code.
+          </p>
+          <!-- Input Field -->
+          <input
+            class="bg-surface-container-lowest border-outline-variant px-lg font-mono text-on-background placeholder:text-outline-variant focus:border-primary focus:ring-primary h-[56px] w-full rounded-[8px] border text-center text-body transition-colors focus:outline-none focus:ring-1"
+            placeholder="ENTER CODE"
+            type="text" />
+        </div>
+      </div>
+      <!-- CTA Fixed at Bottom -->
+      <div class="pt-md bg-surface-container-lowest mt-auto w-full">
+        <button
+          class="bg-primary text-on-primary font-body flex h-[52px] w-full cursor-not-allowed items-center justify-center rounded-xl text-[16px] font-semibold leading-[24px] opacity-50 transition-opacity"
+          disabled="">
+          Redeem
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

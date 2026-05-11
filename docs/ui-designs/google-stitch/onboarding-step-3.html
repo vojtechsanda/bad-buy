@@ -1,0 +1,282 @@
+<!doctype html>
+
+<html lang="en" style="width: 390px">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Your money basics - Step 2 of 3</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet" />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'on-primary-fixed-variant': '#005143',
+              'on-secondary-container': '#793f25',
+              'on-tertiary-fixed': '#251a00',
+              'surface-tint': '#0c6b59',
+              outline: '#6f7975',
+              'surface-dim': '#d7dbd8',
+              'surface-container-lowest': '#ffffff',
+              'on-primary-container': '#f4fffa',
+              'on-tertiary': '#ffffff',
+              'on-secondary-fixed-variant': '#6f371e',
+              'inverse-primary': '#86d6c0',
+              'primary-fixed-dim': '#86d6c0',
+              surface: '#f7faf7',
+              'surface-container-high': '#e6e9e6',
+              'on-secondary-fixed': '#360f00',
+              'inverse-surface': '#2d3130',
+              'on-secondary': '#ffffff',
+              'on-error-container': '#93000a',
+              tertiary: '#745800',
+              'surface-container-highest': '#e0e3e0',
+              background: '#f7faf7',
+              'outline-variant': '#bec9c4',
+              'on-tertiary-fixed-variant': '#5a4400',
+              'on-primary-fixed': '#00201a',
+              'secondary-fixed': '#ffdbcd',
+              'secondary-container': '#feae8c',
+              'primary-fixed': '#a1f2dc',
+              'on-error': '#ffffff',
+              'on-background': '#181c1b',
+              primary: '#056857',
+              'tertiary-container': '#927000',
+              'surface-container': '#ebefec',
+              'on-tertiary-container': '#fffbff',
+              'tertiary-fixed-dim': '#f0c03f',
+              'surface-variant': '#e0e3e0',
+              error: '#ba1a1a',
+              'on-surface': '#181c1b',
+              'secondary-fixed-dim': '#ffb596',
+              'tertiary-fixed': '#ffdf97',
+              'surface-container-low': '#f1f4f1',
+              'on-surface-variant': '#3f4945',
+              secondary: '#8c4e33',
+              'surface-bright': '#f7faf7',
+              'primary-container': '#2f826f',
+              'error-container': '#ffdad6',
+              'on-primary': '#ffffff',
+              'inverse-on-surface': '#eef2ee',
+            },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              full: '9999px',
+            },
+            spacing: {
+              md: '16px',
+              unit: '4px',
+              'container-margin': '20px',
+              lg: '24px',
+              gutter: '16px',
+              xs: '4px',
+              xl: '40px',
+              sm: '8px',
+            },
+            fontFamily: {
+              'headline-lg': ['Manrope'],
+              'display-xl': ['Manrope'],
+              'body-lg': ['Manrope'],
+              'label-caps': ['Manrope'],
+              'body-md': ['Manrope'],
+              'headline-md': ['Manrope'],
+            },
+            fontSize: {
+              'headline-lg': [
+                '32px',
+                {
+                  lineHeight: '40px',
+                  letterSpacing: '-0.01em',
+                  fontWeight: '700',
+                },
+              ],
+              'display-xl': [
+                '48px',
+                {
+                  lineHeight: '56px',
+                  letterSpacing: '-0.02em',
+                  fontWeight: '800',
+                },
+              ],
+              'body-lg': [
+                '18px',
+                {
+                  lineHeight: '28px',
+                  fontWeight: '500',
+                },
+              ],
+              'label-caps': [
+                '12px',
+                {
+                  lineHeight: '16px',
+                  letterSpacing: '0.05em',
+                  fontWeight: '700',
+                },
+              ],
+              'body-md': [
+                '16px',
+                {
+                  lineHeight: '24px',
+                  fontWeight: '400',
+                },
+              ],
+              'headline-md': [
+                '24px',
+                {
+                  lineHeight: '32px',
+                  fontWeight: '600',
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #fbf9f5; /* requested custom warm off-white, overriding theme background for this specific intent */
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="font-body-md text-on-surface relative mx-auto flex min-h-screen max-w-md flex-col overflow-hidden antialiased shadow-2xl">
+    <!-- TopAppBar from JSON -->
+    <header
+      class="docked full-width flat no shadows font-manrope top-0 z-10 flex h-16 w-full shrink-0 items-center justify-between border-b border-stone-200 bg-stone-50 px-5 tracking-tight antialiased dark:border-stone-800 dark:bg-stone-950">
+      <button
+        aria-label="Go back"
+        class="-ml-2 flex items-center justify-center rounded-full p-2 text-teal-700 transition-colors hover:bg-stone-100 dark:text-teal-400 dark:hover:bg-stone-900"
+        type="button">
+        <span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+      </button>
+      <div class="flex flex-1 justify-center">
+        <span class="text-lg font-bold text-teal-800 dark:text-teal-200">Step 2 of 3</span>
+      </div>
+      <div class="w-10"></div>
+      <!-- spacer for balance -->
+    </header>
+    <!-- Progress Bar (Custom to intent, overriding standard nav) -->
+    <div class="px-container-margin py-md shrink-0">
+      <div class="flex w-full gap-2">
+        <div class="bg-primary h-2 flex-1 rounded-full"></div>
+        <div class="bg-primary h-2 flex-1 rounded-full"></div>
+        <div class="h-2 flex-1 rounded-full bg-[#E8E2D6]"></div>
+      </div>
+    </div>
+    <!-- Scrollable Canvas -->
+    <main class="px-container-margin pt-lg flex-1 overflow-y-auto pb-[100px]">
+      <!-- Header -->
+      <div class="mb-xl">
+        <h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Your money basics</h1>
+        <p class="font-body-md text-body-md text-on-surface-variant">
+          We'll never share this. It powers your work-hour calculations.
+        </p>
+      </div>
+      <!-- Form -->
+      <div class="gap-lg flex flex-col">
+        <!-- Field 1 -->
+        <div class="gap-sm flex flex-col">
+          <label class="gap-xs font-body-lg text-on-surface flex items-center text-body-lg">
+            Show prices in
+            <span class="material-symbols-outlined text-primary text-[18px]" data-icon="info"
+              >info</span
+            >
+          </label>
+          <button
+            class="bg-surface-container-lowest border-outline-variant p-md focus:border-primary focus:ring-primary flex w-full items-center justify-between rounded-xl border text-left outline-none transition-colors focus:ring-1"
+            type="button">
+            <span class="font-body-md text-body-md text-on-surface">EUR · Euro</span>
+            <span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more"
+              >expand_more</span
+            >
+          </button>
+        </div>
+        <!-- Field 2 -->
+        <div class="gap-sm flex flex-col">
+          <label class="gap-xs font-body-lg text-on-surface flex items-center text-body-lg">
+            Your hourly wage
+            <span class="material-symbols-outlined text-primary text-[18px]" data-icon="info"
+              >info</span
+            >
+          </label>
+          <div class="gap-md flex">
+            <div
+              class="bg-surface-container-lowest border-outline-variant focus-within:border-primary focus-within:ring-primary px-md flex w-[70%] items-center overflow-hidden rounded-xl border transition-colors focus-within:ring-1">
+              <span class="font-body-lg text-on-surface-variant mr-xs text-body-lg">€</span>
+              <input
+                class="font-body-lg text-on-surface placeholder-on-surface-variant h-[56px] w-full border-none bg-transparent p-0 text-body-lg focus:ring-0"
+                placeholder="0"
+                type="number" />
+            </div>
+            <button
+              class="bg-surface-container-low border-outline-variant p-md gap-xs hover:bg-surface-container flex w-[30%] items-center justify-center rounded-xl border transition-colors"
+              type="button">
+              <span class="font-body-md text-body-md text-on-surface font-medium">EUR</span>
+              <span
+                class="material-symbols-outlined text-on-surface-variant text-[20px]"
+                data-icon="expand_more"
+                >expand_more</span
+              >
+            </button>
+          </div>
+        </div>
+        <!-- Field 3 -->
+        <div class="gap-sm flex flex-col">
+          <label class="gap-xs font-body-lg text-on-surface flex items-center text-body-lg">
+            Average work hours per day
+            <span class="material-symbols-outlined text-primary text-[18px]" data-icon="info"
+              >info</span
+            >
+          </label>
+          <div
+            class="bg-surface-container-lowest border-outline-variant p-xs pl-md focus-within:border-primary focus-within:ring-primary flex h-[56px] w-full items-center justify-between rounded-xl border transition-colors focus-within:ring-1">
+            <input
+              class="font-body-lg text-on-surface w-20 border-none bg-transparent p-0 text-body-lg focus:ring-0"
+              type="number"
+              value="8" />
+            <div class="gap-xs pr-xs flex">
+              <button
+                class="bg-surface-container-low text-on-surface hover:bg-surface-container flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
+                type="button">
+                <span class="material-symbols-outlined" data-icon="remove">remove</span>
+              </button>
+              <button
+                class="bg-surface-container-low text-on-surface hover:bg-surface-container flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
+                type="button">
+                <span class="material-symbols-outlined" data-icon="add">add</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- BottomNavBar from JSON (Transactional intent, suppressed standard nav, rendering primary action) -->
+    <div
+      class="pb-safe fixed bottom-0 left-0 left-1/2 z-50 mx-auto flex w-full max-w-md shrink-0 -translate-x-1/2 items-center justify-center border-t border-stone-200 bg-stone-50 p-5 dark:border-stone-800 dark:bg-stone-950">
+      <button
+        class="font-manrope flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-teal-600 py-4 font-semibold text-white opacity-50 dark:bg-teal-500 dark:text-stone-950"
+        disabled=""
+        type="button">
+        Continue
+        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+      </button>
+    </div>
+  </body>
+</html>

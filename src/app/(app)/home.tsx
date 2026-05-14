@@ -1,4 +1,4 @@
-import { ScreenContainer } from '@shared/components';
+import { BottomSheet, ScreenContainer } from '@shared/components';
 import { Button, ButtonText } from '@shared/components/ui/button';
 import { Switch } from '@shared/components/ui/switch';
 import {
@@ -23,7 +23,7 @@ import {
   User,
   X,
 } from 'lucide-react-native';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Text, View } from 'react-native';
 
 // Brand color literals for lucide icons — kept in sync with config.ts
@@ -133,6 +133,8 @@ function FontComparisonCard() {
 // ─── screen ──────────────────────────────────────────────────────────────────
 
 export default function Index() {
+  const [sheetOpen, setSheetOpen] = useState(false);
+
   return (
     <ScreenContainer>
       <View className="gap-8">
@@ -143,6 +145,21 @@ export default function Index() {
             Design system · §4 full reference
           </Text>
         </View>
+
+        {/* ── BottomSheet test ── */}
+        <Section title="BottomSheet">
+          <Button variant="outline" action="primary" size="md" onPress={() => setSheetOpen(true)}>
+            <ButtonText>Open bottom sheet</ButtonText>
+          </Button>
+          <BottomSheet isOpen={sheetOpen} onClose={() => setSheetOpen(false)}>
+            <Text className="font-nunito-bold text-heading text-typography-900">Sheet title</Text>
+            <Text className="mt-2 font-nunito text-body text-typography-600">
+              This is the BottomSheet component. Swipe down or tap the backdrop to close.
+            </Text>
+          </BottomSheet>
+        </Section>
+
+        <Divider />
 
         <FontComparisonCard />
 

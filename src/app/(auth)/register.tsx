@@ -1,22 +1,16 @@
-import { RegisterInput, RegisterSchema } from '@features/auth/schemas';
-import { isLogged } from '@features/auth/store';
-import { FormField } from '@shared/components/FormField';
-import { Button, ButtonText } from '@shared/components/ui/button';
-import { Input, InputField } from '@shared/components/ui/input';
+import { RegisterFormSchema, RegisterInput } from '@features/auth/schemas';
+import { Button, ButtonText, FormField, Input, InputField } from '@shared/components';
 import { useForm } from '@tanstack/react-form';
-import { Redirect } from 'expo-router';
 import { View } from 'react-native';
 
 export default function Register() {
   const form = useForm({
     defaultValues: { email: '', password: '', passwordRepeat: '' } as RegisterInput,
-    validators: { onChange: RegisterSchema },
+    validators: { onChange: RegisterFormSchema },
     onSubmit: async ({ value }) => {
       console.log('register', value);
     },
   });
-
-  if (isLogged) return <Redirect href="/(app)/home" />;
 
   return (
     <View className="pt-24">

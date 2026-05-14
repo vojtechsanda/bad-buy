@@ -6,15 +6,16 @@ import {
   FormControlLabelText,
 } from '@shared/components/ui/form-control';
 import { AnyFieldApi } from '@tanstack/react-form';
+import { ReactNode } from 'react';
 
-type Props = {
+type FormFieldProps = {
   field: AnyFieldApi;
   label: string;
   infoTooltip?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
-export function FormField({ field, label, children }: Props) {
+export function FormField({ field, label, children }: FormFieldProps) {
   const invalid = field.state.meta.isTouched && field.state.meta.errors.length > 0;
   return (
     <FormControl isInvalid={invalid}>

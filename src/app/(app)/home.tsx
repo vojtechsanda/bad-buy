@@ -1,3 +1,4 @@
+import { ScreenContainer } from '@shared/components';
 import { Button, ButtonText } from '@shared/components/ui/button';
 import { Switch } from '@shared/components/ui/switch';
 import {
@@ -22,7 +23,7 @@ import {
   User,
   X,
 } from 'lucide-react-native';
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 // Brand color literals for lucide icons — kept in sync with config.ts
 const C = {
@@ -132,8 +133,8 @@ function FontComparisonCard() {
 
 export default function Index() {
   return (
-    <ScrollView className="flex-1 bg-background-50">
-      <View className="gap-8 px-5 py-10">
+    <ScreenContainer>
+      <View className="gap-8">
         {/* ── Header ── */}
         <View className="gap-1">
           <Text className="font-nunito-extrabold text-display-lg text-primary-500">BadBuy</Text>
@@ -596,9 +597,7 @@ export default function Index() {
             </View>
           </View>
         </Section>
-
-        <View className="h-6" />
       </View>
-    </ScrollView>
+    </ScreenContainer>
   );
 }

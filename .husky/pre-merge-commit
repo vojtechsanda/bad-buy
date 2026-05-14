@@ -1,0 +1,5 @@
+echo -e "\r\e[31m✖\e[0m Manual merge commits are disabled."
+echo -e "\e[33m  Action Required:\e[0m Run \e[32mgit merge --abort\e[0m to clean up your branch."
+echo -e "  Then use \e[32mgit rebase <branch>\e[0m instead.\033[K"
+
+exit 1

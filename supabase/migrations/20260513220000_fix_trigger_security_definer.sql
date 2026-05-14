@@ -2,6 +2,12 @@
 -- SELECTs/UPDATEs on RLS-protected tables see all rows.
 -- search_path is locked to '' to prevent search-path injection;
 -- all table references are fully qualified (public.*).
+--
+-- Avatar images use account.id client-side (e.g. DiceBear seed); drop legacy columns.
+-- Onboarding completion is determined in the app from profile data, not a DB flag.
+
+ALTER TABLE public.account DROP COLUMN IF EXISTS avatar_seed;
+ALTER TABLE public.account DROP COLUMN IF EXISTS is_onboarding_complete;
 
 CREATE OR REPLACE FUNCTION trg_account_before_insert()
 RETURNS TRIGGER
@@ -13,10 +19,6 @@ DECLARE
   candidate text;
   attempts  integer := 0;
 BEGIN
-  IF NEW.avatar_seed IS NULL THEN
-    NEW.avatar_seed := NEW.id::text;
-  END IF;
-
   LOOP
     candidate := upper(substring(replace(gen_random_uuid()::text, '-', ''), 1, 6));
     EXIT WHEN NOT EXISTS (SELECT 1 FROM public.account WHERE referral_code = candidate);

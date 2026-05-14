@@ -10,7 +10,6 @@ export type Database = {
     Tables: {
       account: {
         Row: {
-          avatar_seed: string | null;
           birthdate: string | null;
           country: string | null;
           created_at: string;
@@ -18,7 +17,6 @@ export type Database = {
           display_currency: string | null;
           hourly_wage_usd: number | null;
           id: string;
-          is_onboarding_complete: boolean;
           name: string | null;
           notifications_enabled: boolean;
           premium_expires_at: string | null;
@@ -27,7 +25,6 @@ export type Database = {
           work_hours_per_day: number;
         };
         Insert: {
-          avatar_seed?: string | null;
           birthdate?: string | null;
           country?: string | null;
           created_at?: string;
@@ -35,7 +32,6 @@ export type Database = {
           display_currency?: string | null;
           hourly_wage_usd?: number | null;
           id: string;
-          is_onboarding_complete?: boolean;
           name?: string | null;
           notifications_enabled?: boolean;
           premium_expires_at?: string | null;
@@ -44,7 +40,6 @@ export type Database = {
           work_hours_per_day?: number;
         };
         Update: {
-          avatar_seed?: string | null;
           birthdate?: string | null;
           country?: string | null;
           created_at?: string;
@@ -52,7 +47,6 @@ export type Database = {
           display_currency?: string | null;
           hourly_wage_usd?: number | null;
           id?: string;
-          is_onboarding_complete?: boolean;
           name?: string | null;
           notifications_enabled?: boolean;
           premium_expires_at?: string | null;

@@ -4,24 +4,143 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: '14.4';
+    PostgrestVersion: '14.5';
   };
   public: {
     Tables: {
-      campaign_promo_code: {
+      account: {
         Row: {
-          code: string;
-          ends_at: string | null;
+          avatar_seed: string | null;
+          birthdate: string | null;
+          country: string | null;
+          created_at: string;
+          decision_count: number;
+          display_currency: string | null;
+          hourly_wage_usd: number | null;
+          id: string;
+          is_onboarding_complete: boolean;
+          name: string | null;
+          notifications_enabled: boolean;
+          premium_expires_at: string | null;
+          referral_code: string | null;
+          wage_currency: string | null;
+          work_hours_per_day: number;
         };
         Insert: {
-          code: string;
-          ends_at?: string | null;
+          avatar_seed?: string | null;
+          birthdate?: string | null;
+          country?: string | null;
+          created_at?: string;
+          decision_count?: number;
+          display_currency?: string | null;
+          hourly_wage_usd?: number | null;
+          id: string;
+          is_onboarding_complete?: boolean;
+          name?: string | null;
+          notifications_enabled?: boolean;
+          premium_expires_at?: string | null;
+          referral_code?: string | null;
+          wage_currency?: string | null;
+          work_hours_per_day?: number;
         };
         Update: {
-          code?: string;
-          ends_at?: string | null;
+          avatar_seed?: string | null;
+          birthdate?: string | null;
+          country?: string | null;
+          created_at?: string;
+          decision_count?: number;
+          display_currency?: string | null;
+          hourly_wage_usd?: number | null;
+          id?: string;
+          is_onboarding_complete?: boolean;
+          name?: string | null;
+          notifications_enabled?: boolean;
+          premium_expires_at?: string | null;
+          referral_code?: string | null;
+          wage_currency?: string | null;
+          work_hours_per_day?: number;
         };
         Relationships: [];
+      };
+      account_hobby: {
+        Row: {
+          account_id: string;
+          created_at: string;
+          hobby_name: string;
+          id: string;
+          is_moderated: boolean;
+          predefined_hobby_id: string | null;
+        };
+        Insert: {
+          account_id: string;
+          created_at?: string;
+          hobby_name: string;
+          id?: string;
+          is_moderated?: boolean;
+          predefined_hobby_id?: string | null;
+        };
+        Update: {
+          account_id?: string;
+          created_at?: string;
+          hobby_name?: string;
+          id?: string;
+          is_moderated?: boolean;
+          predefined_hobby_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'account_hobby_account_id_fkey';
+            columns: ['account_id'];
+            isOneToOne: false;
+            referencedRelation: 'account';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'account_hobby_predefined_hobby_id_fkey';
+            columns: ['predefined_hobby_id'];
+            isOneToOne: false;
+            referencedRelation: 'predefined_hobby';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      account_suggestion: {
+        Row: {
+          country: string;
+          generated_at: string;
+          hobby_id: string;
+          id: string;
+          item_emoji: string | null;
+          name: string;
+          price_usd: number;
+        };
+        Insert: {
+          country: string;
+          generated_at?: string;
+          hobby_id: string;
+          id?: string;
+          item_emoji?: string | null;
+          name: string;
+          price_usd: number;
+        };
+        Update: {
+          country?: string;
+          generated_at?: string;
+          hobby_id?: string;
+          id?: string;
+          item_emoji?: string | null;
+          name?: string;
+          price_usd?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'account_suggestion_hobby_id_fkey';
+            columns: ['hobby_id'];
+            isOneToOne: false;
+            referencedRelation: 'account_hobby';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       currency_rate: {
         Row: {
@@ -32,7 +151,7 @@ export type Database = {
           target: string;
         };
         Insert: {
-          base: string;
+          base?: string;
           fetched_at?: string;
           id?: string;
           rate: number;
@@ -47,176 +166,203 @@ export type Database = {
         };
         Relationships: [];
       };
-      profile: {
+      notification: {
         Row: {
-          applied_promo_code: string | null;
-          avatar_url: string | null;
-          birthdate: string | null;
-          country: string | null;
-          display_currency: string | null;
-          hourly_wage_usd: number | null;
+          account_id: string;
+          created_at: string;
           id: string;
-          name: string | null;
-          notifications_enabled: boolean;
-          premium_until: string | null;
-          referral_code: string | null;
-          referred_by: string | null;
-          wage_currency: string | null;
-          work_hours_per_day: number | null;
+          read_at: string | null;
+          tracked_item_id: string;
+          type: Database['public']['Enums']['notification_type'];
         };
         Insert: {
-          applied_promo_code?: string | null;
-          avatar_url?: string | null;
-          birthdate?: string | null;
-          country?: string | null;
-          display_currency?: string | null;
-          hourly_wage_usd?: number | null;
+          account_id: string;
+          created_at?: string;
           id?: string;
-          name?: string | null;
-          notifications_enabled?: boolean;
-          premium_until?: string | null;
-          referral_code?: string | null;
-          referred_by?: string | null;
-          wage_currency?: string | null;
-          work_hours_per_day?: number | null;
+          read_at?: string | null;
+          tracked_item_id: string;
+          type: Database['public']['Enums']['notification_type'];
         };
         Update: {
-          applied_promo_code?: string | null;
-          avatar_url?: string | null;
-          birthdate?: string | null;
-          country?: string | null;
-          display_currency?: string | null;
-          hourly_wage_usd?: number | null;
+          account_id?: string;
+          created_at?: string;
           id?: string;
-          name?: string | null;
-          notifications_enabled?: boolean;
-          premium_until?: string | null;
-          referral_code?: string | null;
-          referred_by?: string | null;
-          wage_currency?: string | null;
-          work_hours_per_day?: number | null;
+          read_at?: string | null;
+          tracked_item_id?: string;
+          type?: Database['public']['Enums']['notification_type'];
         };
         Relationships: [
           {
-            foreignKeyName: 'fk_profile_referred_by';
-            columns: ['referred_by'];
+            foreignKeyName: 'notification_account_id_fkey';
+            columns: ['account_id'];
             isOneToOne: false;
-            referencedRelation: 'profile';
+            referencedRelation: 'account';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'profile_applied_promo_code_fkey';
-            columns: ['applied_promo_code'];
+            foreignKeyName: 'notification_tracked_item_id_fkey';
+            columns: ['tracked_item_id'];
             isOneToOne: false;
-            referencedRelation: 'campaign_promo_code';
-            referencedColumns: ['code'];
-          },
-        ];
-      };
-      profile_hobby: {
-        Row: {
-          hobby_name: string;
-          id: string;
-          profile_id: string;
-        };
-        Insert: {
-          hobby_name: string;
-          id?: string;
-          profile_id: string;
-        };
-        Update: {
-          hobby_name?: string;
-          id?: string;
-          profile_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'profile_hobby_profile_id_fkey';
-            columns: ['profile_id'];
-            isOneToOne: false;
-            referencedRelation: 'profile';
+            referencedRelation: 'tracked_item';
             referencedColumns: ['id'];
           },
         ];
       };
-      profile_suggestion: {
+      predefined_hobby: {
         Row: {
-          country: string | null;
-          generated_at: string;
-          hobby_id: string;
+          category: string;
           id: string;
+          lucide_icon: string;
           name: string;
-          price_usd: number | null;
+          sort_order: number;
         };
         Insert: {
-          country?: string | null;
-          generated_at?: string;
-          hobby_id: string;
+          category: string;
           id?: string;
+          lucide_icon: string;
           name: string;
-          price_usd?: number | null;
+          sort_order?: number;
         };
         Update: {
-          country?: string | null;
-          generated_at?: string;
-          hobby_id?: string;
+          category?: string;
           id?: string;
+          lucide_icon?: string;
           name?: string;
-          price_usd?: number | null;
+          sort_order?: number;
+        };
+        Relationships: [];
+      };
+      promo_code: {
+        Row: {
+          code: string;
+          created_at: string;
+          current_uses: number;
+          expires_at: string | null;
+          id: string;
+          is_active: boolean;
+          max_uses: number | null;
+          premium_months_granted: number;
+        };
+        Insert: {
+          code: string;
+          created_at?: string;
+          current_uses?: number;
+          expires_at?: string | null;
+          id?: string;
+          is_active?: boolean;
+          max_uses?: number | null;
+          premium_months_granted?: number;
+        };
+        Update: {
+          code?: string;
+          created_at?: string;
+          current_uses?: number;
+          expires_at?: string | null;
+          id?: string;
+          is_active?: boolean;
+          max_uses?: number | null;
+          premium_months_granted?: number;
+        };
+        Relationships: [];
+      };
+      referral_redemption: {
+        Row: {
+          id: string;
+          premium_months_granted: number;
+          promo_code_id: string | null;
+          redeemed_at: string;
+          redeemer_account_id: string;
+          referrer_account_id: string | null;
+        };
+        Insert: {
+          id?: string;
+          premium_months_granted?: number;
+          promo_code_id?: string | null;
+          redeemed_at?: string;
+          redeemer_account_id: string;
+          referrer_account_id?: string | null;
+        };
+        Update: {
+          id?: string;
+          premium_months_granted?: number;
+          promo_code_id?: string | null;
+          redeemed_at?: string;
+          redeemer_account_id?: string;
+          referrer_account_id?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: 'profile_suggestion_hobby_id_fkey';
-            columns: ['hobby_id'];
+            foreignKeyName: 'referral_redemption_promo_code_id_fkey';
+            columns: ['promo_code_id'];
             isOneToOne: false;
-            referencedRelation: 'profile_hobby';
+            referencedRelation: 'promo_code';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'referral_redemption_redeemer_account_id_fkey';
+            columns: ['redeemer_account_id'];
+            isOneToOne: true;
+            referencedRelation: 'account';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'referral_redemption_referrer_account_id_fkey';
+            columns: ['referrer_account_id'];
+            isOneToOne: false;
+            referencedRelation: 'account';
             referencedColumns: ['id'];
           },
         ];
       };
       tracked_item: {
         Row: {
-          conversion_rate_snapshot: number | null;
+          account_id: string;
+          conversion_rate_snapshot: number;
           created_at: string;
           decided_at: string | null;
           freeze_until: string | null;
+          frozen_at: string | null;
           id: string;
-          name: string;
-          note: string | null;
-          price_usd: number | null;
-          profile_id: string;
-          status: Database['public']['Enums']['item_status'] | null;
+          item_emoji: string | null;
+          name: string | null;
+          price_currency: string;
+          price_usd: number;
+          status: Database['public']['Enums']['tracked_item_status'];
         };
         Insert: {
-          conversion_rate_snapshot?: number | null;
+          account_id: string;
+          conversion_rate_snapshot: number;
           created_at?: string;
           decided_at?: string | null;
           freeze_until?: string | null;
+          frozen_at?: string | null;
           id?: string;
-          name: string;
-          note?: string | null;
-          price_usd?: number | null;
-          profile_id: string;
-          status?: Database['public']['Enums']['item_status'] | null;
+          item_emoji?: string | null;
+          name?: string | null;
+          price_currency: string;
+          price_usd: number;
+          status?: Database['public']['Enums']['tracked_item_status'];
         };
         Update: {
-          conversion_rate_snapshot?: number | null;
+          account_id?: string;
+          conversion_rate_snapshot?: number;
           created_at?: string;
           decided_at?: string | null;
           freeze_until?: string | null;
+          frozen_at?: string | null;
           id?: string;
-          name?: string;
-          note?: string | null;
-          price_usd?: number | null;
-          profile_id?: string;
-          status?: Database['public']['Enums']['item_status'] | null;
+          item_emoji?: string | null;
+          name?: string | null;
+          price_currency?: string;
+          price_usd?: number;
+          status?: Database['public']['Enums']['tracked_item_status'];
         };
         Relationships: [
           {
-            foreignKeyName: 'tracked_item_profile_id_fkey';
-            columns: ['profile_id'];
+            foreignKeyName: 'tracked_item_account_id_fkey';
+            columns: ['account_id'];
             isOneToOne: false;
-            referencedRelation: 'profile';
+            referencedRelation: 'account';
             referencedColumns: ['id'];
           },
         ];
@@ -229,7 +375,8 @@ export type Database = {
       [_ in never]: never;
     };
     Enums: {
-      item_status: 'bought' | 'skipped' | 'frozen';
+      notification_type: 'freeze_thawed';
+      tracked_item_status: 'frozen' | 'bought' | 'skipped';
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -355,7 +502,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      item_status: ['bought', 'skipped', 'frozen'],
+      notification_type: ['freeze_thawed'],
+      tracked_item_status: ['frozen', 'bought', 'skipped'],
     },
   },
 } as const;

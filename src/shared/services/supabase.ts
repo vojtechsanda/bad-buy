@@ -7,9 +7,7 @@ const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const supabasePublicKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLIC_KEY;
 
 if (!supabaseUrl || !supabasePublicKey) {
-  throw new Error(
-    'Set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_PUBLIC_KEY in .env.txt file.',
-  );
+  throw new Error('Set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_PUBLIC_KEY in .env.');
 }
 
 export const supabase = createClient<Database>(supabaseUrl, supabasePublicKey, {

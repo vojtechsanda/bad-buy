@@ -1,3 +1,4 @@
+export * from './actionsheet';
 export * from './button';
 export * from './form-control';
 export * from './image';

@@ -63,6 +63,10 @@ The redirect pattern is centralised in two places:
 
 NativeWind (Tailwind for React Native) + Gluestack UI v3. The Babel config sets `jsxImportSource: 'nativewind'` so `className` works on RN components. Global stylesheet entry is `global.css`, wired through Metro in `metro.config.js`. Light theme only for v1.
 
+## Code conventions
+
+- Import React types directly: `import { ReactNode } from 'react'`, not `React.ReactNode`.
+
 ## Conventions enforced by tooling
 
 - **Commits** must follow Conventional Commits _and_ start with a lowercase letter (custom commitlint rule in `commitlint.config.js`). Husky's `commit-msg` hook enforces this.

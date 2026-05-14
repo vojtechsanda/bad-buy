@@ -10,11 +10,12 @@ import { AnyFieldApi } from '@tanstack/react-form';
 type Props = {
   field: AnyFieldApi;
   label: string;
+  infoTooltip?: string;
   children: React.ReactNode;
 };
 
 export function FormField({ field, label, children }: Props) {
-  const invalid = field.state.meta.errors.length > 0;
+  const invalid = field.state.meta.isTouched && field.state.meta.errors.length > 0;
   return (
     <FormControl isInvalid={invalid}>
       <FormControlLabel>

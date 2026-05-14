@@ -491,57 +491,58 @@ The base schema is defined in ADR-004. This section documents v1's full schema i
 
 ### 5.1 Updated Entity List
 
-| Table                 | Purpose                                         | Source                               |
-| --------------------- | ----------------------------------------------- | ------------------------------------ |
-| `user`                | Profile, wage, currency, premium status         | ADR-004 (modified — `role` replaced) |
-| `user_hobby`          | User's hobby list (free-form text)              | ADR-004                              |
-| `user_suggestion`     | Cached AI-generated alternatives per hobby      | ADR-004                              |
-| `tracked_item`        | All decisions: skipped, bought, frozen          | ADR-004 (extended)                   |
-| `currency_rate`       | Daily-synced USD-base exchange rates            | ADR-004                              |
-| `predefined_hobby`    | Master list of selectable hobbies in onboarding | New                                  |
-| `promo_code`          | Seed codes (e.g., `LAUNCH2026`)                 | New                                  |
-| `referral_redemption` | Audit log of who redeemed which code            | New                                  |
-| `notification`        | In-app notification feed entries                | New                                  |
+| Table                 | Purpose                                         | Source  |
+| --------------------- | ----------------------------------------------- | ------- |
+| `account`             | Profile, wage, currency, premium status         | ADR-004 |
+| `account_hobby`       | Account's hobby list                            | ADR-004 |
+| `account_suggestion`  | Cached AI-generated alternatives per hobby      | ADR-004 |
+| `tracked_item`        | All decisions: skipped, bought, frozen          | ADR-004 |
+| `currency_rate`       | Daily-synced USD-base exchange rates            | ADR-004 |
+| `predefined_hobby`    | Master list of selectable hobbies in onboarding | New     |
+| `promo_code`          | Seed codes (e.g., `LAUNCH2026`)                 | New     |
+| `referral_redemption` | Audit log of who redeemed which code            | New     |
+| `notification`        | In-app notification feed entries                | New     |
 
-### 5.2 `user` (Modified)
+### 5.2 `account`
 
 The ADR-004 `role` enum is removed. Premium status is now derived from `premium_expires_at`.
 
-| Field                   | Type        | Default              | Notes                                                                |
-| ----------------------- | ----------- | -------------------- | -------------------------------------------------------------------- |
-| `id`                    | uuid PK     | —                    | Supabase Auth user ID                                                |
-| `name`                  | text        | —                    | Display name                                                         |
-| `avatar_seed`           | text        | (= id)               | DiceBear seed (defaults to user UUID)                                |
-| `birthdate`             | date        | —                    | Onboarding                                                           |
-| `country`               | text        | —                    | ISO 3166-1 alpha-2 code                                              |
-| `display_currency`      | text        | derived from country | ISO 4217                                                             |
-| `wage_currency`         | text        | derived from country | ISO 4217                                                             |
-| `hourly_wage_usd`       | decimal     | —                    | Always stored in USD                                                 |
-| `work_hours_per_day`    | decimal     | 8                    |                                                                      |
-| `notifications_enabled` | boolean     | true                 | App-level switch                                                     |
-| `premium_expires_at`    | timestamptz | null                 | NULL = free user                                                     |
-| `referral_code`         | text UNIQUE | generated            | 6 chars, uppercase alphanumeric                                      |
-| `decision_count`        | integer     | 0                    | Sum of skip + buy decisions (incremented on skip/buy, NOT on freeze) |
-| `created_at`            | timestamptz | now()                |                                                                      |
+| Field                    | Type        | Default              | Notes                                                                                   |
+| ------------------------ | ----------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `id`                     | uuid PK     | —                    | Supabase Auth id                                                                        |
+| `name`                   | text        | null                 | Display name; null until set in onboarding                                              |
+| `avatar_seed`            | text        | (= id)               | DiceBear seed (defaults to account UUID)                                                |
+| `birthdate`              | date        | null                 | Onboarding                                                                              |
+| `country`                | text        | null                 | ISO 3166-1 alpha-2 code                                                                 |
+| `display_currency`       | text        | derived from country | ISO 4217                                                                                |
+| `wage_currency`          | text        | derived from country | ISO 4217                                                                                |
+| `hourly_wage_usd`        | decimal     | null                 | Always stored in USD                                                                    |
+| `work_hours_per_day`     | decimal     | 8                    |                                                                                         |
+| `notifications_enabled`  | boolean     | true                 | App-level switch                                                                        |
+| `premium_expires_at`     | timestamptz | null                 | NULL = free account                                                                     |
+| `referral_code`          | text UNIQUE | generated            | 6 chars, uppercase alphanumeric; DB trigger on INSERT, retry on collision               |
+| `decision_count`         | integer     | 0                    | Skip + buy only (not freeze); derivable from `tracked_item` or kept in sync via trigger |
+| `is_onboarding_complete` | boolean     | false                | Set on final onboarding step; drives routing                                            |
+| `created_at`             | timestamptz | now()                |                                                                                         |
 
 **Computed/derived fields (not stored):**
 
 - `is_premium` = `premium_expires_at IS NOT NULL AND premium_expires_at > now()`
-- `total_saved_usd` = `SUM(price_usd) FROM tracked_item WHERE user_id = ? AND status = 'skipped'`
+- `total_saved_usd` = `SUM(price_usd) FROM tracked_item WHERE account_id = ? AND status = 'skipped'` (optional cache + trigger, same idea as `decision_count`)
 - `total_saved_30d_usd` = same with `decided_at > now() - interval '30 days'`
 - `level` = derived from `decision_count` per Section 7
 - `decisions_to_next_level` = derived
 
-### 5.3 `tracked_item` (Extended)
+### 5.3 `tracked_item`
 
 Adds an `item_emoji` field and clarifies the lifecycle.
 
 | Field                      | Type        | Default  | Notes                                                                                  |
 | -------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------- |
 | `id`                       | uuid PK     | —        |                                                                                        |
-| `user_id`                  | uuid FK     | —        |                                                                                        |
+| `account_id`               | uuid FK     | —        | References `account(id)` ON DELETE CASCADE                                             |
 | `name`                     | text        | null     | Only set when item is frozen (named at freeze time)                                    |
-| `item_emoji`               | text        | null     | Optional, only set if user freezes; for v1, not auto-generated for skip/buy items      |
+| `item_emoji`               | text        | null     | Optional, only set if account freezes; for v1, not auto-generated for skip/buy items   |
 | `price_usd`                | decimal     | —        | Always stored in USD                                                                   |
 | `price_currency`           | text        | —        | The currency the user originally entered the price in (for display in vault if needed) |
 | `conversion_rate_snapshot` | decimal     | —        | USD → display_currency rate at decision time                                           |
@@ -549,7 +550,7 @@ Adds an `item_emoji` field and clarifies the lifecycle.
 | `freeze_until`             | timestamptz | null     | Only set when status = frozen; this is when the timer expires                          |
 | `frozen_at`                | timestamptz | null     | When the freeze was created (or last re-frozen)                                        |
 | `created_at`               | timestamptz | now()    | When the audit was first opened                                                        |
-| `decided_at`               | timestamptz | null     | When the user finally chose skip or buy                                                |
+| `decided_at`               | timestamptz | null     | When the account finally chose skip or buy                                             |
 
 **Lifecycle states:**
 
@@ -560,7 +561,7 @@ Adds an `item_emoji` field and clarifies the lifecycle.
 
 **Re-freezing** (from vault detail): updates `freeze_until` and `frozen_at`. Replaces previous countdown — does not extend it.
 
-### 5.4 `predefined_hobby` (New)
+### 5.4 `predefined_hobby`
 
 | Field         | Type        | Notes                                                                        |
 | ------------- | ----------- | ---------------------------------------------------------------------------- |
@@ -569,50 +570,46 @@ Adds an `item_emoji` field and clarifies the lifecycle.
 | `lucide_icon` | text        | Name of Lucide icon to render (e.g., `"Bike"`, `"Music"`, `"Camera"`)        |
 | `category`    | text        | For grouping in the picker (e.g., `"Sports"`, `"Music"`, `"Food"`, `"Tech"`) |
 | `sort_order`  | integer     | Manual ordering within category                                              |
-| `is_active`   | boolean     | Soft delete flag                                                             |
+
+To retire a predefined hobby, delete its row from `predefined_hobby`. The FK on `account_hobby.predefined_hobby_id` uses `ON DELETE SET NULL`: existing picks keep the same `hobby_name` text but lose the link, so they behave like custom hobbies. The hobby disappears from the picker for new selections because the master row no longer exists.
 
 Seeded with ~40 hobbies across ~6 categories. Examples: Cycling, Running, Hiking, Yoga (Sports); Guitar, Piano, Singing (Music); Cooking, Coffee, Wine (Food); Photography, Painting, Reading (Creative); Gaming, PC building, Coding (Tech); Travel, Camping, Gardening (Outdoors).
 
-Free users select from this table only. Premium users may additionally enter custom hobbies (free text → `user_hobby` row directly).
+Free accounts select from this table only. Premium accounts may additionally enter custom hobbies (free text → `account_hobby` row directly).
 
-### 5.5 `user_hobby` (Clarified)
+### 5.5 `account_hobby`
 
-Unchanged from ADR-004. One row per hobby per user. The `hobby_name` field stores either:
+One row per hobby per account. `hobby_name` is the display text (from a predefined row at pick time, or free text for premium). Custom vs predefined-linked: `predefined_hobby_id IS NULL` means custom (including after a predefined row is deleted).
 
-- A predefined hobby's `name` value (looked up at selection time), or
-- A free-text custom hobby (premium only).
-
-A `source` field is added to distinguish:
-
-| Field                 | Type        | Notes                                                                  |
-| --------------------- | ----------- | ---------------------------------------------------------------------- |
-| `id`                  | uuid PK     |                                                                        |
-| `user_id`             | uuid FK     |                                                                        |
-| `hobby_name`          | text        |                                                                        |
-| `source`              | enum        | `predefined`, `custom`                                                 |
-| `predefined_hobby_id` | uuid FK     | NULL for custom                                                        |
-| `is_moderated`        | boolean     | true for predefined; for custom, false until backend moderation passes |
-| `created_at`          | timestamptz |                                                                        |
+| Field                 | Type                       | Notes                                                                                    |
+| --------------------- | -------------------------- | ---------------------------------------------------------------------------------------- |
+| `id`                  | uuid PK                    |                                                                                          |
+| `account_id`          | uuid FK                    | References `account(id)` ON DELETE CASCADE                                               |
+| `hobby_name`          | text                       |                                                                                          |
+| `predefined_hobby_id` | uuid FK                    | NULL for custom hobbies. References `predefined_hobby(id)` ON DELETE SET NULL            |
+| `is_moderated`        | boolean                    | `true` for predefined-origin hobbies; `false` for custom until backend moderation passes |
+| `created_at`          | timestamptz                |                                                                                          |
+| UNIQUE                | `(account_id, hobby_name)` | Prevents duplicate hobbies per account                                                   |
 
 Suggestions are only generated for `is_moderated = true` hobbies. Custom hobbies awaiting moderation show a "Pending review" state in the profile/hobbies view (not visible elsewhere).
 
-### 5.6 `user_suggestion` (Unchanged from ADR-004)
+### 5.6 `account_suggestion`
 
 Adds `item_emoji` for clarity.
 
-| Field          | Type        | Notes                              |
-| -------------- | ----------- | ---------------------------------- |
-| `id`           | uuid PK     |                                    |
-| `hobby_id`     | uuid FK     | ON DELETE CASCADE                  |
-| `name`         | text        | AI-generated alternative item name |
-| `item_emoji`   | text        | AI-generated emoji for the item    |
-| `price_usd`    | decimal     | Suggested price in USD             |
-| `country`      | text        | Cache key (denormalized)           |
-| `generated_at` | timestamptz |                                    |
+| Field          | Type        | Notes                                            |
+| -------------- | ----------- | ------------------------------------------------ |
+| `id`           | uuid PK     |                                                  |
+| `hobby_id`     | uuid FK     | References `account_hobby(id)` ON DELETE CASCADE |
+| `name`         | text        | AI-generated alternative item name               |
+| `item_emoji`   | text        | AI-generated emoji for the item                  |
+| `price_usd`    | decimal     | Suggested price in USD                           |
+| `country`      | text        | Cache key (denormalized)                         |
+| `generated_at` | timestamptz |                                                  |
 
-When the user manually refreshes (premium only), all rows for that user's hobbies in this country are deleted and regenerated.
+When the account manually refreshes (premium only), all rows for that account's hobbies in this country are deleted and regenerated.
 
-### 5.7 `currency_rate` (Unchanged from ADR-004)
+### 5.7 `currency_rate`
 
 | Field        | Type             | Notes                   |
 | ------------ | ---------------- | ----------------------- |
@@ -623,48 +620,52 @@ When the user manually refreshes (premium only), all rows for that user's hobbie
 | `fetched_at` | timestamptz      |                         |
 | UNIQUE       | `(base, target)` |                         |
 
-### 5.8 `promo_code` (New)
+### 5.8 `promo_code`
 
-For seed codes only. User referral codes live on the `user.referral_code` field, not here.
-
-| Field                    | Type        | Notes                                     |
-| ------------------------ | ----------- | ----------------------------------------- |
-| `id`                     | uuid PK     |                                           |
-| `code`                   | text UNIQUE | E.g., `LAUNCH2026`                        |
-| `premium_months_granted` | integer     | Default 3                                 |
-| `max_uses`               | integer     | NULL = unlimited                          |
-| `current_uses`           | integer     | Default 0, incremented on each redemption |
-| `is_active`              | boolean     | Default true                              |
-| `created_at`             | timestamptz |                                           |
-
-### 5.9 `referral_redemption` (New)
-
-Audit log of every redemption. Used to enforce the "one redemption per user, ever" rule and to award the referrer.
+For seed codes only. Account referral codes live on the `account.referral_code` field, not here.
 
 | Field                    | Type        | Notes                                                            |
 | ------------------------ | ----------- | ---------------------------------------------------------------- |
 | `id`                     | uuid PK     |                                                                  |
-| `redeemer_user_id`       | uuid FK     | The user who entered the code                                    |
-| `code_used`              | text        | Either a `user.referral_code` value or a `promo_code.code` value |
-| `referrer_user_id`       | uuid FK     | NULL if `code_used` was a seed code                              |
-| `code_type`              | enum        | `user_referral`, `seed`                                          |
-| `premium_months_granted` | integer     | 3 for v1                                                         |
-| `redeemed_at`            | timestamptz | now()                                                            |
+| `code`                   | text UNIQUE | E.g., `LAUNCH2026`                                               |
+| `premium_months_granted` | integer     | Default 3                                                        |
+| `max_uses`               | integer     | NULL = unlimited                                                 |
+| `current_uses`           | integer     | Default 0, incremented on each redemption                        |
+| `is_active`              | boolean     | Default true                                                     |
+| `expires_at`             | timestamptz | NULL = no expiry; redemption is rejected if `expires_at < now()` |
+| `created_at`             | timestamptz |                                                                  |
 
-**Constraint:** UNIQUE on `redeemer_user_id` — enforces one redemption per user ever.
+### 5.9 `referral_redemption`
 
-### 5.10 `notification` (New)
+Audit log of every redemption. Used to enforce the "one redemption per account, ever" rule and to award the referrer.
+
+| Field                    | Type        | Notes                                                              |
+| ------------------------ | ----------- | ------------------------------------------------------------------ |
+| `id`                     | uuid PK     |                                                                    |
+| `redeemer_account_id`    | uuid FK     | The account who entered the code. References `account(id)`         |
+| `referrer_account_id`    | uuid FK     | NULL if a seed code was used. References `account(id)`             |
+| `promo_code_id`          | uuid FK     | NULL if a user referral code was used. References `promo_code(id)` |
+| `premium_months_granted` | integer     | 3 for v1                                                           |
+| `redeemed_at`            | timestamptz | now()                                                              |
+
+**Constraints:**
+
+- UNIQUE on `redeemer_account_id`: enforces one redemption per account ever.
+- `CHECK (num_nonnulls(referrer_account_id, promo_code_id) = 1)`: exactly one of the two must be set; enforces that every redemption is traceable to either a user referral or a seed code, but never both.
+- `CHECK (redeemer_account_id != referrer_account_id)`: prevents self-referral at the DB level (in addition to app-level validation).
+
+### 5.10 `notification`
 
 In-app notification feed. Synced across devices via Supabase. Push notifications are sent via `expo-notifications` separately but produce a corresponding row here for the in-app feed.
 
-| Field             | Type        | Notes                                                               |
-| ----------------- | ----------- | ------------------------------------------------------------------- |
-| `id`              | uuid PK     |                                                                     |
-| `user_id`         | uuid FK     |                                                                     |
-| `type`            | enum        | `freeze_thawed` (only type in v1)                                   |
-| `tracked_item_id` | uuid FK     | The item whose timer expired                                        |
-| `created_at`      | timestamptz | When the timer expired                                              |
-| `read_at`         | timestamptz | NULL until user opens it; set when they tap it (synced to Supabase) |
+| Field             | Type        | Notes                                                                  |
+| ----------------- | ----------- | ---------------------------------------------------------------------- |
+| `id`              | uuid PK     |                                                                        |
+| `account_id`      | uuid FK     | References `account(id)` ON DELETE CASCADE                             |
+| `type`            | enum        | `freeze_thawed` (only type in v1)                                      |
+| `tracked_item_id` | uuid FK     | References `tracked_item(id)` ON DELETE CASCADE                        |
+| `created_at`      | timestamptz | When the timer expired                                                 |
+| `read_at`         | timestamptz | NULL until account opens it; set when they tap it (synced to Supabase) |
 
 When read, notifications are filtered out of the panel by default. There is no "Mark all read" in v1; only individual tap-through marks read.
 
@@ -680,9 +681,11 @@ When read, notifications are filtered out of the panel by default. There is no "
 
 ### 5.12 Row Level Security
 
-All user-data tables (`user_hobby`, `user_suggestion`, `tracked_item`, `notification`, `referral_redemption`) have RLS policies restricting access to `auth.uid() = user_id` (or `redeemer_user_id` for redemption — exception: the referrer also needs to see their own referral count derived from rows where `referrer_user_id = auth.uid()`, but this is read-only).
+All account-data tables (`account_hobby`, `account_suggestion`, `tracked_item`, `notification`, `referral_redemption`) have RLS policies restricting access to `auth.uid() = account_id` (or `redeemer_account_id` for redemptions — exception: the referrer also needs to see their own referral count derived from rows where `referrer_account_id = auth.uid()`, but this is read-only).
 
-`predefined_hobby`, `promo_code`, `currency_rate` are world-readable (no PII).
+`predefined_hobby` and `currency_rate` are world-readable (no PII).
+
+`promo_code`: no direct client read (RLS).
 
 ---
 

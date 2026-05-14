@@ -1,4 +1,4 @@
-import type { Enums, Tables } from './database.types';
+import type { Enums, Tables } from './database';
 
 export type NotificationType = Enums<'notification_type'>;
 export type TrackedItemStatus = Enums<'tracked_item_status'>;

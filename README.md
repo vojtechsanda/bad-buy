@@ -52,6 +52,22 @@ npm run reset-project
 
 This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
+## Supabase database types
+
+Regenerate TypeScript types for `src/shared/types/database.ts` after schema changes:
+
+Firsly, login to Supabase:
+
+```bash
+pnpm exec supabase login
+```
+
+Then, run the script:
+
+```bash
+pnpm gen:types
+```
+
 ## Other setup steps
 
 - To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)

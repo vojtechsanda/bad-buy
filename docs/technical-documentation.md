@@ -507,23 +507,21 @@ The base schema is defined in ADR-004. This section documents v1's full schema i
 
 The ADR-004 `role` enum is removed. Premium status is now derived from `premium_expires_at`.
 
-| Field                    | Type        | Default              | Notes                                                                                   |
-| ------------------------ | ----------- | -------------------- | --------------------------------------------------------------------------------------- |
-| `id`                     | uuid PK     | —                    | Supabase Auth id                                                                        |
-| `name`                   | text        | null                 | Display name; null until set in onboarding                                              |
-| `avatar_seed`            | text        | (= id)               | DiceBear seed (defaults to account UUID)                                                |
-| `birthdate`              | date        | null                 | Onboarding                                                                              |
-| `country`                | text        | null                 | ISO 3166-1 alpha-2 code                                                                 |
-| `display_currency`       | text        | derived from country | ISO 4217                                                                                |
-| `wage_currency`          | text        | derived from country | ISO 4217                                                                                |
-| `hourly_wage_usd`        | decimal     | null                 | Always stored in USD                                                                    |
-| `work_hours_per_day`     | decimal     | 8                    |                                                                                         |
-| `notifications_enabled`  | boolean     | true                 | App-level switch                                                                        |
-| `premium_expires_at`     | timestamptz | null                 | NULL = free account                                                                     |
-| `referral_code`          | text UNIQUE | generated            | 6 chars, uppercase alphanumeric; DB trigger on INSERT, retry on collision               |
-| `decision_count`         | integer     | 0                    | Skip + buy only (not freeze); derivable from `tracked_item` or kept in sync via trigger |
-| `is_onboarding_complete` | boolean     | false                | Set on final onboarding step; drives routing                                            |
-| `created_at`             | timestamptz | now()                |                                                                                         |
+| Field                   | Type        | Default              | Notes                                                                                   |
+| ----------------------- | ----------- | -------------------- | --------------------------------------------------------------------------------------- |
+| `id`                    | uuid PK     | —                    | Supabase Auth id                                                                        |
+| `name`                  | text        | null                 | Display name; null until set in onboarding                                              |
+| `birthdate`             | date        | null                 | Onboarding                                                                              |
+| `country`               | text        | null                 | ISO 3166-1 alpha-2 code                                                                 |
+| `display_currency`      | text        | derived from country | ISO 4217                                                                                |
+| `wage_currency`         | text        | derived from country | ISO 4217                                                                                |
+| `hourly_wage_usd`       | decimal     | null                 | Always stored in USD                                                                    |
+| `work_hours_per_day`    | decimal     | 8                    |                                                                                         |
+| `notifications_enabled` | boolean     | true                 | App-level switch                                                                        |
+| `premium_expires_at`    | timestamptz | null                 | NULL = free account                                                                     |
+| `referral_code`         | text UNIQUE | generated            | 6 chars, uppercase alphanumeric; DB trigger on INSERT, retry on collision               |
+| `decision_count`        | integer     | 0                    | Skip + buy only (not freeze); derivable from `tracked_item` or kept in sync via trigger |
+| `created_at`            | timestamptz | now()                |                                                                                         |
 
 **Computed/derived fields (not stored):**
 
@@ -1399,7 +1397,7 @@ Screens are documented in the order a new user would encounter them.
 1. Top app bar: title "Profile" left, bell icon right.
 
 2. **Identity block** (centered content, vertical):
-   - DiceBear avatar (~96px, `Avatar` Gluestack component, image source = DiceBear URL with seed = `user.id`).
+   - DiceBear avatar (~96px, `Avatar` Gluestack component; build image URL in the client using `account.id` as the DiceBear seed).
    - Vertical spacing (`3`).
    - User name (`display-md`).
    - Below name, small row centered: `LevelBadge` (small, ~28px) + "L<n>" + tier name in `body`, `text-secondary`. E.g., "L4 · Aware".

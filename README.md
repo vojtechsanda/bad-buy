@@ -10,7 +10,17 @@ Master your money by turning impulsive buys into conscious choices.
    pnpm install
    ```
 
-2. Set up Git hooks
+2. Set up environment variables
+
+   Copy the example env file:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Then open `.env` and fill in the Supabase credentials.
+
+3. Set up Git hooks
 
    ```bash
    pnpm prepare
@@ -18,8 +28,7 @@ Master your money by turning impulsive buys into conscious choices.
 
    This installs Husky Git hooks. On `pre-commit`, `lint-staged` runs Prettier and ESLint on staged files. On `commit-msg`, `commitlint` checks that your commit message follows the project's conventions.
 
-3. Start the app
-
+4. Start the app
    ```bash
    pnpm start
    ```
@@ -43,7 +52,7 @@ npm run reset-project
 
 This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-### Other setup steps
+## Other setup steps
 
 - To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
 - If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)

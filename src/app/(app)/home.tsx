@@ -23,6 +23,7 @@ import {
   User,
   X,
 } from 'lucide-react-native';
+import { ReactNode } from 'react';
 import { Text, View } from 'react-native';
 
 // Brand color literals for lucide icons — kept in sync with config.ts
@@ -41,7 +42,7 @@ const C = {
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <View className="gap-3">
       <Text className="font-nunito-semibold text-caption uppercase tracking-widest text-typography-400">

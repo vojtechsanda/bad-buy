@@ -1,4 +1,6 @@
 import { AuthStickyFooter, RegisterFormSchema } from '@features/auth';
+import { authService } from '@features/auth/service';
+import { DEFAULT_ERROR_MESSAGE } from '@shared/constants';
 import { EmailFormField, PasswordFormField, ScreenContainer } from '@shared/components';
 import { revalidateLogic } from '@tanstack/form-core';
 import { useForm, useStore } from '@tanstack/react-form';
@@ -7,7 +9,7 @@ import { useState } from 'react';
 import { Text, View } from 'react-native';
 
 export default function Register() {
-  const [serverError, setServerError] = useState<string | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const form = useForm({
     defaultValues: { email: '', password: '', passwordRepeat: '' },
@@ -19,9 +21,15 @@ export default function Register() {
       onDynamic: RegisterFormSchema,
     },
     onSubmit: async ({ value }) => {
-      setServerError(null);
-      // TODO: Supabase auth call
-      console.log('register', value);
+      setAuthError(null);
+      try {
+        await authService.signUp(value.email, value.password);
+        // TODO: start onboarding
+      } catch (err) {
+        // TODO: user friendly error message instead of raw supabase error message
+        const message = err instanceof Error ? err.message : DEFAULT_ERROR_MESSAGE;
+        setAuthError(message);
+      }
     },
   });
 

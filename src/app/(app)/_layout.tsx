@@ -1,8 +1,13 @@
-import { isLogged } from '@features/auth';
+import { useAuth } from '@features/auth/hooks';
 import { AppTabs, AppTopBar } from '@shared/components';
 import { Redirect, Tabs } from 'expo-router';
 
 export default function AppLayout() {
+  const { isLogged, isLoading } = useAuth();
+
+  // TODO(#127): replace with loading screen
+  if (isLoading) return null;
+
   if (!isLogged) {
     return <Redirect href="/(auth)/landing" />;
   }

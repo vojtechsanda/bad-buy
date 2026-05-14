@@ -185,7 +185,7 @@ export type Database = {
           note: string | null;
           price_usd: number | null;
           profile_id: string;
-          status: string | null;
+          status: Database['public']['Enums']['item_status'] | null;
         };
         Insert: {
           conversion_rate_snapshot?: number | null;
@@ -197,7 +197,7 @@ export type Database = {
           note?: string | null;
           price_usd?: number | null;
           profile_id: string;
-          status?: string | null;
+          status?: Database['public']['Enums']['item_status'] | null;
         };
         Update: {
           conversion_rate_snapshot?: number | null;
@@ -209,7 +209,7 @@ export type Database = {
           note?: string | null;
           price_usd?: number | null;
           profile_id?: string;
-          status?: string | null;
+          status?: Database['public']['Enums']['item_status'] | null;
         };
         Relationships: [
           {
@@ -229,7 +229,7 @@ export type Database = {
       [_ in never]: never;
     };
     Enums: {
-      item_status: 'bought' | 'skipped' | 'thinking';
+      item_status: 'bought' | 'skipped' | 'frozen';
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -355,7 +355,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      item_status: ['bought', 'skipped', 'thinking'],
+      item_status: ['bought', 'skipped', 'frozen'],
     },
   },
 } as const;

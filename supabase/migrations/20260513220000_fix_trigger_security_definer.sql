@@ -33,6 +33,12 @@ BEGIN
 END;
 $$;
 
+DROP TRIGGER IF EXISTS account_before_insert ON public.account;
+CREATE TRIGGER account_before_insert
+  BEFORE INSERT ON public.account
+  FOR EACH ROW
+  EXECUTE FUNCTION trg_account_before_insert();
+
 CREATE OR REPLACE FUNCTION trg_tracked_item_decision_count()
 RETURNS TRIGGER
 LANGUAGE plpgsql

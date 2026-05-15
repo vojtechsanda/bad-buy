@@ -7,9 +7,10 @@ import { appTabsList } from './constants';
 
 type AppTabsProps = {
   header: (props: BottomTabHeaderProps) => ReactNode;
+  extraScreens?: ReactNode;
 };
 
-export function AppTabs({ header }: AppTabsProps) {
+export function AppTabs({ header, extraScreens }: AppTabsProps) {
   return (
     <Tabs
       initialRouteName="home"
@@ -20,6 +21,7 @@ export function AppTabs({ header }: AppTabsProps) {
       {appTabsList.map(({ name, options }) => (
         <Tabs.Screen key={name} name={name} options={options} />
       ))}
+      {extraScreens}
     </Tabs>
   );
 }

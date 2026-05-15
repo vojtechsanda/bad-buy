@@ -296,6 +296,7 @@ const FormControlErrorText = React.forwardRef<
   IFormControlErrorTextProps
 >(function FormControlErrorText({ className, size, ...props }, ref) {
   const { size: parentSize } = useStyleContext(SCOPE);
+
   return (
     <UIFormControl.Error.Text
       className={formControlErrorTextStyle({
@@ -339,6 +340,7 @@ const FormControlErrorIcon = React.forwardRef<
       />
     );
   }
+
   return (
     <UIFormControl.Error.Icon
       className={formControlErrorIconStyle({

@@ -12,4 +12,12 @@ export default defineConfig([
   {
     ignores: ['dist/*'],
   },
+  {
+    rules: {
+      'padding-line-between-statements': [
+        'warn',
+        { blankLine: 'always', prev: '*', next: 'return' },
+      ],
+    },
+  },
 ]);

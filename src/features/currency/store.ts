@@ -1,4 +1,4 @@
-import { CurrencyRate } from '@shared/types';
+import { Currency } from '@shared/types';
 
 import { CurrencyCode } from './types';
 
@@ -15,89 +15,55 @@ export const mockExchangeRates: Record<CurrencyCode, number> = {
   AUD: 0.65,
 };
 
-type MockCurrencyRate = CurrencyRate & {
-  name: string;
-};
-
-export const mockAvailableCurrencies: MockCurrencyRate[] = [
+export const mockAvailableCurrencies: Currency[] = [
   {
-    id: 'cr-czk',
-    base: 'USD',
-    target: 'CZK',
-    rate: 0.044,
-    fetched_at: '2026-05-15T00:00:00Z',
+    code: 'CZK',
     name: 'Czech Koruna',
+    symbol: 'Kč',
   },
   {
-    id: 'cr-eur',
-    base: 'USD',
-    target: 'EUR',
-    rate: 1.08,
-    fetched_at: '2026-05-15T00:00:00Z',
+    code: 'EUR',
     name: 'Euro',
+    symbol: '€',
   },
   {
-    id: 'cr-usd',
-    base: 'USD',
-    target: 'USD',
-    rate: 1,
-    fetched_at: '2026-05-15T00:00:00Z',
+    code: 'USD',
     name: 'US Dollar',
+    symbol: '$',
   },
   {
-    id: 'cr-gbp',
-    base: 'USD',
-    target: 'GBP',
-    rate: 1.27,
-    fetched_at: '2026-05-15T00:00:00Z',
+    code: 'GBP',
     name: 'British Pound',
+    symbol: '£',
   },
   {
-    id: 'cr-pln',
-    base: 'USD',
-    target: 'PLN',
-    rate: 0.25,
-    fetched_at: '2026-05-15T00:00:00Z',
+    code: 'PLN',
     name: 'Polish Zloty',
+    symbol: 'zł',
   },
   {
-    id: 'cr-chf',
-    base: 'USD',
-    target: 'CHF',
-    rate: 1.13,
-    fetched_at: '2026-05-15T00:00:00Z',
+    code: 'CHF',
     name: 'Swiss Franc',
+    symbol: 'CHF',
   },
   {
-    id: 'cr-huf',
-    base: 'USD',
-    target: 'HUF',
-    rate: 0.0028,
-    fetched_at: '2026-05-15T00:00:00Z',
+    code: 'HUF',
     name: 'Hungarian Forint',
+    symbol: 'Ft',
   },
   {
-    id: 'cr-jpy',
-    base: 'USD',
-    target: 'JPY',
-    rate: 0.0066,
-    fetched_at: '2026-05-15T00:00:00Z',
+    code: 'JPY',
     name: 'Japanese Yen',
+    symbol: '¥',
   },
   {
-    id: 'cr-cad',
-    base: 'USD',
-    target: 'CAD',
-    rate: 0.74,
-    fetched_at: '2026-05-15T00:00:00Z',
+    code: 'CAD',
     name: 'Canadian Dollar',
+    symbol: 'C$',
   },
   {
-    id: 'cr-aud',
-    base: 'USD',
-    target: 'AUD',
-    rate: 0.65,
-    fetched_at: '2026-05-15T00:00:00Z',
+    code: 'AUD',
     name: 'Australian Dollar',
+    symbol: 'A$',
   },
 ];

@@ -21,16 +21,16 @@ export function CurrencySheet({ isOpen, onClose, selectedCurrency, onSelect }: C
       <ScrollView showsVerticalScrollIndicator={false}>
         {mockAvailableCurrencies.map((currency, index) => (
           <Pressable
-            key={currency.target}
-            onPress={() => onSelect(currency.target)}
+            key={currency.code}
+            onPress={() => onSelect(currency.code)}
             className={`flex-row items-center justify-between py-3.5 ${index > 0 ? 'border-t border-outline-100' : ''}`}>
             <View>
               <Text className="font-nunito-semibold text-body text-typography-900">
-                {currency.target}
+                {currency.code}
               </Text>
               <Text className="font-nunito text-body-sm text-typography-400">{currency.name}</Text>
             </View>
-            {selectedCurrency === currency.target && (
+            {selectedCurrency === currency.code && (
               <Check size={18} strokeWidth={2} color={themeColor.primary500} />
             )}
           </Pressable>

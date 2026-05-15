@@ -15,11 +15,14 @@ export function AppTabBar({ state, descriptors, navigation }: AppTabBarProps) {
       style={{ paddingBottom: insets.bottom }}>
       <View className="h-14 flex-row">
         {state.routes.map((route, index) => {
+          const appTab = appTabsList.find((option) => option.name === route.name);
+          if (!appTab) return null;
+
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;
 
           const color = isFocused ? activeColorMap.active : activeColorMap.inactive;
-          const Icon = appTabsList.find((option) => option.name === route.name)?.icon;
+          const Icon = appTab.icon;
           const label = String(options.tabBarLabel ?? options.title ?? route.name);
 
           return (

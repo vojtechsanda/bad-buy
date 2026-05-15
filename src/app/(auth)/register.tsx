@@ -18,6 +18,7 @@ export default function Register() {
         await signUp(value.email, value.password);
         // TODO: start onboarding
       } catch (err) {
+        // TODO: user friendly error message instead of raw supabase error message
         const message =
           err instanceof Error ? err.message : 'Something went wrong. Please try again.';
         setAuthError(message);

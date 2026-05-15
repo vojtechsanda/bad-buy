@@ -50,6 +50,9 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.105.1
         version: 2.105.1
+      '@tanstack/form-core':
+        specifier: ^1.32.0
+        version: 1.32.0
       '@tanstack/react-form':
         specifier: ^1.32.0
         version: 1.32.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)

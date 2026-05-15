@@ -1,5 +1,6 @@
 import { AuthStickyFooter, RegisterFormSchema } from '@features/auth';
 import { EmailFormField, PasswordFormField, ScreenContainer } from '@shared/components';
+import { revalidateLogic } from '@tanstack/form-core';
 import { useForm, useStore } from '@tanstack/react-form';
 import { router } from 'expo-router';
 import { useState } from 'react';
@@ -10,13 +11,15 @@ export default function Register() {
 
   const form = useForm({
     defaultValues: { email: '', password: '', passwordRepeat: '' },
+    validationLogic: revalidateLogic({
+      mode: 'submit',
+      modeAfterSubmission: 'change',
+    }),
     validators: {
-      onBlur: RegisterFormSchema,
-      onSubmit: RegisterFormSchema,
+      onDynamic: RegisterFormSchema,
     },
     onSubmit: async ({ value }) => {
       setServerError(null);
-      // TODO: Supabase auth call
       console.log('register', value);
     },
   });

@@ -16,17 +16,17 @@ type FormFieldProps = {
 
 export function FormField({ field, label, helperText, children }: FormFieldProps) {
   const errorMessage = field.state.meta.errors[0]?.message;
-  const invalid = field.state.meta.errors.length > 0;
-  const subText = invalid ? errorMessage : (helperText ?? '');
-  const subTextColor = invalid ? 'text-error-700' : 'text-typography-500';
+  const isInvalid = field.state.meta.errors.length > 0;
+  const subText = isInvalid ? errorMessage : (helperText ?? '');
+  const subTextColor = isInvalid ? 'text-error-700' : 'text-typography-500';
 
   return (
-    <FormControl isInvalid={invalid}>
+    <FormControl isInvalid={isInvalid}>
       <FormControlLabel>
         <FormControlLabelText>{label}</FormControlLabelText>
       </FormControlLabel>
       {children}
-      <Text className={`mt-1 text-xs ${subTextColor}`}>{subText}</Text>
+      {subText && <Text className={`mt-1 text-xs ${subTextColor}`}>{subText}</Text>}
     </FormControl>
   );
 }

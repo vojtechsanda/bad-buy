@@ -15,4 +15,9 @@ export const RegisterFormSchema = z
 
 export type RegisterFormType = z.infer<typeof RegisterFormSchema>;
 
-// TODO: Login schema below
+export const LoginFormSchema = z.object({
+  email: EmailSchema,
+  password: PasswordSchema,
+});
+
+export type LoginFormType = z.infer<typeof LoginFormSchema>;

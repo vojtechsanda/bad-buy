@@ -12,7 +12,7 @@ export default function Register() {
   const form = useForm({
     defaultValues: { email: '', password: '', passwordRepeat: '' },
     validationLogic: revalidateLogic({
-      mode: 'submit',
+      mode: 'blur',
       modeAfterSubmission: 'change',
     }),
     validators: {
@@ -20,6 +20,7 @@ export default function Register() {
     },
     onSubmit: async ({ value }) => {
       setServerError(null);
+      // TODO: Supabase auth call
       console.log('register', value);
     },
   });
@@ -39,12 +40,11 @@ export default function Register() {
           ctaDisabled={!canSubmit}
           footerText="Already have an account? "
           footerLinkLabel="Log in"
-          onFooterLinkPress={() => router.push('/(auth)/login')}
-          className=" pb-6"
+          onFooterLinkPress={() => router.navigate('/(auth)/login')}
         />
       }>
-      <View className="flex-col gap-6">
-        <Text className="font-nunito-bold text-display-md text-typography-900">
+      <View className="flex-col gap-6 pt-12">
+        <Text className="font-nunito-bold text-display-lg text-typography-900">
           Create your account
         </Text>
         <form.Field name="email">

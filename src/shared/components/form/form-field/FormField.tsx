@@ -15,8 +15,10 @@ type FormFieldProps = {
 };
 
 export function FormField({ field, label, helperText, children }: FormFieldProps) {
+  const hasBeenSubmitted = field.form.state.submissionAttempts > 0;
+  const isInvalid =
+    (field.state.meta.isTouched || hasBeenSubmitted) && field.state.meta.errors.length > 0;
   const errorMessage = field.state.meta.errors[0]?.message;
-  const isInvalid = field.state.meta.errors.length > 0;
   const subText = isInvalid ? errorMessage : (helperText ?? '');
   const subTextColor = isInvalid ? 'text-error-700' : 'text-typography-500';
 

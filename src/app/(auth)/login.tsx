@@ -12,7 +12,7 @@ export default function Login() {
   const form = useForm({
     defaultValues: { email: '', password: '' },
     validationLogic: revalidateLogic({
-      mode: 'blur',
+      mode: 'submit',
       modeAfterSubmission: 'change',
     }),
     validators: {

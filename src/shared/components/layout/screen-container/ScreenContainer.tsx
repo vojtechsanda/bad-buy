@@ -1,5 +1,6 @@
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { BlurTargetView } from 'expo-blur';
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useContext, useRef } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -13,7 +14,6 @@ export type ScreenContainerProps = {
   withHorizontalPadding?: boolean;
   background?: 'bg' | 'surface' | 'transparent';
   withSafeAreaTop?: boolean;
-  withSafeAreaBottom?: boolean;
 };
 
 export function ScreenContainer({
@@ -22,12 +22,16 @@ export function ScreenContainer({
   scrollable = true,
   withHorizontalPadding = true,
   background = 'bg',
-  withSafeAreaTop = true,
-  withSafeAreaBottom = true,
+  withSafeAreaTop = false,
 }: ScreenContainerProps) {
   const blurRef = useRef<View | null>(null);
 
   const insets = useSafeAreaInsets();
+  const tabBarHeight = useContext(BottomTabBarHeightContext);
+
+  const withSafeAreaBottom = tabBarHeight === 0 || tabBarHeight === undefined;
+
+  const bottomSpacing = tabBarHeight || insets.bottom;
   const hPadding = withHorizontalPadding ? 'px-5' : '';
 
   return (
@@ -37,7 +41,13 @@ export function ScreenContainer({
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ paddingTop: withSafeAreaTop ? insets.top : 0 }}>
         {scrollable ? (
-          <ScrollView keyboardShouldPersistTaps="handled">
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={
+              withSafeAreaBottom
+                ? { paddingVertical: 8, paddingBottom: bottomSpacing }
+                : { paddingVertical: 8 }
+            }>
             <BlurTargetView ref={blurRef}>
               <View className={`flex-1 ${hPadding} py-2`}>{children}</View>
             </BlurTargetView>
@@ -51,11 +61,11 @@ export function ScreenContainer({
         {stickyBottom ? (
           <View
             className="border-t border-outline-200 px-5 py-3"
-            style={{ paddingBottom: (withSafeAreaBottom ? insets.bottom : 0) + 12 }}>
+            style={{ paddingBottom: (withSafeAreaBottom ? bottomSpacing : 0) + 12 }}>
             {stickyBottom}
           </View>
         ) : (
-          withSafeAreaBottom && <View style={{ height: insets.bottom }} />
+          withSafeAreaBottom && <View style={{ height: bottomSpacing }} />
         )}
       </KeyboardAvoidingView>
     </BlurRefProvider>

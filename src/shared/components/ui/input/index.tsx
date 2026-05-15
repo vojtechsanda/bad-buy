@@ -140,6 +140,7 @@ const InputIcon = React.forwardRef<React.ComponentRef<typeof UIInput.Icon>, IInp
     } else if ((props.height !== undefined || props.width !== undefined) && size === undefined) {
       return <UIInput.Icon ref={ref} {...props} className={inputIconStyle({ class: className })} />;
     }
+
     return (
       <UIInput.Icon
         ref={ref}

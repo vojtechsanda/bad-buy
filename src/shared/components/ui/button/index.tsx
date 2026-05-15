@@ -351,6 +351,7 @@ const ButtonIcon = React.forwardRef<React.ElementRef<typeof UIButton.Icon>, IBut
         <UIButton.Icon ref={ref} {...props} className={buttonIconStyle({ class: className })} />
       );
     }
+
     return (
       <UIButton.Icon
         {...props}

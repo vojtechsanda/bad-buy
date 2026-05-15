@@ -17,6 +17,7 @@ type FormFieldProps = {
 
 export function FormField({ field, label, children }: FormFieldProps) {
   const invalid = field.state.meta.isTouched && field.state.meta.errors.length > 0;
+
   return (
     <FormControl isInvalid={invalid}>
       <FormControlLabel>

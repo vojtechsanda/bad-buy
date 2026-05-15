@@ -13,6 +13,7 @@ const createStyle = (styleTagId: string) => {
   const style = document.createElement('style');
   style.id = styleTagId;
   style.appendChild(document.createTextNode(''));
+
   return style;
 };
 
@@ -31,6 +32,7 @@ export function GluestackUIProvider({
     const cssVariables = Object.keys(config[configKey as keyof typeof config]).reduce(
       (acc: string, curr: string) => {
         acc += `${curr}:${config[configKey as keyof typeof config][curr]}; `;
+
         return acc;
       },
       '',

@@ -12,7 +12,6 @@ type AuthStickyFooterProps = {
   footerText?: string;
   footerLinkLabel?: string;
   onFooterLinkPress?: () => void;
-  className?: string;
 };
 
 export function AuthStickyFooter({
@@ -26,16 +25,12 @@ export function AuthStickyFooter({
   footerText,
   footerLinkLabel,
   onFooterLinkPress,
-  className,
 }: AuthStickyFooterProps) {
   const label = isLoading && ctaLoadingLabel ? ctaLoadingLabel : ctaLabel;
 
   return (
-    <View className={`gap-3 ${className ?? ''}`}>
-      <Button
-        className="h-16 w-full rounded-md"
-        onPress={onCtaPress}
-        isDisabled={ctaDisabled || isLoading}>
+    <View className="gap-3">
+      <Button onPress={onCtaPress} isDisabled={ctaDisabled || isLoading}>
         <ButtonText className="font-nunito-bold text-white">{label}</ButtonText>
       </Button>
 

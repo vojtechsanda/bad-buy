@@ -35,7 +35,7 @@ export type Database = {
           name: string;
           notifications_enabled?: boolean;
           premium_expires_at?: string | null;
-          referral_code?: string;
+          referral_code: string;
           wage_currency: string;
           work_hours_per_day?: number;
         };
@@ -54,7 +54,22 @@ export type Database = {
           wage_currency?: string;
           work_hours_per_day?: number;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'fk_account_display_currency';
+            columns: ['display_currency'];
+            isOneToOne: false;
+            referencedRelation: 'currency';
+            referencedColumns: ['code'];
+          },
+          {
+            foreignKeyName: 'fk_account_wage_currency';
+            columns: ['wage_currency'];
+            isOneToOne: false;
+            referencedRelation: 'currency';
+            referencedColumns: ['code'];
+          },
+        ];
       };
       account_hobby: {
         Row: {
@@ -136,6 +151,24 @@ export type Database = {
           },
         ];
       };
+      currency: {
+        Row: {
+          code: string;
+          name: string;
+          symbol: string;
+        };
+        Insert: {
+          code: string;
+          name: string;
+          symbol: string;
+        };
+        Update: {
+          code?: string;
+          name?: string;
+          symbol?: string;
+        };
+        Relationships: [];
+      };
       currency_rate: {
         Row: {
           base: string;
@@ -158,7 +191,22 @@ export type Database = {
           rate?: number;
           target?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'fk_currency_rate_base';
+            columns: ['base'];
+            isOneToOne: false;
+            referencedRelation: 'currency';
+            referencedColumns: ['code'];
+          },
+          {
+            foreignKeyName: 'fk_currency_rate_target';
+            columns: ['target'];
+            isOneToOne: false;
+            referencedRelation: 'currency';
+            referencedColumns: ['code'];
+          },
+        ];
       };
       notification: {
         Row: {
@@ -352,6 +400,13 @@ export type Database = {
           status?: Database['public']['Enums']['tracked_item_status'];
         };
         Relationships: [
+          {
+            foreignKeyName: 'fk_tracked_item_price_currency';
+            columns: ['price_currency'];
+            isOneToOne: false;
+            referencedRelation: 'currency';
+            referencedColumns: ['code'];
+          },
           {
             foreignKeyName: 'tracked_item_account_id_fkey';
             columns: ['account_id'];

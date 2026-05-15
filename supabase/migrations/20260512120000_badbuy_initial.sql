@@ -78,38 +78,6 @@ CREATE TABLE IF NOT EXISTS account (
   created_at              timestamptz NOT NULL DEFAULT now()
 );
 
--- Trigger: set avatar_seed = id and generate referral_code on INSERT
-CREATE OR REPLACE FUNCTION trg_account_before_insert()
-RETURNS TRIGGER LANGUAGE plpgsql AS $$
-DECLARE
-  candidate text;
-  attempts  integer := 0;
-BEGIN
-  -- Default avatar_seed to the account's own UUID
-  IF NEW.avatar_seed IS NULL THEN
-    NEW.avatar_seed := NEW.id::text;
-  END IF;
-
-  -- Generate a unique 6-char uppercase alphanumeric referral code
-  LOOP
-    candidate := upper(substring(replace(gen_random_uuid()::text, '-', ''), 1, 6));
-    EXIT WHEN NOT EXISTS (SELECT 1 FROM account WHERE referral_code = candidate);
-    attempts := attempts + 1;
-    IF attempts > 10 THEN
-      RAISE EXCEPTION 'Could not generate unique referral_code after 10 attempts';
-    END IF;
-  END LOOP;
-  NEW.referral_code := candidate;
-
-  RETURN NEW;
-END;
-$$;
-
-DROP TRIGGER IF EXISTS account_before_insert ON account;
-CREATE TRIGGER account_before_insert
-  BEFORE INSERT ON account
-  FOR EACH ROW EXECUTE FUNCTION trg_account_before_insert();
-
 -- -----------------------------------------------------------------------------
 -- 2.4 account_hobby
 -- -----------------------------------------------------------------------------

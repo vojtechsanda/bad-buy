@@ -38,6 +38,8 @@ const inputStyle = tva({
 
   variants: {
     size: {
+      '3xl': 'h-16',
+      '2xl': 'h-14',
       xl: 'h-12',
       lg: 'h-11',
       md: 'h-10',

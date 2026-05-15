@@ -27,7 +27,7 @@ export function AuthStickyFooter({
   const label = isLoading && ctaLoadingLabel ? ctaLoadingLabel : ctaLabel;
 
   return (
-    <View className={className ?? ''}>
+    <View className={`pb-6 ${className ?? ''}`}>
       <Button
         className="h-16 w-full rounded-md"
         onPress={onCtaPress}

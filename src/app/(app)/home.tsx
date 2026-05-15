@@ -5,7 +5,7 @@ import { CurrencyCode } from '@features/currency/types';
 import { GreetingView, PriceInput } from '@features/home/components';
 import { ScreenContainer, StatisticsCard } from '@shared/components';
 import { Button, ButtonText } from '@shared/components/ui';
-import { isInLast30Days } from '@shared/utils';
+import { formatPrice, isInLast30Days } from '@shared/utils';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
@@ -37,10 +37,10 @@ export default function HomeScreen() {
 
         <StatisticsCard
           caption="Total price in last 30 days"
-          value={computeTotalItemsPrice(last30DaysSkippedItems, account.display_currency).toFixed(
-            2,
+          value={formatPrice(
+            computeTotalItemsPrice(last30DaysSkippedItems, account.display_currency),
+            account.display_currency,
           )}
-          valuePrefix={account.display_currency}
         />
 
         <View className="gap-6">

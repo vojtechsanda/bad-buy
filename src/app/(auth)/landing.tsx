@@ -6,7 +6,7 @@ export default function Landing() {
   const router = useRouter();
 
   return (
-    <ScreenContainer>
+    <ScreenContainer withSafeAreaTop={true}>
       <View className="flex-1 items-center justify-center">
         <Text>Welcome, please sign in or sign up. 🐰</Text>
       </View>

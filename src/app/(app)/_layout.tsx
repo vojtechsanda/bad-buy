@@ -1,10 +1,11 @@
 import { isLogged } from '@features/auth/store';
-import { Redirect, Stack } from 'expo-router';
+import { AppTabs, AppTopBar } from '@shared/components';
+import { Redirect } from 'expo-router';
 
 export default function AppLayout() {
   if (!isLogged) {
     return <Redirect href="/(auth)/landing" />;
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return <AppTabs header={({ options }) => <AppTopBar title={options.title} />} />;
 }

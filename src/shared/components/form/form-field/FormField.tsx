@@ -2,6 +2,8 @@ import {
   FormControl,
   FormControlError,
   FormControlErrorText,
+  FormControlHelper,
+  FormControlHelperText,
   FormControlLabel,
   FormControlLabelText,
 } from '@shared/components/ui/form-control';
@@ -11,11 +13,11 @@ import { ReactNode } from 'react';
 type FormFieldProps = {
   field: AnyFieldApi;
   label: string;
-  infoTooltip?: string;
+  helperText?: string;
   children: ReactNode;
 };
 
-export function FormField({ field, label, children }: FormFieldProps) {
+export function FormField({ field, label, helperText, children }: FormFieldProps) {
   const invalid = field.state.meta.isTouched && field.state.meta.errors.length > 0;
 
   return (
@@ -24,6 +26,11 @@ export function FormField({ field, label, children }: FormFieldProps) {
         <FormControlLabelText>{label}</FormControlLabelText>
       </FormControlLabel>
       {children}
+      {helperText && !invalid && (
+        <FormControlHelper>
+          <FormControlHelperText>{helperText}</FormControlHelperText>
+        </FormControlHelper>
+      )}
       <FormControlError>
         <FormControlErrorText>{field.state.meta.errors[0]?.message}</FormControlErrorText>
       </FormControlError>

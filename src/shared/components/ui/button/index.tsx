@@ -37,7 +37,7 @@ cssInterop(PrimitiveIcon, {
 });
 
 const buttonStyle = tva({
-  base: 'group/button rounded bg-primary-500 flex-row items-center justify-center data-[focus-visible=true]:web:outline-none data-[focus-visible=true]:web:ring-2 data-[disabled=true]:opacity-40 gap-2',
+  base: 'group/button rounded-md bg-primary-500 flex-row items-center justify-center data-[focus-visible=true]:web:outline-none data-[focus-visible=true]:web:ring-2 data-[disabled=true]:opacity-40 gap-2',
   variants: {
     action: {
       primary:
@@ -62,8 +62,8 @@ const buttonStyle = tva({
       xs: 'px-3.5 h-8',
       sm: 'px-4 h-9',
       md: 'px-5 h-10',
-      lg: 'px-6 h-11',
-      xl: 'px-7 h-12',
+      lg: 'px-8 h-16',
+      xl: 'px-12 h-20',
     },
   },
   compoundVariants: [
@@ -136,8 +136,8 @@ const buttonTextStyle = tva({
       xs: 'text-xs',
       sm: 'text-sm',
       md: 'text-base',
-      lg: 'text-lg',
-      xl: 'text-xl',
+      lg: 'text-xl',
+      xl: 'text-2xl',
     },
   },
   parentCompoundVariants: [
@@ -276,7 +276,7 @@ type IButtonProps = Omit<React.ComponentPropsWithoutRef<typeof UIButton>, 'conte
   VariantProps<typeof buttonStyle> & { className?: string };
 
 const Button = React.forwardRef<React.ElementRef<typeof UIButton>, IButtonProps>(
-  ({ className, variant = 'solid', size = 'md', action = 'primary', ...props }, ref) => {
+  ({ className, variant = 'solid', size = 'lg', action = 'primary', ...props }, ref) => {
     return (
       <UIButton
         ref={ref}

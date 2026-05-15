@@ -1,11 +1,11 @@
-import { RegisterFormSchema, RegisterInput } from '@features/auth/schemas';
+import { RegisterFormSchema } from '@features/auth/schemas';
 import { Button, ButtonText, FormField, Input, InputField } from '@shared/components';
 import { useForm } from '@tanstack/react-form';
 import { View } from 'react-native';
 
 export default function Register() {
   const form = useForm({
-    defaultValues: { email: '', password: '', passwordRepeat: '' } as RegisterInput,
+    defaultValues: { email: '', password: '', passwordRepeat: '' },
     validators: { onChange: RegisterFormSchema },
     onSubmit: async ({ value }) => {
       console.log('register', value);

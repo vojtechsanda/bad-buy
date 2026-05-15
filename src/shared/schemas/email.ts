@@ -1,4 +1,5 @@
 import { z } from 'zod';
 
 export const EmailSchema = z.email();
-export type EmailValue = z.infer<typeof EmailSchema>;
+
+export type EmailType = z.infer<typeof EmailSchema>;

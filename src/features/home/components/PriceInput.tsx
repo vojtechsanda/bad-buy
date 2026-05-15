@@ -1,5 +1,5 @@
 import { CurrencyCode } from '@features/currency/types';
-import { themeColor } from '@shared/constants';
+import { decimalPlacePrecision, themeColor } from '@shared/constants';
 import { ChevronDown } from 'lucide-react-native';
 import { Pressable, Text, TextInput, View } from 'react-native';
 
@@ -26,8 +26,8 @@ export function PriceInput({
         className="h-full py-0 font-nunito-extrabold text-display-xl text-typography-900"
         value={value}
         onChangeText={onValueChange}
-        onBlur={() => value && onValueChange(Number(value).toFixed(2))}
-        placeholder={Number(0).toFixed(2)}
+        onBlur={() => value && onValueChange(Number(value).toFixed(decimalPlacePrecision))}
+        placeholder={Number(0).toFixed(decimalPlacePrecision)}
         placeholderTextColor={themeColor.typography400}
         keyboardType="decimal-pad"
         autoFocus={autoFocus}

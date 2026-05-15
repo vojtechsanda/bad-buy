@@ -1,14 +1,11 @@
 import {
   FormControl,
-  FormControlError,
-  FormControlErrorText,
-  FormControlHelper,
-  FormControlHelperText,
   FormControlLabel,
   FormControlLabelText,
 } from '@shared/components/ui/form-control';
 import { AnyFieldApi } from '@tanstack/react-form';
 import { ReactNode } from 'react';
+import { Text } from 'react-native';
 
 type FormFieldProps = {
   field: AnyFieldApi;
@@ -18,7 +15,10 @@ type FormFieldProps = {
 };
 
 export function FormField({ field, label, helperText, children }: FormFieldProps) {
-  const invalid = field.state.meta.isTouched && field.state.meta.errors.length > 0;
+  const errorMessage = field.state.meta.errors[0]?.message;
+  const invalid = field.state.meta.errors.length > 0;
+  const subText = invalid ? errorMessage : (helperText ?? '');
+  const subTextColor = invalid ? 'text-error-700' : 'text-typography-500';
 
   return (
     <FormControl isInvalid={invalid}>
@@ -26,14 +26,7 @@ export function FormField({ field, label, helperText, children }: FormFieldProps
         <FormControlLabelText>{label}</FormControlLabelText>
       </FormControlLabel>
       {children}
-      {helperText && !invalid && (
-        <FormControlHelper>
-          <FormControlHelperText>{helperText}</FormControlHelperText>
-        </FormControlHelper>
-      )}
-      <FormControlError>
-        <FormControlErrorText>{field.state.meta.errors[0]?.message}</FormControlErrorText>
-      </FormControlError>
+      <Text className={`mt-1 text-xs ${subTextColor}`}>{subText}</Text>
     </FormControl>
   );
 }

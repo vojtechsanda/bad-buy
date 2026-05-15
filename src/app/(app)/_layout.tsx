@@ -1,4 +1,4 @@
-import { isLogged } from '@features/auth/store';
+import { isLogged } from '@features/auth';
 import { AppTabs, AppTopBar } from '@shared/components';
 import { Redirect } from 'expo-router';
 

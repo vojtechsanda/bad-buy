@@ -1,4 +1,4 @@
-import { isLogged } from '@features/auth/store';
+import { isLogged } from '@features/auth';
 import { Redirect, Stack } from 'expo-router';
 
 export default function AuthLayout() {

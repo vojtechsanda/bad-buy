@@ -16,15 +16,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: pnpm
+
+      - name: Create .env file from repository secrets
+        run: echo '${{ secrets.DOTENV_FILE_CONTENT }}' > .env
+        shell: bash
+
       - uses: expo/expo-github-action@v8
         with:
           eas-version: latest
           packager: pnpm
           token: ${{ secrets.EXPO_TOKEN }}
+
       - run: pnpm install --frozen-lockfile
       - run: npx expo-doctor
       - run: pnpm prettier --check .
@@ -37,19 +44,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: pnpm
+
+      - name: Create .env file from repository secrets
+        run: echo '${{ secrets.DOTENV_FILE_CONTENT }}' > .env
+        shell: bash
+
       - uses: expo/expo-github-action@v8
         with:
           packager: pnpm
+
       - run: pnpm install --frozen-lockfile
+
       - uses: actions/cache@v4
         with:
           path: node_modules/.cache/metro
           key: ${{ runner.os }}-metro-web-${{ hashFiles('.nvmrc') }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-metro-web-${{ hashFiles('.nvmrc') }}-
+
       - run: pnpm build:web
 
   build_android:
@@ -59,10 +75,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: pnpm
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -87,6 +105,10 @@ jobs:
           path: android
           key: ${{ runner.os }}-android-${{ hashFiles('app.json', 'package.json', 'pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-android-
+
+      - name: Create .env file from repository secrets
+        run: echo '${{ secrets.DOTENV_FILE_CONTENT }}' > .env
+        shell: bash
 
       - uses: expo/expo-github-action@v8
         with:
@@ -128,11 +150,13 @@ jobs:
     needs: analyze_code
     steps:
       - uses: actions/checkout@v4
+
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest
 
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -149,6 +173,10 @@ jobs:
           path: ios
           key: ${{ runner.os }}-ios-${{ hashFiles('app.json', 'package.json', 'pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-ios-
+
+      - name: Create .env file from repository secrets
+        run: echo '${{ secrets.DOTENV_FILE_CONTENT }}' > .env
+        shell: bash
 
       - uses: expo/expo-github-action@v8
         with:

@@ -1,0 +1,101 @@
+import { BottomSheet, Button, ButtonText } from '@shared/components';
+import { Switch } from '@shared/components/ui/switch';
+import { Account } from '@shared/types';
+import { useState } from 'react';
+import { Text, View } from 'react-native';
+
+import { SettingsRow } from './SettingsRow';
+
+type ProfileSettingsProps = {
+  account: Account;
+};
+
+export function ProfileSettings({ account }: ProfileSettingsProps) {
+  const [notificationsEnabled, setNotificationsEnabled] = useState(account.notifications_enabled);
+
+  const [personalInfoOpen, setPersonalInfoOpen] = useState(false);
+  const [promoOpen, setPromoOpen] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  return (
+    <>
+      <View className="divide-y divide-outline-200 rounded-md bg-background-0 shadow shadow-black/10">
+        <SettingsRow label="Personal info" onPress={() => setPersonalInfoOpen(true)} />
+        <SettingsRow label="Hobbies" onPress={() => {}} />
+        <SettingsRow label="Redeem code" onPress={() => setPromoOpen(true)} />
+        <SettingsRow
+          label="Notifications"
+          onPress={() => setNotificationsEnabled((v) => !v)}
+          trailing={
+            <Switch
+              size="md"
+              value={notificationsEnabled}
+              onValueChange={setNotificationsEnabled}
+            />
+          }
+        />
+        <SettingsRow label="Log out" onPress={() => setLogoutOpen(true)} />
+        <SettingsRow label="Delete account" danger onPress={() => setDeleteOpen(true)} isLastRow />
+      </View>
+
+      <BottomSheet isOpen={personalInfoOpen} onClose={() => setPersonalInfoOpen(false)}>
+        <Text className="font-nunito-bold text-heading text-typography-900">Personal info</Text>
+        <Text className="mt-2 font-nunito text-body text-typography-600">
+          Personal info edit sheet — coming soon.
+        </Text>
+        <View className="mt-6">
+          <Button
+            variant="outline"
+            action="primary"
+            size="md"
+            onPress={() => setPersonalInfoOpen(false)}
+          >
+            <ButtonText>Close</ButtonText>
+          </Button>
+        </View>
+      </BottomSheet>
+
+      <BottomSheet isOpen={promoOpen} onClose={() => setPromoOpen(false)}>
+        <Text className="font-nunito-bold text-heading text-typography-900">Enter promo code</Text>
+        <Text className="mt-2 font-nunito text-body text-typography-600">
+          Promo code redemption sheet — coming soon.
+        </Text>
+        <View className="mt-6">
+          <Button variant="outline" action="primary" size="md" onPress={() => setPromoOpen(false)}>
+            <ButtonText>Close</ButtonText>
+          </Button>
+        </View>
+      </BottomSheet>
+
+      <BottomSheet isOpen={logoutOpen} onClose={() => setLogoutOpen(false)}>
+        <Text className="font-nunito-bold text-heading text-typography-900">Log out</Text>
+        <Text className="mt-2 font-nunito text-body text-typography-600">
+          Log out confirmation — coming soon.
+        </Text>
+        <View className="mt-6">
+          <Button variant="outline" action="primary" size="md" onPress={() => setLogoutOpen(false)}>
+            <ButtonText>Close</ButtonText>
+          </Button>
+        </View>
+      </BottomSheet>
+
+      <BottomSheet isOpen={deleteOpen} onClose={() => setDeleteOpen(false)}>
+        <Text className="font-nunito-bold text-heading text-error-500">Delete account</Text>
+        <Text className="mt-2 font-nunito text-body text-typography-600">
+          Account deletion confirmation — coming soon.
+        </Text>
+        <View className="mt-6">
+          <Button
+            variant="outline"
+            action="negative"
+            size="md"
+            onPress={() => setDeleteOpen(false)}
+          >
+            <ButtonText>Close</ButtonText>
+          </Button>
+        </View>
+      </BottomSheet>
+    </>
+  );
+}

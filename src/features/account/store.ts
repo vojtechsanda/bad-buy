@@ -1,21 +1,5 @@
 import { Account, TrackedItem } from '@shared/types';
 
-export const mockAccount: Account = {
-  id: 'mock-user-id-001',
-  name: 'Vojta',
-  created_at: '2026-01-01T00:00:00Z',
-  birthdate: '1998-05-15',
-  country: 'CZ',
-  decision_count: 0,
-  display_currency: 'EUR',
-  hourly_wage_usd: 12.5,
-  notifications_enabled: true,
-  premium_expires_at: null,
-  referral_code: 'VOJTA2026',
-  wage_currency: 'EUR',
-  work_hours_per_day: 8,
-};
-
 export const mockAccountHistory: TrackedItem[] = [
   {
     id: 'item-001',
@@ -88,3 +72,19 @@ export const mockAccountHistory: TrackedItem[] = [
     freeze_until: null,
   },
 ];
+
+export const mockAccount: Account = {
+  id: 'mock-user-id-001',
+  name: 'Vojta',
+  created_at: '2026-01-01T00:00:00Z',
+  birthdate: '1998-05-15',
+  country: 'CZ',
+  decision_count: mockAccountHistory.length,
+  display_currency: 'EUR',
+  hourly_wage_usd: 12.5,
+  notifications_enabled: true,
+  premium_expires_at: '2026-07-01T00:00:00Z',
+  referral_code: 'VOJTA2026',
+  wage_currency: 'EUR',
+  work_hours_per_day: 8,
+};

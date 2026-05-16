@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Text } from 'react-native';
 
 import { refreshEverySecondThreshold } from './constants';
@@ -7,7 +7,7 @@ import { formatCountdown } from './utils';
 type CountdownPillProps = {
   formatExpireAtLabel?: (expiresAtLabel: string) => string | null;
   expiresAt: string;
-  expiredLabel: string;
+  expiredLabel: ReactNode;
   className?: string;
 };
 

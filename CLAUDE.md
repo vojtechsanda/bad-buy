@@ -83,6 +83,23 @@ NativeWind (Tailwind for React Native) + Gluestack UI v3. The Babel config sets 
 
 - Always pass an explicit `color` prop to Lucide icons — e.g. `color={themeColor.primary500}`. Do not rely on className or button context for icon color.
 
+### Layout pitfalls
+
+- **`minWidth: 0` on flex-1 text columns:** add `style={{ minWidth: 0 }}` to any `flex-1` View that contains `Text` next to non-flex siblings — without it React Native lets the text column bleed past its allocation.
+
+### Navigation
+
+- Use the object form for dynamic routes — `router.push({ pathname: '/(app)/vault/[id]', params: { id } })` — not template literals. This keeps params typed and avoids string interpolation errors.
+
+### Shared general components
+
+- Non-layout, non-UI-primitive shared components live in `src/shared/components/general/<component-name>/` with their own `index.ts` barrel.
+- Each subfolder may contain `ComponentName.tsx`, `utils.ts`, `constants.ts` as needed — split logic out of the component file when it grows.
+
+### Component design
+
+- Derive boolean state from data inside the component rather than accepting it as a prop — e.g. compute `thawed` from `item.freeze_until` internally instead of receiving `thawed: boolean` from the parent.
+
 ## Conventions enforced by tooling
 
 - **Commits** must follow Conventional Commits _and_ start with a lowercase letter (custom commitlint rule in `commitlint.config.js`). Husky's `commit-msg` hook enforces this.

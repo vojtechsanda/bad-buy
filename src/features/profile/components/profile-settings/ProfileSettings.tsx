@@ -1,4 +1,10 @@
-import { BottomSheet, Button, ButtonText, PromoRedemptionSheet } from '@shared/components';
+import {
+  BottomSheet,
+  Button,
+  ButtonText,
+  PremiumUpsellSheet,
+  PromoRedemptionSheet,
+} from '@shared/components';
 import { Switch } from '@shared/components/ui/switch';
 import { Account } from '@shared/types';
 import { useState } from 'react';
@@ -17,6 +23,7 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
 
   const [personalInfoOpen, setPersonalInfoOpen] = useState(false);
   const [promoOpen, setPromoOpen] = useState(false);
+  const [upsellOpen, setUpsellOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -58,7 +65,13 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
         </View>
       </BottomSheet>
 
+      <PremiumUpsellSheet
+        isOpen={upsellOpen}
+        onClose={() => setUpsellOpen(false)}
+        onRedeemPress={() => setPromoOpen(true)}
+      />
       <PromoRedemptionSheet isOpen={promoOpen} onClose={() => setPromoOpen(false)} />
+
       <LogoutSheet isOpen={logoutOpen} onClose={() => setLogoutOpen(false)} />
       <DeleteAccountSheet isOpen={deleteOpen} onClose={() => setDeleteOpen(false)} />
     </>

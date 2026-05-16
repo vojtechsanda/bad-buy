@@ -1,5 +1,6 @@
-import { AuthStickyFooter, LoginFormSchema } from '@features/auth';
+import { AuthStickyFooter, LoginFormSchema, authService } from '@features/auth';
 import { EmailFormField, PasswordFormField, ScreenContainer } from '@shared/components';
+import { DEFAULT_ERROR_MESSAGE } from '@shared/constants';
 import { revalidateLogic } from '@tanstack/form-core';
 import { useForm, useStore } from '@tanstack/react-form';
 import { router } from 'expo-router';
@@ -20,8 +21,12 @@ export default function Login() {
     },
     onSubmit: async ({ value }) => {
       setServerError(null);
-      // TODO: Supabase auth call
-      console.log('login', value);
+      try {
+        await authService.signIn(value.email, value.password);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : DEFAULT_ERROR_MESSAGE;
+        setServerError(message);
+      }
     },
   });
 

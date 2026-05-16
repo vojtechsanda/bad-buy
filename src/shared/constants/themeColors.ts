@@ -5,6 +5,7 @@ const v = rawVars.light;
 
 export const themeColor = {
   primary500: rgb(v['--color-primary-500']),
+  accent500: rgb(v['--color-tertiary-500']),
   typography400: rgb(v['--color-typography-400']),
   typography900: rgb(v['--color-typography-900']),
 } as const;

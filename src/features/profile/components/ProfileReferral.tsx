@@ -1,6 +1,7 @@
 import { Button, ButtonText } from '@shared/components';
 import { themeColor } from '@shared/constants';
 import { Account } from '@shared/types';
+import * as Clipboard from 'expo-clipboard';
 import { Copy } from 'lucide-react-native';
 import { useState } from 'react';
 import { Text, View } from 'react-native';
@@ -12,8 +13,8 @@ type ProfileReferralProps = {
 export function ProfileReferral({ account }: ProfileReferralProps) {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
-    // TODO: wire to expo-clipboard — `await Clipboard.setStringAsync(account.referral_code)`
+  const handleCopy = async () => {
+    await Clipboard.setStringAsync(account.referral_code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -30,7 +31,7 @@ export function ProfileReferral({ account }: ProfileReferralProps) {
 
       <Button variant="outline" action="primary" size="md" onPress={handleCopy}>
         <Copy size={16} strokeWidth={1.75} color={themeColor.primary500} />
-        <ButtonText className="font-nunito">{copied ? 'Copied!' : 'Copy code'} TODO</ButtonText>
+        <ButtonText className="font-nunito">{copied ? 'Copied!' : 'Copy code'}</ButtonText>
       </Button>
 
       <Text className="text-center font-nunito text-body-sm text-typography-400">

@@ -14,14 +14,16 @@ type OnboardingShellProps = {
 
 export function OnboardingShell({ children, step, totalSteps, onBack }: OnboardingShellProps) {
   const insets = useSafeAreaInsets();
+  const canGoBack = step > 1;
 
   return (
     <View className="flex-1 bg-background-0" style={{ paddingTop: insets.top }}>
       <View className="flex-row items-center gap-3 px-5 py-3">
-        <Pressable onPress={onBack} hitSlop={8}>
-          <ChevronLeft size={24} strokeWidth={1.75} color={themeColor.typography900} />
-        </Pressable>
-
+        {canGoBack && (
+          <Pressable onPress={onBack} hitSlop={8} className="h-6 w-6 items-center justify-center">
+            <ChevronLeft size={24} strokeWidth={1.75} color={themeColor.typography900} />
+          </Pressable>
+        )}
         <StepProgressBar current={step} total={totalSteps} />
       </View>
       {children}

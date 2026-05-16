@@ -1,5 +1,10 @@
 import { AuthStickyFooter, LoginFormSchema, authService } from '@features/auth';
-import { EmailFormField, PasswordFormField, ScreenContainer } from '@shared/components';
+import {
+  EmailFormField,
+  ErrorMessage,
+  PasswordFormField,
+  ScreenContainer,
+} from '@shared/components';
 import { DEFAULT_ERROR_MESSAGE } from '@shared/constants';
 import { revalidateLogic } from '@tanstack/form-core';
 import { useForm, useStore } from '@tanstack/react-form';
@@ -58,9 +63,9 @@ export default function Login() {
         <form.Field name="password">
           {(field) => <PasswordFormField field={field} label="Password" />}
         </form.Field>
-      </View>
 
-      {serverError && <Text className="mt-4 text-body-sm text-error-500">{serverError}</Text>}
+        <ErrorMessage message={serverError} />
+      </View>
     </ScreenContainer>
   );
 }

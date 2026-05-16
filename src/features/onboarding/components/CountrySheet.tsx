@@ -24,12 +24,18 @@ const getCountryName = (() => {
 
 type Country = { iso2: string; name: string; flag: string };
 
-const countries: Country[] = Object.keys(countryToCurrency)
-  .map((iso2) => ({
-    iso2,
-    name: getCountryName(iso2),
-    flag: flagEmoji(iso2),
-  }))
+const allIso2: string[] = (() => {
+  try {
+    return (Intl as typeof Intl & { supportedValuesOf(key: string): string[] }).supportedValuesOf(
+      'region',
+    );
+  } catch {
+    return Object.keys(countryToCurrency);
+  }
+})();
+
+const countries: Country[] = allIso2
+  .map((iso2) => ({ iso2, name: getCountryName(iso2), flag: flagEmoji(iso2) }))
   .sort((a, b) => a.name.localeCompare(b.name));
 
 type CountrySheetProps = {

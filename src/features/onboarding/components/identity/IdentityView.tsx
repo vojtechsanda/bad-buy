@@ -3,8 +3,8 @@ import { revalidateLogic } from '@tanstack/form-core';
 import { useForm, useStore } from '@tanstack/react-form';
 import { Text, View } from 'react-native';
 
-import { IdentitySchema } from '../../schemas';
-import { IdentityFormData } from '../../types';
+import { IdentitySchema , IdentityFormData } from '../../schemas';
+
 import { OnboardingStickyFooter } from '../OnboardingStickyFooter';
 import { BirthdateFormField } from './BirthdateFormField';
 import { CountryFormField } from './CountryFormField';

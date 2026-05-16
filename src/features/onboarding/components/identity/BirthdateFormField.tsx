@@ -53,10 +53,11 @@ export function BirthdateFormField({ field }: BirthdateFormFieldProps) {
           mode="date"
           display="default"
           maximumDate={new Date()}
-          onChange={(event, date) => {
+          onValueChange={(_, date) => {
             setShowPicker(false);
-            if (event.type !== 'dismissed' && date) field.handleChange(date);
+            if (date) field.handleChange(date);
           }}
+          onDismiss={() => setShowPicker(false)}
         />
       )}
 

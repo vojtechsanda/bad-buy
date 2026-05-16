@@ -5,3 +5,5 @@ export const IdentitySchema = z.object({
   birthdate: z.date({ message: 'Please input a birthdate' }),
   countryIso2: z.string().min(2, { message: 'Please select a country' }),
 });
+
+export type IdentityFormData = z.infer<typeof IdentitySchema>;

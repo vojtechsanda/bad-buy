@@ -1,12 +1,20 @@
-import { IdentityView, OnboardingShell } from '@features/onboarding';
-import { useFocusEffect , router } from 'expo-router';
-
-import { useCallback, useState } from 'react';
+import { IdentityFormData, IdentityView, OnboardingShell } from '@features/onboarding';
+import { getCurrencyForCountry } from '@shared/utils';
+import { router, useFocusEffect } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { BackHandler } from 'react-native';
 
 export default function Onboarding() {
   const [step, setStep] = useState(1);
   const [totalSteps] = useState<3 | 4>(3);
+  const [identityData, setIdentityData] = useState<{
+    data: IdentityFormData;
+    currency: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (step === 2 && identityData) console.log('step 2 ready', identityData);
+  }, [step, identityData]);
 
   useFocusEffect(
     useCallback(() => {
@@ -31,7 +39,8 @@ export default function Onboarding() {
     >
       {step === 1 && (
         <IdentityView
-          onComplete={() => {
+          onComplete={(data) => {
+            setIdentityData({ data, currency: getCurrencyForCountry(data.countryIso2) });
             setStep(2);
           }}
         />

@@ -274,7 +274,7 @@ const buttonGroupStyle = tva({
   },
 });
 
-type IButtonProps = Omit<React.ComponentPropsWithoutRef<typeof UIButton>, 'context'> &
+export type IButtonProps = Omit<React.ComponentPropsWithoutRef<typeof UIButton>, 'context'> &
   VariantProps<typeof buttonStyle> & { className?: string };
 
 const Button = React.forwardRef<React.ElementRef<typeof UIButton>, IButtonProps>(

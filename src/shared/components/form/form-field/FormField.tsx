@@ -28,7 +28,7 @@ export function FormField({ field, label, helperText, children }: FormFieldProps
         <FormControlLabelText>{label}</FormControlLabelText>
       </FormControlLabel>
       {children}
-      {subText && <Text className={`mt-1 text-xs ${subTextColor}`}>{subText}</Text>}
+      {subText ? <Text className={`mt-1 text-xs ${subTextColor}`}>{subText}</Text> : null}
     </FormControl>
   );
 }

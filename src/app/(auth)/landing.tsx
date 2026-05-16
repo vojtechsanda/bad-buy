@@ -1,18 +1,35 @@
-import { Button, ButtonText, ScreenContainer } from '@shared/components';
-import { useRouter } from 'expo-router';
-import { Text, View } from 'react-native';
+import { AuthStickyFooter } from '@features/auth';
+import { IllustrationFrame, ScreenContainer } from '@shared/components';
+import { router } from 'expo-router';
+import { Text, View, useWindowDimensions } from 'react-native';
 
 export default function Landing() {
-  const router = useRouter();
+  const { height } = useWindowDimensions();
 
   return (
-    <ScreenContainer withSafeAreaTop={true}>
-      <View className="flex-1 items-center justify-center">
-        <Text>Welcome, please sign in or sign up. 🐰</Text>
+    <ScreenContainer
+      withSafeAreaTop={true}
+      scrollable={false}
+      stickyBottom={
+        <AuthStickyFooter
+          ctaLabel="Create account"
+          onCtaPress={() => router.navigate('/(auth)/register')}
+          secondaryLabel="I already have an account"
+          onSecondaryPress={() => router.navigate('/(auth)/login')}
+        />
+      }>
+      <IllustrationFrame
+        source={require('@assets/images/landing.jpeg')}
+        style={{ height: height * 0.5 }}
+      />
+      <View className="mt-6 items-center gap-3">
+        <Text className="text-center font-nunito-bold text-display-lg text-typography-900">
+          Pause before you buy.
+        </Text>
+        <Text className="text-center text-body-lg text-typography-600">
+          {"See the true cost of what you spend. Skip what doesn't matter."}
+        </Text>
       </View>
-      <Button onPress={() => router.push('/(auth)/register')}>
-        <ButtonText>Create account</ButtonText>
-      </Button>
     </ScreenContainer>
   );
 }

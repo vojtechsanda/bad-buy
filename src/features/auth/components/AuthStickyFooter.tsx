@@ -7,9 +7,11 @@ type AuthStickyFooterProps = {
   onCtaPress: () => void;
   ctaDisabled?: boolean;
   isLoading?: boolean;
-  footerText: string;
-  footerLinkLabel: string;
-  onFooterLinkPress: () => void;
+  secondaryLabel?: string;
+  onSecondaryPress?: () => void;
+  footerText?: string;
+  footerLinkLabel?: string;
+  onFooterLinkPress?: () => void;
   className?: string;
 };
 
@@ -19,6 +21,8 @@ export function AuthStickyFooter({
   onCtaPress,
   ctaDisabled,
   isLoading,
+  secondaryLabel,
+  onSecondaryPress,
   footerText,
   footerLinkLabel,
   onFooterLinkPress,
@@ -27,24 +31,32 @@ export function AuthStickyFooter({
   const label = isLoading && ctaLoadingLabel ? ctaLoadingLabel : ctaLabel;
 
   return (
-    <View className={`pb-6 ${className ?? ''}`}>
+    <View className={`gap-3 pb-6 ${className ?? ''}`}>
       <Button
         className="h-16 w-full rounded-md"
         onPress={onCtaPress}
         isDisabled={ctaDisabled || isLoading}>
         <ButtonText className="font-nunito-bold text-white">{label}</ButtonText>
       </Button>
-      <View className="h-4" />
-      <View className="flex-row justify-center">
-        <Text className="text-center text-body-sm text-typography-500">
-          {footerText}
-          <Text
-            className="font-nunito-semibold text-primary-500 underline"
-            onPress={onFooterLinkPress}>
-            {footerLinkLabel}
+
+      {secondaryLabel && onSecondaryPress && (
+        <Button variant="link" onPress={onSecondaryPress}>
+          <ButtonText>{secondaryLabel}</ButtonText>
+        </Button>
+      )}
+
+      {footerText && footerLinkLabel && onFooterLinkPress && (
+        <View className="flex-row justify-center">
+          <Text className="text-center text-body-sm text-typography-500">
+            {footerText}
+            <Text
+              className="font-nunito-semibold text-primary-500 underline"
+              onPress={onFooterLinkPress}>
+              {footerLinkLabel}
+            </Text>
           </Text>
-        </Text>
-      </View>
+        </View>
+      )}
     </View>
   );
 }

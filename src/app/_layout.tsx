@@ -22,16 +22,10 @@ export default function RootLayout() {
     Nunito_800ExtraBold,
   });
 
-  const isReady = fontsLoaded || !!fontError;
-
   useEffect(() => {
-    if (fontError) {
-      console.error('Font loading error:', fontError);
-    }
-    if (isReady) SplashScreen.hideAsync();
-  }, [isReady, fontError]);
-
-  if (!isReady) return null;
+    if (fontError) console.error('Font loading error:', fontError);
+    if (fontsLoaded || fontError) SplashScreen.hideAsync();
+  }, [fontsLoaded, fontError]);
 
   return (
     <AppProviders>

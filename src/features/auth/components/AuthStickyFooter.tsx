@@ -31,7 +31,7 @@ export function AuthStickyFooter({
   const label = isLoading && ctaLoadingLabel ? ctaLoadingLabel : ctaLabel;
 
   return (
-    <View className={`gap-3 pb-6 ${className ?? ''}`}>
+    <View className={`gap-3 ${className ?? ''}`}>
       <Button
         className="h-16 w-full rounded-md"
         onPress={onCtaPress}
@@ -40,13 +40,13 @@ export function AuthStickyFooter({
       </Button>
 
       {secondaryLabel && onSecondaryPress && (
-        <Button variant="link" onPress={onSecondaryPress}>
+        <Button className="w-full" variant="link" onPress={onSecondaryPress}>
           <ButtonText>{secondaryLabel}</ButtonText>
         </Button>
       )}
 
       {footerText && footerLinkLabel && onFooterLinkPress && (
-        <View className="flex-row justify-center">
+        <View className="flex-row justify-center pb-6">
           <Text className="text-center text-body-sm text-typography-500">
             {footerText}
             <Text

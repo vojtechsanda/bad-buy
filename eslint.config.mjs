@@ -18,6 +18,7 @@ export default defineConfig([
         'warn',
         { blankLine: 'always', prev: '*', next: 'return' },
       ],
+      'react/no-unescaped-entities': 'off',
     },
   },
 ]);

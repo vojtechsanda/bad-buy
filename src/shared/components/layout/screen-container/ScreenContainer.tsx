@@ -53,7 +53,7 @@ export function ScreenContainer({
             </BlurTargetView>
           </ScrollView>
         ) : (
-          <BlurTargetView ref={blurRef}>
+          <BlurTargetView ref={blurRef} style={{ flex: 1 }}>
             <View className={`flex-1 ${hPadding} py-2`}>{children}</View>
           </BlurTargetView>
         )}

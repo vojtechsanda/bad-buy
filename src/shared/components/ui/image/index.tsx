@@ -34,7 +34,9 @@ const Image = React.forwardRef<
       {...props}
       ref={ref}
       // @ts-expect-error : web only
-      style={Platform.OS === 'web' ? { height: 'revert-layer', width: 'revert-layer' } : style}
+      style={
+        Platform.OS === 'web' ? [{ height: 'revert-layer', width: 'revert-layer' }, style] : style
+      }
     />
   );
 });

@@ -9,7 +9,6 @@ export default function Landing() {
   return (
     <ScreenContainer
       withSafeAreaTop={true}
-      scrollable={false}
       stickyBottom={
         <AuthStickyFooter
           ctaLabel="Create account"
@@ -21,13 +20,15 @@ export default function Landing() {
       <IllustrationFrame
         source={require('@assets/images/landing.jpeg')}
         style={{ height: height * 0.5 }}
+        alt="cat"
       />
+
       <View className="mt-6 items-center gap-3">
         <Text className="text-center font-nunito-bold text-display-lg text-typography-900">
           Pause before you buy.
         </Text>
-        <Text className="text-center text-body-lg text-typography-600">
-          {"See the true cost of what you spend. Skip what doesn't matter."}
+        <Text className="w-[90%] text-center font-nunito-semibold text-body-lg text-typography-600">
+          See the true cost of what you spend. Skip what doesn't matter.
         </Text>
       </View>
     </ScreenContainer>

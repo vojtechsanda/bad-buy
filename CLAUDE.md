@@ -67,6 +67,22 @@ NativeWind (Tailwind for React Native) + Gluestack UI v3. The Babel config sets 
 
 - Import React types directly: `import { ReactNode } from 'react'`, not `React.ReactNode`.
 
+### Screen composition
+
+- Keep screen files (`src/app/`) thin — routing params, data wiring, and layout only. Delegate all rendering to feature components.
+- Break each screen section into a named `*View` component inside `src/features/<name>/components/` (e.g. `AuditPriceView`, `AuditTimePriceView`).
+- Sticky action bars at the bottom of a screen go in `ScreenContainer`'s `stickyBottom` prop, extracted as a `*StickyFooter` component (e.g. `AuditStickyFooter`).
+- Never add top padding (`pt-*`) to the root View inside `ScreenContainer` — the container already provides vertical spacing.
+
+### Feature public API
+
+- Each feature exposes a root `index.tsx` that re-exports from its submodules (`./store`, `./components`, `./schemas`, etc.).
+- **Always import from the feature root**, not from internal paths: `import { isLogged } from '@features/auth'`, not `@features/auth/store`.
+
+### Icons
+
+- Always pass an explicit `color` prop to Lucide icons — e.g. `color={themeColor.primary500}`. Do not rely on className or button context for icon color.
+
 ## Conventions enforced by tooling
 
 - **Commits** must follow Conventional Commits _and_ start with a lowercase letter (custom commitlint rule in `commitlint.config.js`). Husky's `commit-msg` hook enforces this.

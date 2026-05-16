@@ -11,10 +11,11 @@ type FormFieldProps = {
   field: AnyFieldApi;
   label: string;
   helperText?: string;
+  labelRight?: ReactNode;
   children: ReactNode;
 };
 
-export function FormField({ field, label, helperText, children }: FormFieldProps) {
+export function FormField({ field, label, helperText, labelRight, children }: FormFieldProps) {
   const hasBeenSubmitted = field.form.state.submissionAttempts > 0;
   const isInvalid =
     (field.state.meta.isTouched || hasBeenSubmitted) && field.state.meta.errors.length > 0;
@@ -26,6 +27,7 @@ export function FormField({ field, label, helperText, children }: FormFieldProps
     <FormControl isInvalid={isInvalid}>
       <FormControlLabel>
         <FormControlLabelText>{label}</FormControlLabelText>
+        {labelRight}
       </FormControlLabel>
       {children}
       {subText ? <Text className={`mt-1 text-xs ${subTextColor}`}>{subText}</Text> : null}

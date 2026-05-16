@@ -99,6 +99,9 @@ NativeWind (Tailwind for React Native) + Gluestack UI v3. The Babel config sets 
 ### Component design
 
 - Derive boolean state from data inside the component rather than accepting it as a prop — e.g. compute `thawed` from `item.freeze_until` internally instead of receiving `thawed: boolean` from the parent.
+- **Extend over duplicate:** add an optional prop to an existing component rather than creating a near-identical parallel component. `AuditStickyFooter` takes `freezeLabel?: string` (default `'Freeze'`); no `VaultStickyFooter` needed.
+- **Formatter callbacks over static string props:** when a component renders text that callers need to customise, accept a `format*?: (value) => string` callback rather than a prefix/suffix prop. Example: `CountdownPill` exposes `formatExpireAtLabel?` so callers can produce `"Thaws in 5h 3m"` without new props.
+- **Optional override params on utility functions:** add an optional `customRate?` parameter to conversion utils rather than creating a separate snapshot-rate variant. The live rate is the default; callers that have a frozen snapshot pass it explicitly.
 
 ## Conventions enforced by tooling
 

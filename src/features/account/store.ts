@@ -83,7 +83,7 @@ export const mockAccount: Account = {
   display_currency: 'EUR',
   hourly_wage_usd: 12.5,
   notifications_enabled: true,
-  premium_expires_at: '2026-07-01T00:00:00Z',
+  premium_expires_at: null,
   referral_code: 'VOJTA2026',
   wage_currency: 'EUR',
   work_hours_per_day: 8,

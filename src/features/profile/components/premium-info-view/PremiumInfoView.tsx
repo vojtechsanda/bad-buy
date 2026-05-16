@@ -1,4 +1,4 @@
-import { BottomSheet, Button, ButtonText, CountdownPill } from '@shared/components';
+import { CountdownPill, PremiumUpsellSheet, PromoRedemptionSheet } from '@shared/components';
 import { themeColor } from '@shared/constants';
 import { Account } from '@shared/types';
 import { ChevronRight } from 'lucide-react-native';
@@ -13,6 +13,7 @@ type PremiumInfoViewProps = {
 
 export function PremiumInfoView({ account }: PremiumInfoViewProps) {
   const [upsellOpen, setUpsellOpen] = useState(false);
+  const [promoOpen, setPromoOpen] = useState(false);
 
   const isPremium =
     account.premium_expires_at !== null && new Date(account.premium_expires_at) > new Date();
@@ -38,17 +39,13 @@ export function PremiumInfoView({ account }: PremiumInfoViewProps) {
         />
       </Pressable>
 
-      <BottomSheet isOpen={upsellOpen} onClose={() => setUpsellOpen(false)}>
-        <Text className="font-nunito-bold text-heading text-typography-900">Unlock Premium</Text>
-        <Text className="mt-2 font-nunito text-body text-typography-600">
-          Premium upsell sheet — coming soon.
-        </Text>
-        <View className="mt-6">
-          <Button variant="outline" action="primary" size="md" onPress={() => setUpsellOpen(false)}>
-            <ButtonText>Close</ButtonText>
-          </Button>
-        </View>
-      </BottomSheet>
+      <PremiumUpsellSheet
+        isOpen={upsellOpen}
+        onClose={() => setUpsellOpen(false)}
+        onRedeemPress={() => setPromoOpen(true)}
+      />
+
+      <PromoRedemptionSheet isOpen={promoOpen} onClose={() => setPromoOpen(false)} />
     </>
   );
 }

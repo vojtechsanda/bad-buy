@@ -1,6 +1,10 @@
-import { AuthStickyFooter, RegisterFormSchema } from '@features/auth';
-import { authService } from '@features/auth/service';
-import { EmailFormField, PasswordFormField, ScreenContainer } from '@shared/components';
+import { AuthStickyFooter, RegisterFormSchema, authService } from '@features/auth';
+import {
+  EmailFormField,
+  ErrorMessage,
+  PasswordFormField,
+  ScreenContainer,
+} from '@shared/components';
 import { DEFAULT_ERROR_MESSAGE } from '@shared/constants';
 import { revalidateLogic } from '@tanstack/form-core';
 import { useForm, useStore } from '@tanstack/react-form';
@@ -69,9 +73,9 @@ export default function Register() {
         <form.Field name="passwordRepeat">
           {(field) => <PasswordFormField field={field} label="Repeat password" />}
         </form.Field>
-      </View>
 
-      {serverError && <Text className="mt-4 text-body-sm text-error-500">{serverError}</Text>}
+        <ErrorMessage message={serverError} />
+      </View>
     </ScreenContainer>
   );
 }

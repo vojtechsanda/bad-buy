@@ -1,4 +1,4 @@
-import { useAuth } from '@features/auth/hooks';
+import { useAuth } from '@features/auth';
 import { AppTabs, AppTopBar } from '@shared/components';
 import { Redirect, Tabs } from 'expo-router';
 

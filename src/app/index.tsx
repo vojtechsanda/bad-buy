@@ -1,4 +1,4 @@
-import { useAuth } from '@features/auth/hooks';
+import { useAuth } from '@features/auth';
 import { Redirect } from 'expo-router';
 
 export default function Index() {

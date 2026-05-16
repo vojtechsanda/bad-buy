@@ -3,12 +3,12 @@ import { formatPrice } from '@shared/utils';
 import { Text, View } from 'react-native';
 
 type AuditPriceViewProps = {
-  price: string;
+  price: number | string;
   currency: CurrencyCode;
 };
 
 export function AuditPriceView({ price, currency }: AuditPriceViewProps) {
-  const displayPrice = formatPrice(parseFloat(price), currency);
+  const displayPrice = formatPrice(price, currency);
 
   return (
     <View className="gap-1">

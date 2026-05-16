@@ -8,20 +8,27 @@ import { Text, View } from 'react-native';
 type AuditSuggestionListViewProps = {
   currency: CurrencyCode;
   suggestions: AccountSuggestion[];
+  showRefresh?: boolean;
 };
 
-export function AuditSuggestionListView({ currency, suggestions }: AuditSuggestionListViewProps) {
+export function AuditSuggestionListView({
+  currency,
+  suggestions,
+  showRefresh = true,
+}: AuditSuggestionListViewProps) {
   return (
     <View className="gap-4">
       <View className="flex-row items-center justify-between">
         <Text className="font-nunito-bold text-heading text-typography-900">
           What else this could buy
         </Text>
-        <PremiumLockGate>
-          <Button variant="solid" action="neutral" size="md" className="rounded-full">
-            <RefreshCw size={18} strokeWidth={1.75} />
-          </Button>
-        </PremiumLockGate>
+        {showRefresh && (
+          <PremiumLockGate>
+            <Button variant="solid" action="neutral" size="md" className="rounded-full">
+              <RefreshCw size={18} strokeWidth={1.75} />
+            </Button>
+          </PremiumLockGate>
+        )}
       </View>
 
       <View>

@@ -5,11 +5,18 @@ import { refreshEverySecondThreshold } from './constants';
 import { formatCountdown } from './utils';
 
 type CountdownPillProps = {
+  formatExpireAtLabel?: (expiresAtLabel: string) => string | null;
   expiresAt: string;
   expiredLabel: string;
+  className?: string;
 };
 
-export function CountdownPill({ expiresAt, expiredLabel }: CountdownPillProps) {
+export function CountdownPill({
+  formatExpireAtLabel = (label) => label,
+  expiresAt,
+  expiredLabel,
+  className,
+}: CountdownPillProps) {
   const [label, setLabel] = useState(() => formatCountdown(expiresAt));
 
   const getRemaining = (time: string) => new Date(time).getTime() - Date.now();
@@ -35,8 +42,16 @@ export function CountdownPill({ expiresAt, expiredLabel }: CountdownPillProps) {
   }, [expiresAt]);
 
   if (label === null || getRemaining(expiresAt) <= 0) {
-    return <Text className="font-nunito-semibold text-caption text-error-500">{expiredLabel}</Text>;
+    return (
+      <Text className={`font-nunito-semibold text-caption text-error-500 ${className || ''}`}>
+        {expiredLabel}
+      </Text>
+    );
   }
 
-  return <Text className="font-nunito-semibold text-caption text-typography-600">{label}</Text>;
+  return (
+    <Text className={`font-nunito-semibold text-caption text-typography-600 ${className || ''}`}>
+      {formatExpireAtLabel(label)}
+    </Text>
+  );
 }

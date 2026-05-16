@@ -6,7 +6,7 @@ import { Text, View } from 'react-native';
 import { getTimePrice, getTimePriceNote } from './utils';
 
 type AuditTimePriceViewProps = {
-  price: string;
+  price: number | string;
   currency: CurrencyCode;
   account: Account;
 };

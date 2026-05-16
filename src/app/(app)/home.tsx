@@ -36,7 +36,7 @@ export default function HomeScreen() {
         <GreetingView name={account.name} />
 
         <StatisticsCard
-          caption="Total price in last 30 days"
+          caption="Total saved in last 30 days"
           value={formatPrice(
             computeTotalItemsPrice(last30DaysSkippedItems, account.display_currency),
             account.display_currency,

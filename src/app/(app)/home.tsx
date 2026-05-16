@@ -1,11 +1,11 @@
+import { TotalSavedCard } from '@features/account/components';
 import { mockAccount, mockAccountHistory } from '@features/account/store';
-import { computeTotalItemsPrice } from '@features/account/utils';
 import { CurrencySheet } from '@features/currency/components';
 import { CurrencyCode } from '@features/currency/types';
 import { GreetingView, PriceInput } from '@features/home/components';
-import { ScreenContainer, StatisticsCard } from '@shared/components';
+import { ScreenContainer } from '@shared/components';
 import { Button, ButtonText } from '@shared/components/ui';
-import { formatPrice, isInLast30Days } from '@shared/utils';
+import { isInLast30Days } from '@shared/utils';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
@@ -26,8 +26,8 @@ export default function HomeScreen() {
     setPrice('');
   };
 
-  const last30DaysSkippedItems = mockAccountHistory.filter(
-    (item) => item.status === 'skipped' && isInLast30Days(new Date(item.created_at)),
+  const last30DaysHistory = mockAccountHistory.filter((item) =>
+    isInLast30Days(new Date(item.created_at)),
   );
 
   return (
@@ -35,12 +35,10 @@ export default function HomeScreen() {
       <View className="gap-8">
         <GreetingView name={account.name} />
 
-        <StatisticsCard
-          caption="Total saved in last 30 days"
-          value={formatPrice(
-            computeTotalItemsPrice(last30DaysSkippedItems, account.display_currency),
-            account.display_currency,
-          )}
+        <TotalSavedCard
+          history={last30DaysHistory}
+          currency={account.display_currency}
+          label="Saved in last 30 days"
         />
 
         <View className="gap-6">

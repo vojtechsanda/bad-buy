@@ -1,12 +1,38 @@
+import { TotalSavedCard } from '@features/account/components';
+import { mockAccount, mockAccountHistory } from '@features/account/store';
+import {
+  LevelProgressBar,
+  PremiumInfoView,
+  ProfileIdentityView,
+  ProfileReferral,
+  ProfileSettings,
+} from '@features/profile/components';
 import { ScreenContainer } from '@shared/components';
-import { Text } from 'react-native';
+import { View } from 'react-native';
 
 export default function Profile() {
+  const account = mockAccount;
+  const accountHistory = mockAccountHistory;
+
   return (
-    <ScreenContainer withSafeAreaTop={false}>
-      <Text className="font-nunito-bold text-heading text-typography-900">
-        Content of profile page
-      </Text>
+    <ScreenContainer>
+      <View className="gap-6">
+        <ProfileIdentityView account={account} />
+
+        <LevelProgressBar account={account} />
+
+        <TotalSavedCard
+          history={accountHistory}
+          currency={account.display_currency}
+          label="Total saved"
+        />
+
+        <PremiumInfoView account={account} />
+
+        <ProfileReferral account={account} />
+
+        <ProfileSettings account={account} />
+      </View>
     </ScreenContainer>
   );
 }

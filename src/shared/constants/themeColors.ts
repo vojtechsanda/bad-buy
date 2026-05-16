@@ -8,4 +8,5 @@ export const themeColor = {
   accent500: rgb(v['--color-tertiary-500']),
   typography400: rgb(v['--color-typography-400']),
   typography900: rgb(v['--color-typography-900']),
+  outline100: rgb(v['--color-outline-100']),
 } as const;

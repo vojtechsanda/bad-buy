@@ -42,7 +42,8 @@ export default function Register() {
           footerLinkLabel="Log in"
           onFooterLinkPress={() => router.navigate('/(auth)/login')}
         />
-      }>
+      }
+    >
       <View className="flex-col gap-6 pt-12">
         <Text className="font-nunito-bold text-display-lg text-typography-900">
           Create your account

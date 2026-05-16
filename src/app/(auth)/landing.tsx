@@ -16,7 +16,8 @@ export default function Landing() {
           secondaryLabel="I already have an account"
           onSecondaryPress={() => router.navigate('/(auth)/login')}
         />
-      }>
+      }
+    >
       <IllustrationFrame
         source={require('@assets/images/landing.jpeg')}
         style={{ height: height * 0.5 }}

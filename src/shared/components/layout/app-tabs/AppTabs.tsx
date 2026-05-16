@@ -17,7 +17,8 @@ export function AppTabs({ header, extraScreens }: AppTabsProps) {
       tabBar={(props) => <AppTabBar {...props} />}
       screenOptions={{
         header,
-      }}>
+      }}
+    >
       {appTabsList.map(({ name, options }) => (
         <Tabs.Screen key={name} name={name} options={options} />
       ))}

@@ -8,10 +8,12 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: 'class',
@@ -126,9 +128,11 @@
   <body class="bg-background text-on-background flex min-h-screen flex-col antialiased">
     <!-- TopAppBar from JSON (Modified for Onboarding structural constraints) -->
     <header
-      class="docked full-width flat no shadows top-0 flex h-16 w-full items-center justify-between border-none bg-[#FAF9F6] px-5 dark:bg-stone-950">
+      class="docked full-width flat no shadows top-0 flex h-16 w-full items-center justify-between border-none bg-[#FAF9F6] px-5 dark:bg-stone-950"
+    >
       <button
-        class="flex items-center justify-center rounded-full p-2 transition-colors duration-200 hover:bg-stone-100 dark:hover:bg-stone-900">
+        class="flex items-center justify-center rounded-full p-2 transition-colors duration-200 hover:bg-stone-100 dark:hover:bg-stone-900"
+      >
         <span class="material-symbols-outlined text-[#3E8F7C] dark:text-[#52B49C]">arrow_back</span>
       </button>
       <h1 class="font-label-caps text-label-caps text-on-surface flex-1 text-center">
@@ -147,7 +151,8 @@
     </div>
     <!-- Main Content Canvas -->
     <main
-      class="px-container-margin mx-auto w-full max-w-md flex-1 overflow-y-auto pb-[120px] pt-[32px]">
+      class="px-container-margin mx-auto w-full max-w-md flex-1 overflow-y-auto pb-[120px] pt-[32px]"
+    >
       <div class="mb-[32px]">
         <h2 class="font-headline-md text-headline-md text-on-background mb-sm">
           Tell us about you
@@ -166,12 +171,14 @@
             class="border-outline-variant bg-surface-container-lowest text-on-surface focus:border-primary focus:ring-primary font-body-md text-body-md placeholder-outline h-[48px] rounded-lg border px-[12px] outline-none transition-colors focus:ring-1"
             id="name"
             placeholder="How should we call you?"
-            type="text" />
+            type="text"
+          />
         </div>
         <!-- Field B: Birthdate -->
         <div class="gap-sm flex flex-col">
           <label
-            class="font-body-md text-body-md text-on-surface-variant gap-xs flex cursor-pointer items-center text-sm">
+            class="font-body-md text-body-md text-on-surface-variant gap-xs flex cursor-pointer items-center text-sm"
+          >
             Birthdate
             <span
               class="material-symbols-outlined text-[14px] text-[#5B8DB8]"
@@ -181,7 +188,8 @@
           </label>
           <button
             class="border-outline-variant bg-surface-container-lowest hover:bg-surface-container flex h-[48px] items-center justify-between rounded-lg border px-[12px] transition-colors"
-            type="button">
+            type="button"
+          >
             <span class="font-body-md text-body-md text-outline">Select date</span>
             <span class="material-symbols-outlined text-on-surface-variant text-[16px]"
               >expand_more</span
@@ -191,7 +199,8 @@
         <!-- Field C: Country -->
         <div class="gap-sm flex flex-col">
           <label
-            class="font-body-md text-body-md text-on-surface-variant gap-xs flex cursor-pointer items-center text-sm">
+            class="font-body-md text-body-md text-on-surface-variant gap-xs flex cursor-pointer items-center text-sm"
+          >
             Country
             <span
               class="material-symbols-outlined text-[14px] text-[#5B8DB8]"
@@ -201,7 +210,8 @@
           </label>
           <button
             class="border-outline-variant bg-surface-container-lowest hover:bg-surface-container flex h-[48px] items-center justify-between rounded-lg border px-[12px] transition-colors"
-            type="button">
+            type="button"
+          >
             <span class="font-body-md text-body-md text-outline">Select your country</span>
             <span class="material-symbols-outlined text-on-surface-variant text-[16px]"
               >expand_more</span
@@ -212,10 +222,12 @@
     </main>
     <!-- BottomNavBar from JSON (Modified for Transactional Intent) -->
     <div
-      class="flat no shadows fixed bottom-0 left-0 z-50 flex w-full flex-col border-t border-stone-100 bg-[#FAF9F6] px-5 pb-8 pt-4 dark:border-stone-900 dark:bg-stone-950">
+      class="flat no shadows fixed bottom-0 left-0 z-50 flex w-full flex-col border-t border-stone-100 bg-[#FAF9F6] px-5 pb-8 pt-4 dark:border-stone-900 dark:bg-stone-950"
+    >
       <button
         class="mx-auto mb-4 flex h-[52px] w-full max-w-md cursor-not-allowed items-center justify-center rounded-lg bg-[#3E8F7C] px-8 py-3 font-['Manrope'] text-base font-bold text-white opacity-50 transition-transform duration-150 hover:opacity-90 active:scale-95"
-        disabled="">
+        disabled=""
+      >
         Continue
         <span class="material-symbols-outlined ml-2" data-icon="arrow_forward">arrow_forward</span>
       </button>

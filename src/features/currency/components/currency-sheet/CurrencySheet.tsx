@@ -23,7 +23,8 @@ export function CurrencySheet({ isOpen, onClose, selectedCurrency, onSelect }: C
           <Pressable
             key={currency.code}
             onPress={() => onSelect(currency.code)}
-            className={`flex-row items-center justify-between py-3.5 ${index > 0 ? 'border-t border-outline-100' : ''}`}>
+            className={`flex-row items-center justify-between py-3.5 ${index > 0 ? 'border-t border-outline-100' : ''}`}
+          >
             <View>
               <Text className="font-nunito-semibold text-body text-typography-900">
                 {currency.code}

@@ -24,7 +24,7 @@ export function AuditSuggestionListView({
         </Text>
         {showRefresh && (
           <PremiumLockGate>
-            <Button variant="solid" action="neutral" size="md" className="rounded-full">
+            <Button variant="solid" action="neutral" size="sm" className="rounded-full">
               <RefreshCw size={18} strokeWidth={1.75} />
             </Button>
           </PremiumLockGate>

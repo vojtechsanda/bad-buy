@@ -62,8 +62,8 @@ const buttonStyle = tva({
 
     size: {
       xs: 'px-3.5 h-8',
-      sm: 'px-4 h-9',
-      md: 'px-5 h-10',
+      sm: 'px-5 h-10',
+      md: 'px-6 h-14',
       lg: 'px-8 h-16',
       xl: 'px-12 h-20',
     },
@@ -137,7 +137,7 @@ const buttonTextStyle = tva({
     size: {
       xs: 'text-xs',
       sm: 'text-sm',
-      md: 'text-base',
+      md: 'text-lg',
       lg: 'text-xl',
       xl: 'text-2xl',
     },

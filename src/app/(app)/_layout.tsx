@@ -12,6 +12,7 @@ export default function AppLayout() {
       header={({ options }) => <AppTopBar title={options.title} />}
       extraScreens={
         <>
+          <Tabs.Screen name="vault" />
           <Tabs.Screen name="audit" />
           <Tabs.Screen name="buy" options={{ tabBarButton: () => null, headerShown: false }} />
           <Tabs.Screen name="skip" options={{ tabBarButton: () => null, headerShown: false }} />

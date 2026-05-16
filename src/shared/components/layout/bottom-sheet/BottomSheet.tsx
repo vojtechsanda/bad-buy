@@ -11,9 +11,16 @@ export type BottomSheetProps = {
   /** 0..1 — fraction of screen height, 'auto' — height based on content */
   heightMode?: 'auto' | number;
   children: ReactNode;
+  showHandle?: boolean;
 };
 
-export function BottomSheet({ isOpen, onClose, heightMode = 'auto', children }: BottomSheetProps) {
+export function BottomSheet({
+  isOpen,
+  onClose,
+  heightMode = 'auto',
+  children,
+  showHandle = true,
+}: BottomSheetProps) {
   const insets = useSafeAreaInsets();
   const snapPoints = typeof heightMode === 'number' ? [heightMode * 100] : undefined;
 
@@ -27,9 +34,11 @@ export function BottomSheet({ isOpen, onClose, heightMode = 'auto', children }: 
           className="rounded-t-lg bg-background-0 px-5 shadow-floating"
           style={{ paddingBottom: insets.bottom + 24 }}
         >
-          <UIActionsheet.DragIndicatorWrapper className="w-full items-center pb-2 pt-5">
-            <UIActionsheet.DragIndicator className="h-1 w-9 rounded-full bg-outline-200" />
-          </UIActionsheet.DragIndicatorWrapper>
+          {showHandle && (
+            <UIActionsheet.DragIndicatorWrapper className="w-full items-center pb-2 pt-5">
+              <UIActionsheet.DragIndicator className="h-1 w-9 rounded-full bg-outline-200" />
+            </UIActionsheet.DragIndicatorWrapper>
+          )}
           {children}
         </UIActionsheet.Content>
       </BlurView>

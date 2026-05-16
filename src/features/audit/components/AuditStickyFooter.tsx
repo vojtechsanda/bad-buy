@@ -5,7 +5,11 @@ import { Check, ShoppingBag, Snowflake } from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
-export function AuditStickyFooter() {
+type AuditStickyFooterProps = {
+  freezeLabel?: string;
+};
+
+export function AuditStickyFooter({ freezeLabel = 'Freeze' }: AuditStickyFooterProps) {
   const router = useRouter();
 
   const [freezeSheetOpen, setFreezeSheetOpen] = useState(false);
@@ -16,7 +20,6 @@ export function AuditStickyFooter() {
         <Button
           variant="outline"
           action="primary"
-          size="lg"
           className="flex-1 bg-background-0"
           onPress={() => router.push('/(app)/buy')}
         >
@@ -27,12 +30,11 @@ export function AuditStickyFooter() {
         <Button
           variant="outline"
           action="primary"
-          size="lg"
           className="flex-1 bg-background-0"
           onPress={() => setFreezeSheetOpen(true)}
         >
           <Snowflake size={18} strokeWidth={1.75} color={themeColor.primary500} />
-          <ButtonText>Freeze</ButtonText>
+          <ButtonText>{freezeLabel}</ButtonText>
         </Button>
       </View>
 

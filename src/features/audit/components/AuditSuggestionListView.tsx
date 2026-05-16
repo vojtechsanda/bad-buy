@@ -28,7 +28,8 @@ export function AuditSuggestionListView({ currency, suggestions }: AuditSuggesti
         {suggestions.map((suggestion, index) => (
           <View
             key={suggestion.id}
-            className={`flex-row items-center justify-between gap-4 py-3 ${index > 0 ? 'border-t border-outline-100' : ''}`}>
+            className={`flex-row items-center justify-between gap-4 py-3 ${index > 0 ? 'border-t border-outline-100' : ''}`}
+          >
             <View className="flex-1 flex-row items-center gap-3">
               <Text className="text-3xl">{suggestion.item_emoji}</Text>
               <Text className="w-[88%] font-nunito-semibold text-lg text-typography-900">

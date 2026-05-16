@@ -18,7 +18,8 @@ export function AuditStickyFooter() {
           action="primary"
           size="lg"
           className="flex-1 bg-background-0"
-          onPress={() => router.push('/(app)/buy')}>
+          onPress={() => router.push('/(app)/buy')}
+        >
           <ShoppingBag size={18} strokeWidth={1.75} color={themeColor.primary500} />
           <ButtonText>Buy</ButtonText>
         </Button>
@@ -28,7 +29,8 @@ export function AuditStickyFooter() {
           action="primary"
           size="lg"
           className="flex-1 bg-background-0"
-          onPress={() => setFreezeSheetOpen(true)}>
+          onPress={() => setFreezeSheetOpen(true)}
+        >
           <Snowflake size={18} strokeWidth={1.75} color={themeColor.primary500} />
           <ButtonText>Freeze</ButtonText>
         </Button>
@@ -36,7 +38,8 @@ export function AuditStickyFooter() {
 
       <Pressable
         onPress={() => router.push('/(app)/skip')}
-        className="h-14 flex-row items-center overflow-hidden rounded-2xl bg-primary-100 px-2">
+        className="h-14 flex-row items-center overflow-hidden rounded-2xl bg-primary-100 px-2"
+      >
         <View className="h-10 w-10 items-center justify-center rounded-full bg-primary-500">
           <Check size={18} strokeWidth={2.5} color="#FEFEFE" />
         </View>
@@ -57,7 +60,8 @@ export function AuditStickyFooter() {
             variant="outline"
             action="primary"
             size="md"
-            onPress={() => setFreezeSheetOpen(false)}>
+            onPress={() => setFreezeSheetOpen(false)}
+          >
             <ButtonText>Close</ButtonText>
           </Button>
         </View>

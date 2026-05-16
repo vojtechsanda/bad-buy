@@ -56,7 +56,8 @@ export default function HomeScreen() {
             action="primary"
             size="lg"
             isDisabled={!isPriceValid}
-            onPress={handleSeeTheCost}>
+            onPress={handleSeeTheCost}
+          >
             <ButtonText>See the cost</ButtonText>
           </Button>
         </View>

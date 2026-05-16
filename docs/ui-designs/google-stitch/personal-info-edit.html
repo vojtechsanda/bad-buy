@@ -8,13 +8,16 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: 'class',
@@ -109,15 +112,18 @@
     </style>
   </head>
   <body
-    class="bg-surface-container-lowest font-body text-on-surface relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
+    class="bg-surface-container-lowest font-body text-on-surface relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
+  >
     <!-- Mobile Container Frame (for simulation purposes) -->
     <div
-      class="bg-background relative mx-auto flex h-full w-full max-w-md flex-col overflow-hidden shadow-2xl">
+      class="bg-background relative mx-auto flex h-full w-full max-w-md flex-col overflow-hidden shadow-2xl"
+    >
       <!-- Underlying Content Blur/Backdrop -->
       <div class="absolute inset-0 z-40 bg-[#2C2A26]/40 transition-opacity"></div>
       <!-- Bottom Sheet -->
       <div
-        class="bg-surface-container-lowest absolute bottom-0 left-0 right-0 z-50 flex h-[85%] translate-y-0 transform flex-col rounded-t-[20px] shadow-[0_-4px_24px_rgba(0,0,0,0.08)] transition-transform duration-300">
+        class="bg-surface-container-lowest absolute bottom-0 left-0 right-0 z-50 flex h-[85%] translate-y-0 transform flex-col rounded-t-[20px] shadow-[0_-4px_24px_rgba(0,0,0,0.08)] transition-transform duration-300"
+      >
         <!-- Drag Handle Container -->
         <div class="pt-md pb-sm flex w-full justify-center">
           <div class="h-xs w-sheet-handle bg-surface-variant rounded-full"></div>
@@ -136,7 +142,8 @@
             </div>
             <div class="relative">
               <div
-                class="bg-surface-container-low px-md active:border-primary-container flex w-full items-center justify-between rounded-xl border border-transparent py-[14px] transition-colors">
+                class="bg-surface-container-low px-md active:border-primary-container flex w-full items-center justify-between rounded-xl border border-transparent py-[14px] transition-colors"
+              >
                 <span class="font-body text-on-surface">France</span>
                 <span class="material-symbols-outlined text-on-surface-variant"
                   >keyboard_arrow_down</span
@@ -152,7 +159,8 @@
             </div>
             <div class="relative">
               <div
-                class="bg-surface-container-low px-md active:border-primary-container flex w-full items-center justify-between rounded-xl border border-transparent py-[14px] transition-colors">
+                class="bg-surface-container-low px-md active:border-primary-container flex w-full items-center justify-between rounded-xl border border-transparent py-[14px] transition-colors"
+              >
                 <span class="font-body text-on-surface">EUR · Euro</span>
                 <span class="material-symbols-outlined text-on-surface-variant"
                   >keyboard_arrow_down</span
@@ -169,16 +177,19 @@
             <div class="space-x-sm flex">
               <!-- Left Input -->
               <div
-                class="bg-surface-container-low px-md focus-within:border-primary w-[70%] rounded-xl border border-transparent py-[14px] transition-colors">
+                class="bg-surface-container-low px-md focus-within:border-primary w-[70%] rounded-xl border border-transparent py-[14px] transition-colors"
+              >
                 <input
                   class="text-on-surface font-body w-full border-none bg-transparent p-0 focus:ring-0"
                   placeholder="0.00"
                   type="text"
-                  value="25" />
+                  value="25"
+                />
               </div>
               <!-- Right Currency Chip -->
               <div
-                class="bg-surface-container space-x-xs px-sm border-surface-variant active:bg-surface-container-highest flex w-[30%] cursor-pointer items-center justify-center rounded-xl border py-[14px] transition-colors">
+                class="bg-surface-container space-x-xs px-sm border-surface-variant active:bg-surface-container-highest flex w-[30%] cursor-pointer items-center justify-center rounded-xl border py-[14px] transition-colors"
+              >
                 <span class="font-body text-on-surface font-semibold">EUR</span>
                 <span class="material-symbols-outlined text-on-surface-variant text-[18px]"
                   >keyboard_arrow_down</span
@@ -195,18 +206,22 @@
               <span class="material-symbols-outlined text-outline text-[14px]">info</span>
             </div>
             <div
-              class="bg-surface-container-low px-sm py-sm flex w-full items-center justify-between rounded-xl border border-transparent">
+              class="bg-surface-container-low px-sm py-sm flex w-full items-center justify-between rounded-xl border border-transparent"
+            >
               <button
-                class="text-primary hover:bg-surface-container-high flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
+                class="text-primary hover:bg-surface-container-high flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
+              >
                 <span class="material-symbols-outlined">remove</span>
               </button>
               <input
                 class="text-on-surface font-body flex-1 border-none bg-transparent p-0 text-center focus:ring-0"
                 readonly=""
                 type="text"
-                value="8" />
+                value="8"
+              />
               <button
-                class="text-primary hover:bg-surface-container-high flex h-10 w-10 items-center justify-center rounded-lg transition-colors">
+                class="text-primary hover:bg-surface-container-high flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
+              >
                 <span class="material-symbols-outlined">add</span>
               </button>
             </div>
@@ -215,7 +230,8 @@
         <!-- Sticky Save Button -->
         <div class="p-md bg-surface-container-lowest border-surface-variant pb-safe border-t">
           <button
-            class="bg-primary text-on-primary font-body flex h-[52px] w-full items-center justify-center rounded-xl font-semibold shadow-sm transition-transform active:scale-[0.98]">
+            class="bg-primary text-on-primary font-body flex h-[52px] w-full items-center justify-center rounded-xl font-semibold shadow-sm transition-transform active:scale-[0.98]"
+          >
             Save
           </button>
         </div>

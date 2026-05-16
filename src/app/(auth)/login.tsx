@@ -42,7 +42,8 @@ export default function Login() {
           footerLinkLabel="Sign up"
           onFooterLinkPress={() => router.navigate('/(auth)/register')}
         />
-      }>
+      }
+    >
       <View className="flex-col gap-6 pt-12">
         <Text className="font-nunito-bold text-display-lg text-typography-900">Welcome back</Text>
         <form.Field name="email">

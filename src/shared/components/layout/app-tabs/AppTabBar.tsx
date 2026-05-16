@@ -12,7 +12,8 @@ export function AppTabBar({ state, descriptors, navigation }: AppTabBarProps) {
   return (
     <View
       className="border-t border-outline-200 bg-background-0 pt-2"
-      style={{ paddingBottom: insets.bottom }}>
+      style={{ paddingBottom: insets.bottom }}
+    >
       <View className="h-14 flex-row">
         {state.routes.map((route, index) => {
           const appTab = appTabsList.find((option) => option.name === route.name);
@@ -33,7 +34,8 @@ export function AppTabBar({ state, descriptors, navigation }: AppTabBarProps) {
                   navigation.navigate(route.name, route.params);
                 }
               }}
-              className="flex-1 items-center justify-center gap-1">
+              className="flex-1 items-center justify-center gap-1"
+            >
               {Icon && (
                 <Icon
                   size={22}

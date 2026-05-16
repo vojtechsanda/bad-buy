@@ -8,13 +8,16 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: 'class',
@@ -156,14 +159,17 @@
     </style>
   </head>
   <body
-    class="font-body-md text-on-surface relative mx-auto flex min-h-screen max-w-md flex-col overflow-hidden antialiased shadow-2xl">
+    class="font-body-md text-on-surface relative mx-auto flex min-h-screen max-w-md flex-col overflow-hidden antialiased shadow-2xl"
+  >
     <!-- TopAppBar from JSON -->
     <header
-      class="docked full-width flat no shadows font-manrope top-0 z-10 flex h-16 w-full shrink-0 items-center justify-between border-b border-stone-200 bg-stone-50 px-5 tracking-tight antialiased dark:border-stone-800 dark:bg-stone-950">
+      class="docked full-width flat no shadows font-manrope top-0 z-10 flex h-16 w-full shrink-0 items-center justify-between border-b border-stone-200 bg-stone-50 px-5 tracking-tight antialiased dark:border-stone-800 dark:bg-stone-950"
+    >
       <button
         aria-label="Go back"
         class="-ml-2 flex items-center justify-center rounded-full p-2 text-teal-700 transition-colors hover:bg-stone-100 dark:text-teal-400 dark:hover:bg-stone-900"
-        type="button">
+        type="button"
+      >
         <span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
       </button>
       <div class="flex flex-1 justify-center">
@@ -201,7 +207,8 @@
           </label>
           <button
             class="bg-surface-container-lowest border-outline-variant p-md focus:border-primary focus:ring-primary flex w-full items-center justify-between rounded-xl border text-left outline-none transition-colors focus:ring-1"
-            type="button">
+            type="button"
+          >
             <span class="font-body-md text-body-md text-on-surface">EUR · Euro</span>
             <span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more"
               >expand_more</span
@@ -218,16 +225,19 @@
           </label>
           <div class="gap-md flex">
             <div
-              class="bg-surface-container-lowest border-outline-variant focus-within:border-primary focus-within:ring-primary px-md flex w-[70%] items-center overflow-hidden rounded-xl border transition-colors focus-within:ring-1">
+              class="bg-surface-container-lowest border-outline-variant focus-within:border-primary focus-within:ring-primary px-md flex w-[70%] items-center overflow-hidden rounded-xl border transition-colors focus-within:ring-1"
+            >
               <span class="font-body-lg text-on-surface-variant mr-xs text-body-lg">€</span>
               <input
                 class="font-body-lg text-on-surface placeholder-on-surface-variant h-[56px] w-full border-none bg-transparent p-0 text-body-lg focus:ring-0"
                 placeholder="0"
-                type="number" />
+                type="number"
+              />
             </div>
             <button
               class="bg-surface-container-low border-outline-variant p-md gap-xs hover:bg-surface-container flex w-[30%] items-center justify-center rounded-xl border transition-colors"
-              type="button">
+              type="button"
+            >
               <span class="font-body-md text-body-md text-on-surface font-medium">EUR</span>
               <span
                 class="material-symbols-outlined text-on-surface-variant text-[20px]"
@@ -246,20 +256,24 @@
             >
           </label>
           <div
-            class="bg-surface-container-lowest border-outline-variant p-xs pl-md focus-within:border-primary focus-within:ring-primary flex h-[56px] w-full items-center justify-between rounded-xl border transition-colors focus-within:ring-1">
+            class="bg-surface-container-lowest border-outline-variant p-xs pl-md focus-within:border-primary focus-within:ring-primary flex h-[56px] w-full items-center justify-between rounded-xl border transition-colors focus-within:ring-1"
+          >
             <input
               class="font-body-lg text-on-surface w-20 border-none bg-transparent p-0 text-body-lg focus:ring-0"
               type="number"
-              value="8" />
+              value="8"
+            />
             <div class="gap-xs pr-xs flex">
               <button
                 class="bg-surface-container-low text-on-surface hover:bg-surface-container flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
-                type="button">
+                type="button"
+              >
                 <span class="material-symbols-outlined" data-icon="remove">remove</span>
               </button>
               <button
                 class="bg-surface-container-low text-on-surface hover:bg-surface-container flex h-10 w-10 items-center justify-center rounded-lg transition-colors"
-                type="button">
+                type="button"
+              >
                 <span class="material-symbols-outlined" data-icon="add">add</span>
               </button>
             </div>
@@ -269,11 +283,13 @@
     </main>
     <!-- BottomNavBar from JSON (Transactional intent, suppressed standard nav, rendering primary action) -->
     <div
-      class="pb-safe fixed bottom-0 left-0 left-1/2 z-50 mx-auto flex w-full max-w-md shrink-0 -translate-x-1/2 items-center justify-center border-t border-stone-200 bg-stone-50 p-5 dark:border-stone-800 dark:bg-stone-950">
+      class="pb-safe fixed bottom-0 left-0 left-1/2 z-50 mx-auto flex w-full max-w-md shrink-0 -translate-x-1/2 items-center justify-center border-t border-stone-200 bg-stone-50 p-5 dark:border-stone-800 dark:bg-stone-950"
+    >
       <button
         class="font-manrope flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-teal-600 py-4 font-semibold text-white opacity-50 dark:bg-teal-500 dark:text-stone-950"
         disabled=""
-        type="button">
+        type="button"
+      >
         Continue
         <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
       </button>

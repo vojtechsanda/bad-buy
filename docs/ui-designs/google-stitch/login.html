@@ -8,15 +8,18 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: 'class',
@@ -150,15 +153,18 @@
     </style>
   </head>
   <body
-    class="font-body text-on-background flex min-h-screen flex-col items-center justify-center antialiased">
+    class="font-body text-on-background flex min-h-screen flex-col items-center justify-center antialiased"
+  >
     <!-- Mobile Container to enforce standard width constraints -->
     <main class="px-md relative mx-auto flex h-screen w-full max-w-md flex-col">
       <!-- TopAppBar (Minimal for Transactional Screen) -->
       <header
-        class="pt-sm pb-sm px-md absolute left-0 top-0 flex h-14 w-full items-center justify-between">
+        class="pt-sm pb-sm px-md absolute left-0 top-0 flex h-14 w-full items-center justify-between"
+      >
         <button
           aria-label="Go back"
-          class="hover:bg-surface-container-high text-on-surface flex items-center justify-center rounded-full p-2 transition-colors">
+          class="hover:bg-surface-container-high text-on-surface flex items-center justify-center rounded-full p-2 transition-colors"
+        >
           <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0"
             >arrow_back_ios</span
           >
@@ -184,7 +190,8 @@
               name="email"
               placeholder="Enter your email"
               type="email"
-              value="you@example.com" />
+              value="you@example.com"
+            />
           </div>
           <!-- Password Field -->
           <div class="gap-xs mt-sm relative flex flex-col">
@@ -198,11 +205,13 @@
                 name="password"
                 placeholder="Enter your password"
                 type="password"
-                value="••••••••••" />
+                value="••••••••••"
+              />
               <button
                 aria-label="Toggle password visibility"
                 class="text-on-surface-variant hover:text-on-surface absolute right-3 top-1/2 -translate-y-1/2 p-1 focus:outline-none"
-                type="button">
+                type="button"
+              >
                 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0"
                   >visibility</span
                 >
@@ -214,7 +223,8 @@
           <!-- Primary CTA -->
           <button
             class="bg-primary text-on-primary font-body hover:bg-surface-tint focus:ring-primary flex h-[52px] w-full items-center justify-center rounded-md text-body font-semibold shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
-            type="submit">
+            type="submit"
+          >
             Log in
           </button>
         </form>

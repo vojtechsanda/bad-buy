@@ -39,7 +39,8 @@ export function ScreenContainer({
       <KeyboardAvoidingView
         className={`flex-1 ${getBackgroundClass(background)}`}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ paddingTop: withSafeAreaTop ? insets.top : 0 }}>
+        style={{ paddingTop: withSafeAreaTop ? insets.top : 0 }}
+      >
         {scrollable ? (
           <ScrollView
             keyboardShouldPersistTaps="handled"
@@ -47,7 +48,8 @@ export function ScreenContainer({
               withSafeAreaBottom
                 ? { paddingVertical: 8, paddingBottom: bottomSpacing }
                 : { paddingVertical: 8 }
-            }>
+            }
+          >
             <BlurTargetView ref={blurRef}>
               <View className={`flex-1 ${hPadding} py-2`}>{children}</View>
             </BlurTargetView>
@@ -61,7 +63,8 @@ export function ScreenContainer({
         {stickyBottom ? (
           <View
             className="border-t border-outline-200 px-5 py-3"
-            style={{ paddingBottom: (withSafeAreaBottom ? bottomSpacing : 0) + 12 }}>
+            style={{ paddingBottom: (withSafeAreaBottom ? bottomSpacing : 0) + 12 }}
+          >
             {stickyBottom}
           </View>
         ) : (

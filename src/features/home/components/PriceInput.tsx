@@ -35,7 +35,8 @@ export function PriceInput({
       />
       <Pressable
         onPress={onCurrencyTap}
-        className="flex-row items-center gap-1 rounded-full bg-background-100 px-4 py-2">
+        className="flex-row items-center gap-1 rounded-full bg-background-100 px-4 py-2"
+      >
         <Text className="font-nunito-bold text-body-sm text-typography-900">{currency}</Text>
         <ChevronDown size={14} strokeWidth={1.75} color={themeColor.typography400} />
       </Pressable>

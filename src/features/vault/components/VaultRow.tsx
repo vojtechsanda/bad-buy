@@ -22,10 +22,12 @@ export function VaultRow({ item }: VaultRowProps) {
           pathname: '/(app)/vault/[id]',
           params: { id: item.id },
         })
-      }>
+      }
+    >
       <View
         style={{ width: 44, height: 44, borderRadius: 22 }}
-        className={`items-center justify-center ${thawed ? 'bg-accent-100' : 'bg-primary-100'}`}>
+        className={`items-center justify-center ${thawed ? 'bg-accent-100' : 'bg-primary-100'}`}
+      >
         {thawed ? (
           <Clock size={22} strokeWidth={1.75} color={themeColor.accent500} />
         ) : (

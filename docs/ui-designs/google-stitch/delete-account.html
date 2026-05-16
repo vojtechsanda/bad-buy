@@ -8,13 +8,16 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet" />
+      rel="stylesheet"
+    />
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: 'class',
@@ -116,7 +119,8 @@
     </style>
   </head>
   <body
-    class="bg-background font-body relative flex min-h-screen items-center justify-center text-body antialiased">
+    class="bg-background font-body relative flex min-h-screen items-center justify-center text-body antialiased"
+  >
     <!-- Mock Background Content to show overlay effect -->
     <div class="p-lg absolute inset-0 z-0 mx-auto w-full max-w-[1200px] opacity-30">
       <header class="mb-xl flex items-center justify-between">
@@ -131,17 +135,20 @@
     <!-- Backdrop Overlay -->
     <div
       aria-hidden="true"
-      class="bg-primary/40 fixed inset-0 z-40 backdrop-blur-sm transition-opacity"></div>
+      class="bg-primary/40 fixed inset-0 z-40 backdrop-blur-sm transition-opacity"
+    ></div>
     <!-- Bottom Sheet Container -->
     <div
-      class="bg-surface-container-lowest pt-sm pb-xl px-lg fixed inset-x-0 bottom-0 z-50 mx-auto flex w-full max-w-lg flex-col items-center rounded-t-[20px] shadow-2xl">
+      class="bg-surface-container-lowest pt-sm pb-xl px-lg fixed inset-x-0 bottom-0 z-50 mx-auto flex w-full max-w-lg flex-col items-center rounded-t-[20px] shadow-2xl"
+    >
       <!-- Drag Handle -->
       <div class="bg-outline-variant mb-lg h-1 w-9 rounded-full opacity-60"></div>
       <!-- Content Area -->
       <div class="flex w-full flex-col items-center text-center">
         <!-- Warning Icon (Optional Enhancement based on Danger context) -->
         <div
-          class="bg-error-container/50 mb-md flex h-12 w-12 items-center justify-center rounded-full">
+          class="bg-error-container/50 mb-md flex h-12 w-12 items-center justify-center rounded-full"
+        >
           <span class="material-symbols-outlined text-error text-[24px]">warning</span>
         </div>
         <!-- Title -->
@@ -156,13 +163,15 @@
           <!-- Primary CTA (Danger) -->
           <button
             class="bg-error text-on-error font-body hover:bg-error/90 flex h-[52px] w-full items-center justify-center rounded-xl text-body font-semibold transition-all active:scale-[0.98]"
-            type="button">
+            type="button"
+          >
             Delete account
           </button>
           <!-- Secondary CTA (Ghost) -->
           <button
             class="text-primary font-body hover:bg-surface-container-low flex h-[52px] w-full items-center justify-center rounded-xl bg-transparent text-body font-semibold transition-all active:scale-[0.98]"
-            type="button">
+            type="button"
+          >
             Cancel
           </button>
         </div>

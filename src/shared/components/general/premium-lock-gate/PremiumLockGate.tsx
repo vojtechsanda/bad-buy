@@ -41,7 +41,8 @@ export function PremiumLockGate({ children }: PremiumLockGateProps) {
             variant="outline"
             action="primary"
             size="md"
-            onPress={() => setPremiumUpsellSheetOpen(false)}>
+            onPress={() => setPremiumUpsellSheetOpen(false)}
+          >
             <ButtonText>Close</ButtonText>
           </Button>
         </View>

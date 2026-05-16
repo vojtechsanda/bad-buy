@@ -46,7 +46,8 @@ export function AuthStickyFooter({
             {footerText}
             <Text
               className="font-nunito-semibold text-primary-500 underline"
-              onPress={onFooterLinkPress}>
+              onPress={onFooterLinkPress}
+            >
               {footerLinkLabel}
             </Text>
           </Text>

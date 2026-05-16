@@ -18,7 +18,8 @@ export function AppTopBar({ title }: AppTopBarProps) {
   return (
     <View
       className="flex-row items-center justify-between bg-background-50 px-5 pb-3"
-      style={{ paddingTop: insets.top + 12 }}>
+      style={{ paddingTop: insets.top + 12 }}
+    >
       <View className="flex-row items-center gap-1">
         {router.canGoBack() && (
           <Pressable onPress={() => router.back()} className="-ml-2 rounded-full p-1.5">

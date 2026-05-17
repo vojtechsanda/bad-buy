@@ -14,6 +14,7 @@ export type ScreenContainerProps = {
   withHorizontalPadding?: boolean;
   background?: 'bg' | 'surface' | 'transparent';
   withSafeAreaTop?: boolean;
+  header?: ReactNode;
 };
 
 export function ScreenContainer({
@@ -23,6 +24,7 @@ export function ScreenContainer({
   withHorizontalPadding = true,
   background = 'bg',
   withSafeAreaTop = false,
+  header,
 }: ScreenContainerProps) {
   const blurRef = useRef<View | null>(null);
 
@@ -51,11 +53,13 @@ export function ScreenContainer({
             }
           >
             <BlurTargetView ref={blurRef}>
+              {header}
               <View className={`flex-1 ${hPadding} py-2`}>{children}</View>
             </BlurTargetView>
           </ScrollView>
         ) : (
           <BlurTargetView ref={blurRef} style={{ flex: 1 }}>
+            {header}
             <View className={`flex-1 ${hPadding} py-2`}>{children}</View>
           </BlurTargetView>
         )}

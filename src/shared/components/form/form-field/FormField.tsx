@@ -3,19 +3,29 @@ import {
   FormControlLabel,
   FormControlLabelText,
 } from '@shared/components/ui/form-control';
+import { themeColor } from '@shared/constants';
 import { AnyFieldApi } from '@tanstack/react-form';
+import { Info } from 'lucide-react-native';
 import { ReactNode } from 'react';
-import { Text } from 'react-native';
+import { Alert, Pressable, Text } from 'react-native';
 
 type FormFieldProps = {
   field: AnyFieldApi;
   label: string;
   helperText?: string;
-  labelRight?: ReactNode;
+  infoMessage?: string;
+  labelTrailing?: ReactNode;
   children: ReactNode;
 };
 
-export function FormField({ field, label, helperText, labelRight, children }: FormFieldProps) {
+export function FormField({
+  field,
+  label,
+  helperText,
+  infoMessage,
+  labelTrailing,
+  children,
+}: FormFieldProps) {
   const hasBeenSubmitted = field.form.state.submissionAttempts > 0;
   const isInvalid =
     (field.state.meta.isTouched || hasBeenSubmitted) && field.state.meta.errors.length > 0;
@@ -25,9 +35,14 @@ export function FormField({ field, label, helperText, labelRight, children }: Fo
 
   return (
     <FormControl isInvalid={isInvalid}>
-      <FormControlLabel>
+      <FormControlLabel className="gap-1.5">
         <FormControlLabelText>{label}</FormControlLabelText>
-        {labelRight}
+        {infoMessage && (
+          <Pressable onPress={() => Alert.alert(infoMessage)} hitSlop={8}>
+            <Info size={14} strokeWidth={2} color={themeColor.typography400} />
+          </Pressable>
+        )}
+        {labelTrailing}
       </FormControlLabel>
       {children}
       {subText ? <Text className={`mt-1 text-xs ${subTextColor}`}>{subText}</Text> : null}

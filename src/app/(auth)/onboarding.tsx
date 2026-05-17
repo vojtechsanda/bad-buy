@@ -1,5 +1,5 @@
+import { getCurrencyForCountry } from '@features/currency/utils';
 import { IdentityFormData, IdentityView, OnboardingShell } from '@features/onboarding';
-import { getCurrencyForCountry } from '@shared/utils';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { BackHandler } from 'react-native';
@@ -18,13 +18,13 @@ export default function Onboarding() {
 
   useFocusEffect(
     useCallback(() => {
-      const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+      const backHandlerSubscription = BackHandler.addEventListener('hardwareBackPress', () => {
         if (step > 1) setStep((s) => Math.max(1, s - 1));
 
         return true;
       });
 
-      return () => sub.remove();
+      return () => backHandlerSubscription.remove();
     }, [step]),
   );
 
@@ -37,13 +37,18 @@ export default function Onboarding() {
         else setStep((s) => s - 1);
       }}
     >
-      {step === 1 && (
-        <IdentityView
-          onComplete={(data) => {
-            setIdentityData({ data, currency: getCurrencyForCountry(data.countryIso2) });
-            setStep(2);
-          }}
-        />
+      {(header) => (
+        <>
+          {step === 1 && (
+            <IdentityView
+              screenHeader={header}
+              onComplete={(data) => {
+                setIdentityData({ data, currency: getCurrencyForCountry(data.countryIso2) });
+                setStep(2);
+              }}
+            />
+          )}
+        </>
       )}
     </OnboardingShell>
   );

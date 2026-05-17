@@ -1,5 +1,5 @@
+import { useAccount } from '@features/account/hooks';
 import { PremiumUpsellSheet, PromoRedemptionSheet } from '@shared/components/sheets';
-import { mockAccount } from '@shared/modules/account';
 import { ReactNode, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
@@ -14,13 +14,13 @@ export function PremiumLockGate({
   noBadgeOverflowX = false,
   noBadgeOverflowY = false,
 }: PremiumLockGateProps) {
-  const account = mockAccount;
+  const { account } = useAccount();
 
   const [upsellOpen, setUpsellOpen] = useState(false);
   const [promoOpen, setPromoOpen] = useState(false);
 
   const hasActivePremium =
-    account.premium_expires_at && new Date(account.premium_expires_at) > new Date();
+    account?.premium_expires_at != null && new Date(account.premium_expires_at) > new Date();
 
   if (hasActivePremium) {
     return <>{children}</>;

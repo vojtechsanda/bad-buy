@@ -1,3 +1,4 @@
+import { SkeletonBar } from '@shared/components';
 import { CurrencyCode, useConvertToUsd } from '@shared/modules/currency';
 import { Account } from '@shared/types';
 import { Text, View } from 'react-native';
@@ -7,13 +8,28 @@ import { getTimePrice, getTimePriceNote } from './utils';
 type AuditTimePriceViewProps = {
   price: number | string;
   currency: CurrencyCode;
-  account: Account;
+  account: Account | null;
+  isLoading?: boolean;
 };
 
-export function AuditTimePriceView({ price, currency, account }: AuditTimePriceViewProps) {
+export function AuditTimePriceView({
+  price,
+  currency,
+  account,
+  isLoading = false,
+}: AuditTimePriceViewProps) {
   const { convertToUsd } = useConvertToUsd();
-  const priceUsd = convertToUsd(price, currency);
 
+  if (isLoading || !account) {
+    return (
+      <View className="items-center gap-4 rounded-lg bg-background-100 px-6 py-8">
+        <SkeletonBar width={128} height={48} />
+        <SkeletonBar width={192} height={16} />
+      </View>
+    );
+  }
+
+  const priceUsd = convertToUsd(price, currency);
   const workHours = priceUsd / account.hourly_wage_usd;
 
   return (

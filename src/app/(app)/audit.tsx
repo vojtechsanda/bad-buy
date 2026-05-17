@@ -5,24 +5,25 @@ import {
   AuditStickyFooter,
   AuditSuggestionListView,
   AuditTimePriceView,
-  mockSuggestions,
   useAuditInitialActions,
+  useSuggestions,
 } from '@shared/modules/audit';
-import { CurrencyCode } from '@shared/modules/currency';
+import { CurrencyCode, useConvertToUsd } from '@shared/modules/currency';
 import { Redirect, useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
 export default function AuditScreen() {
   const { price, currency } = useLocalSearchParams<{ price: string; currency: CurrencyCode }>();
 
-  const { account, isLoading } = useAccountSWR();
+  const { convertToUsd } = useConvertToUsd();
+  const { account, isLoading: isAccountLoading } = useAccountSWR();
+  const priceUsd = price && currency ? convertToUsd(price, currency) : undefined;
+  const { suggestions, isLoading, refresh } = useSuggestions(priceUsd);
 
   const { handleBuy, handleFreeze, handleSkip } = useAuditInitialActions();
 
-  if (isLoading) return <FullSizeSpinner />;
+  if (isAccountLoading) return <FullSizeSpinner />;
   if (!account) return <FullSizeError message="Unable to load profile, please try again later" />;
-
-  const suggestions = mockSuggestions;
 
   if (!price || !currency) {
     return <Redirect href="/(app)/home" />;
@@ -43,9 +44,19 @@ export default function AuditScreen() {
       <View className="gap-8">
         <AuditPriceView price={price} currency={currency} />
 
-        <AuditTimePriceView price={price} currency={currency} account={account} />
+        <AuditTimePriceView
+          price={price}
+          currency={currency}
+          account={account}
+          isLoading={isAccountLoading}
+        />
 
-        <AuditSuggestionListView currency={currency} suggestions={suggestions} />
+        <AuditSuggestionListView
+          currency={currency}
+          suggestions={suggestions}
+          isLoading={isLoading}
+          onRefresh={refresh}
+        />
       </View>
     </ScreenContainer>
   );

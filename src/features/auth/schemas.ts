@@ -1,11 +1,11 @@
-import { EmailSchema } from '@shared/schemas/email';
-import { PasswordSchema } from '@shared/schemas/password';
+import { emailSchema } from '@shared/schemas/email';
+import { passwordSchema } from '@shared/schemas/password';
 import { z } from 'zod';
 
 export const RegisterFormSchema = z
   .object({
-    email: EmailSchema,
-    password: PasswordSchema,
+    email: emailSchema,
+    password: passwordSchema,
     passwordRepeat: z.string(),
   })
   .refine((v) => v.password === v.passwordRepeat, {
@@ -16,8 +16,8 @@ export const RegisterFormSchema = z
 export type RegisterFormType = z.infer<typeof RegisterFormSchema>;
 
 export const LoginFormSchema = z.object({
-  email: EmailSchema,
-  password: PasswordSchema,
+  email: emailSchema,
+  password: passwordSchema,
 });
 
 export type LoginFormType = z.infer<typeof LoginFormSchema>;

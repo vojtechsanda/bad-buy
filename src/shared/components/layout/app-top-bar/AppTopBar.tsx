@@ -1,8 +1,10 @@
 import { themeColor } from '@shared/constants';
 import { useRouter } from 'expo-router';
-import { Bell, ChevronLeft } from 'lucide-react-native';
-import { Pressable, Text, View } from 'react-native';
+import { Bell } from 'lucide-react-native';
+import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { BackButton } from '../../general/back-button';
 
 type AppTopBarProps = {
   title?: string;
@@ -21,11 +23,7 @@ export function AppTopBar({ title }: AppTopBarProps) {
       style={{ paddingTop: insets.top + 12 }}
     >
       <View className="flex-row items-center gap-1">
-        {router.canGoBack() && (
-          <Pressable onPress={() => router.back()} className="-ml-2 rounded-full p-1.5">
-            <ChevronLeft size={22} strokeWidth={1.75} color={themeColor.typography900} />
-          </Pressable>
-        )}
+        {router.canGoBack() && <BackButton onPress={() => router.back()} />}
         <Text className="font-nunito-bold text-heading text-typography-900">{title}</Text>
       </View>
 

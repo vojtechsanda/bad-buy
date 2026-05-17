@@ -1,20 +1,21 @@
-import { ScreenContainer } from '@shared/components';
+import { InputFormField, ScreenContainer } from '@shared/components';
 import { revalidateLogic } from '@tanstack/form-core';
 import { useForm, useStore } from '@tanstack/react-form';
-import { Text, View } from 'react-native';
+import { ReactNode } from 'react';
+import { View } from 'react-native';
 
-import { IdentitySchema , IdentityFormData } from '../../schemas';
-
+import { IdentityFormData, identityFormSchema } from '../../schemas';
 import { OnboardingStickyFooter } from '../OnboardingStickyFooter';
+import { OnboardingTitle } from '../OnboardingTitle';
 import { BirthdateFormField } from './BirthdateFormField';
 import { CountryFormField } from './CountryFormField';
-import { NameFormField } from './NameFormField';
 
 type IdentityViewProps = {
   onComplete: (data: IdentityFormData) => void;
+  screenHeader?: ReactNode;
 };
 
-export function IdentityView({ onComplete }: IdentityViewProps) {
+export function IdentityView({ onComplete, screenHeader }: IdentityViewProps) {
   const form = useForm({
     defaultValues: {
       name: '',
@@ -25,7 +26,7 @@ export function IdentityView({ onComplete }: IdentityViewProps) {
       mode: 'submit',
       modeAfterSubmission: 'change',
     }),
-    validators: { onDynamic: IdentitySchema },
+    validators: { onDynamic: identityFormSchema },
     onSubmit: async ({ value }) => {
       console.log('identity', value);
       onComplete(value as IdentityFormData);
@@ -40,20 +41,23 @@ export function IdentityView({ onComplete }: IdentityViewProps) {
 
   return (
     <ScreenContainer
+      header={screenHeader}
+      withSafeAreaTop
       stickyBottom={<OnboardingStickyFooter onPress={form.handleSubmit} disabled={!isComplete} />}
     >
       <View className="flex-col gap-8">
-        <View className="gap-1.5">
-          <Text className="font-nunito-bold text-display-lg text-typography-900">
-            Tell us about you
-          </Text>
-          <Text className="font-nunito text-heading text-typography-500">
-            We'll personalize your experience.
-          </Text>
-        </View>
+        <OnboardingTitle title="Tell us about you" subtitle="We'll personalize your experience." />
 
         <View className="gap-6">
-          <form.Field name="name">{(field) => <NameFormField field={field} />}</form.Field>
+          <form.Field name="name">
+            {(field) => (
+              <InputFormField
+                field={field}
+                label="Your name"
+                placeholder="How should we call you?"
+              />
+            )}
+          </form.Field>
           <form.Field name="birthdate">
             {(field) => <BirthdateFormField field={field} />}
           </form.Field>

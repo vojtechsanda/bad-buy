@@ -42,7 +42,7 @@ export function PromoRedemptionSheet({ isOpen, onClose }: PromoRedemptionSheetPr
           <SheetHeader title="Got a code?" subtitle="Enter your promo or referral code." />
 
           <View className="mt-6">
-            <Input size="2xl" variant="outline">
+            <Input size="3xl">
               <InputField
                 value={code}
                 onChangeText={(text) => {
@@ -51,11 +51,12 @@ export function PromoRedemptionSheet({ isOpen, onClose }: PromoRedemptionSheetPr
                 }}
                 placeholder="ENTER CODE"
                 autoCapitalize="characters"
+                autoCorrect={false}
                 textAlign="center"
-                className="font-mono tracking-widest"
+                className="font-mono text-xl tracking-widest"
               />
             </Input>
-            {error !== null && <ErrorMessage message={error} />}
+            <ErrorMessage message={error} />
           </View>
 
           <SheetActions

@@ -1,17 +1,21 @@
 import { BottomSheet, Button, ButtonText } from '@shared/components';
 import { themeColor } from '@shared/constants';
-import { useRouter } from 'expo-router';
 import { Check, ShoppingBag, Snowflake } from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 type AuditStickyFooterProps = {
   freezeLabel?: string;
+  onSkip: () => void;
+  onFreeze: () => void;
+  onBuy: () => void;
 };
 
-export function AuditStickyFooter({ freezeLabel = 'Freeze' }: AuditStickyFooterProps) {
-  const router = useRouter();
-
+export function AuditStickyFooter({
+  onSkip,
+  onBuy,
+  freezeLabel = 'Freeze',
+}: AuditStickyFooterProps) {
   const [freezeSheetOpen, setFreezeSheetOpen] = useState(false);
 
   return (
@@ -21,7 +25,7 @@ export function AuditStickyFooter({ freezeLabel = 'Freeze' }: AuditStickyFooterP
           variant="outline"
           action="primary"
           className="flex-1 bg-background-0"
-          onPress={() => router.push('/(app)/buy')}
+          onPress={onBuy}
         >
           <ShoppingBag size={18} strokeWidth={1.75} color={themeColor.primary500} />
           <ButtonText>Buy</ButtonText>
@@ -39,7 +43,7 @@ export function AuditStickyFooter({ freezeLabel = 'Freeze' }: AuditStickyFooterP
       </View>
 
       <Pressable
-        onPress={() => router.push('/(app)/skip')}
+        onPress={onSkip}
         className="h-14 flex-row items-center overflow-hidden rounded-2xl bg-primary-100 px-2"
       >
         <View className="h-10 w-10 items-center justify-center rounded-full bg-primary-500">

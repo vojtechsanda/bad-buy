@@ -9,10 +9,11 @@ import { mockSuggestions } from '@features/audit/store';
 import { convertFromUsd } from '@features/currency/utils';
 import { mockFreezedItems } from '@features/vault/store';
 import { CountdownPill, ScreenContainer } from '@shared/components';
-import { Redirect, useLocalSearchParams } from 'expo-router';
+import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
 import { View } from 'react-native';
 
 export default function VaultItemDetail() {
+  const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const suggestions = mockSuggestions;
@@ -30,7 +31,21 @@ export default function VaultItemDetail() {
   );
 
   return (
-    <ScreenContainer stickyBottom={<AuditStickyFooter freezeLabel="Re-freeze" />}>
+    <ScreenContainer
+      stickyBottom={
+        <AuditStickyFooter
+          onSkip={() =>
+            router.push({
+              pathname: '/(app)/skip',
+              params: { price: displayedPrice, currency: item.price_currency },
+            })
+          }
+          onBuy={() => router.push('/(app)/buy')}
+          onFreeze={() => {}}
+          freezeLabel="Re-freeze"
+        />
+      }
+    >
       <View className="gap-8">
         <View className="gap-2">
           <AuditPriceView price={displayedPrice} currency={item.price_currency} />

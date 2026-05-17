@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <circle cx="120" cy="124" r="92" fill="#F0F7F5"/>
+  <circle cx="120" cy="124" r="62" fill="#D9EBE5" opacity="0.6"/>
+
+  <g transform="translate(40 70) rotate(-30)">
+    <path d="M0 8 Q12 -4 26 4 Q22 16 8 16 Q2 14 0 8Z" fill="#7FB8A7" opacity="0.7"/>
+  </g>
+  <g transform="translate(180 80) rotate(30)">
+    <ellipse cx="0" cy="0" rx="14" ry="9" fill="#FCE9E0"/>
+  </g>
+  <g transform="translate(46 184) rotate(20)">
+    <path d="M0 6 Q10 -4 22 2 Q18 14 6 14 Q0 12 0 6Z" fill="#D9EBE5"/>
+  </g>
+  <g transform="translate(186 176) rotate(-22)">
+    <path d="M0 0 Q14 -4 18 8 Q10 16 0 12 Q-4 6 0 0Z" fill="#7FB8A7" opacity="0.55"/>
+  </g>
+
+  <path d="M58 168 Q58 144 80 140 Q108 138 132 138 Q160 138 178 142 Q188 144 188 162 Q188 188 156 196 Q124 202 96 198 Q66 192 58 178 Z" fill="#F4C4A8"/>
+  <path d="M70 188 Q120 200 178 184" stroke="#E89B7A" stroke-width="1.6" fill="none" opacity="0.5" stroke-linecap="round"/>
+
+  <rect x="86" y="102" width="68" height="48" rx="8" fill="#3E8F7C"/>
+  <rect x="86" y="102" width="68" height="14" rx="8" fill="#7FB8A7" opacity="0.55"/>
+
+  <rect x="116" y="102" width="8" height="48" fill="#E89B7A"/>
+  <rect x="86" y="120" width="68" height="8" fill="#E89B7A"/>
+
+  <path d="M120 100 Q108 86 104 92 Q100 102 116 100 Z" fill="#E89B7A"/>
+  <path d="M120 100 Q132 86 136 92 Q140 102 124 100 Z" fill="#E89B7A"/>
+  <circle cx="120" cy="100" r="3.5" fill="#C97554"/>
+
+  <path d="M94 110 Q100 106 110 108" stroke="#D9EBE5" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+</svg>

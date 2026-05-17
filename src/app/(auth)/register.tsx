@@ -28,7 +28,7 @@ export default function Register() {
       setServerError(null);
       try {
         await authService.signUp(value.email, value.password);
-        // TODO: start onboarding
+        router.navigate('/(onboarding)/onboarding');
       } catch (err) {
         // TODO: user friendly error message instead of raw supabase error message
         const message = err instanceof Error ? err.message : DEFAULT_ERROR_MESSAGE;

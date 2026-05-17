@@ -9,12 +9,19 @@ import {
   IllustrationSvgFrame,
   ScreenContainer,
 } from '@shared/components';
-import { formatPrice } from '@shared/utils';
-import { Redirect, router, useLocalSearchParams } from 'expo-router';
+import { formatPrice, playCelebrationHaptics } from '@shared/utils';
+import { Redirect, router, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { useCallback } from 'react';
 import { Text, View } from 'react-native';
 
 export default function SkipScreen() {
   const { price, currency } = useLocalSearchParams<{ price: string; currency: CurrencyCode }>();
+
+  useFocusEffect(
+    useCallback(() => {
+      playCelebrationHaptics();
+    }, []),
+  );
 
   const accountHistory = mockAccountHistory;
 

@@ -6,6 +6,7 @@ type SelectFormFieldProps = {
   onPress: () => void;
   value: string | null;
   placeholder: string;
+  placeholderIcon?: string;
 };
 
 export function SelectFormField({ onPress, value, placeholder }: SelectFormFieldProps) {

@@ -1,10 +1,9 @@
 import { InputFormField, ScreenContainer } from '@shared/components';
-import { revalidateLogic } from '@tanstack/form-core';
 import { useForm, useStore } from '@tanstack/react-form';
 import { ReactNode } from 'react';
 import { View } from 'react-native';
 
-import { IdentityFormData, identityFormSchema } from '../../schemas';
+import { IdentityFormData, identityFormSchema, onboardingValidationLogic } from '../../schemas';
 import { OnboardingStickyFooter } from '../OnboardingStickyFooter';
 import { OnboardingTitle } from '../OnboardingTitle';
 import { BirthdateFormField } from './BirthdateFormField';
@@ -22,10 +21,7 @@ export function IdentityView({ onComplete, screenHeader }: IdentityViewProps) {
       birthdate: undefined as unknown as Date,
       countryIso2: '',
     },
-    validationLogic: revalidateLogic({
-      mode: 'submit',
-      modeAfterSubmission: 'change',
-    }),
+    validationLogic: onboardingValidationLogic,
     validators: { onDynamic: identityFormSchema },
     onSubmit: async ({ value }) => {
       console.log('identity', value);

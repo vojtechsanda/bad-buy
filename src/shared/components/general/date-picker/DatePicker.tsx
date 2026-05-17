@@ -20,11 +20,10 @@ export function DatePicker({ isOpen, onClose, value, onChange, maximumDate }: Da
           mode="date"
           display="default"
           maximumDate={maximumDate}
-          onValueChange={(_, date) => {
+          onChange={(_, date) => {
             onClose();
             if (date) onChange(date);
           }}
-          onDismiss={onClose}
         />
       )}
 
@@ -38,7 +37,7 @@ export function DatePicker({ isOpen, onClose, value, onChange, maximumDate }: Da
             mode="date"
             display="spinner"
             maximumDate={maximumDate}
-            onValueChange={(_, date) => {
+            onChange={(_, date) => {
               if (date) onChange(date);
             }}
           />

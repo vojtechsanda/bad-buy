@@ -1,5 +1,6 @@
-export * from './illustration-frame';
 export * from './countdown-pill';
+export * from './illustration-frame';
+export * from './illustration-svg-frame';
 export * from './premium-lock-gate';
 export * from './statistics-card';
 export * from './step-progress-bar';

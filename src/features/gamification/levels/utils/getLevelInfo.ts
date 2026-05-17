@@ -15,6 +15,7 @@ export function getCurrentLevelInfo(decisionCount: number): LevelInfo {
     return {
       level: currentLevel.level,
       tier: currentLevel.tier,
+      note: currentLevel.note,
       nextLevel: null,
       nextTier: null,
       decisionsToNext: null,
@@ -25,6 +26,7 @@ export function getCurrentLevelInfo(decisionCount: number): LevelInfo {
   return {
     level: currentLevel.level,
     tier: currentLevel.tier,
+    note: currentLevel.note,
     nextLevel: nextLevel.level,
     nextTier: nextLevel.tier,
     decisionsToNext: nextLevel.threshold - decisionCount,

@@ -12,11 +12,14 @@ export function BirthdateFormField({ field }: BirthdateFormFieldProps) {
   return (
     <>
       <FormField field={field} label="Birthdate">
-        <SelectFormField
-          onPress={() => setShowPicker(true)}
-          value={formattedDate}
-          placeholder="Select date"
-        />
+        {(isInvalid) => (
+          <SelectFormField
+            onPress={() => setShowPicker(true)}
+            value={formattedDate}
+            placeholder="Select date"
+            isInvalid={isInvalid}
+          />
+        )}
       </FormField>
 
       <DatePicker

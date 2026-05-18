@@ -24,17 +24,19 @@ export function CurrencyFormField({
   return (
     <>
       <FormField field={field} label={label} infoMessage={infoMessage}>
-        <SelectFormField
-          onPress={() => setShowSheet(true)}
-          value={displayValue}
-          placeholder="Select currency"
-        />
+        {(isInvalid) => (
+          <SelectFormField
+            onPress={() => setShowSheet(true)}
+            value={displayValue}
+            placeholder="Select currency"
+            isInvalid={isInvalid}
+          />
+        )}
       </FormField>
 
       <CurrencySheet
         isOpen={showSheet}
         onClose={() => setShowSheet(false)}
-        currencies={mockAvailableCurrencies}
         selectedCurrency={field.state.value}
         onSelect={(code) => {
           field.handleChange(code);

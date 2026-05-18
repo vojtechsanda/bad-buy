@@ -17,11 +17,14 @@ export function CountryFormField({ field }: CountryFormFieldProps) {
   return (
     <>
       <FormField field={field} label="Your country">
-        <SelectFormField
-          onPress={() => setShowSheet(true)}
-          value={displayValue}
-          placeholder="Select your country"
-        />
+        {(isInvalid) => (
+          <SelectFormField
+            onPress={() => setShowSheet(true)}
+            value={displayValue}
+            placeholder="Select your country"
+            isInvalid={isInvalid}
+          />
+        )}
       </FormField>
 
       <CountrySheet

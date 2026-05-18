@@ -1,5 +1,5 @@
 import { mockAvailableCurrencies } from '@features/currency';
-import { CurrencyPickerSheet, UnitFormField } from '@shared/components';
+import { CurrencySheet, UnitFormField } from '@shared/components';
 import { AnyFieldApi } from '@tanstack/react-form';
 import { useState } from 'react';
 
@@ -22,7 +22,7 @@ export function WageFormField({ wageField, currencyField, pinnedCurrency }: Wage
         onUnitPress={() => setShowSheet(true)}
       />
 
-      <CurrencyPickerSheet
+      <CurrencySheet
         isOpen={showSheet}
         onClose={() => setShowSheet(false)}
         currencies={mockAvailableCurrencies}

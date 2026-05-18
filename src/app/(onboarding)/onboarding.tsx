@@ -3,10 +3,10 @@ import {
   HobbyView,
   IdentityFormData,
   IdentityView,
-  MoneyFormData,
   MoneyView,
   OnboardingShell,
   PromoView,
+  moneyFormData,
 } from '@features/onboarding';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
@@ -19,7 +19,7 @@ export default function Onboarding() {
     data: IdentityFormData;
     currency: string;
   } | null>(null);
-  const [moneyData, setMoneyData] = useState<MoneyFormData | null>(null);
+  const [moneyData, setMoneyData] = useState<moneyFormData | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -47,6 +47,7 @@ export default function Onboarding() {
           {step === 1 && (
             <IdentityView
               screenHeader={header}
+              defaultValues={identityData?.data}
               onComplete={(data) => {
                 console.log('identity complete', data);
                 setIdentityData({ data, currency: getCurrencyForCountry(data.countryIso2) });
@@ -58,6 +59,7 @@ export default function Onboarding() {
             <MoneyView
               screenHeader={header}
               defaultCurrency={identityData.currency}
+              defaultValues={moneyData ?? undefined}
               onComplete={(data) => {
                 console.log('money complete', data);
                 setMoneyData(data);

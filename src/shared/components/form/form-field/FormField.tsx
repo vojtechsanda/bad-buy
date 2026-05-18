@@ -11,9 +11,9 @@ import { Alert, Pressable, Text } from 'react-native';
 
 type FormFieldProps = {
   field: AnyFieldApi;
-  label: string;
+  label?: string;
   helperText?: string;
-  infoMessage?: string;
+  infoMessage?: string | { title: string; message: string };
   labelTrailing?: ReactNode;
   children: ReactNode;
 };
@@ -32,13 +32,23 @@ export function FormField({
   const errorMessage = field.state.meta.errors[0]?.message;
   const subText = isInvalid ? errorMessage : (helperText ?? '');
   const subTextColor = isInvalid ? 'text-error-700' : 'text-typography-500';
+  const displayLabel = typeof infoMessage === 'object' ? infoMessage.title : (label ?? '');
+
+  const handleInfo = () => {
+    if (!infoMessage) return;
+    if (typeof infoMessage === 'object') {
+      Alert.alert(infoMessage.title, infoMessage.message);
+    } else {
+      Alert.alert(displayLabel, infoMessage);
+    }
+  };
 
   return (
     <FormControl isInvalid={isInvalid}>
       <FormControlLabel className="gap-1.5">
-        <FormControlLabelText>{label}</FormControlLabelText>
+        <FormControlLabelText>{displayLabel}</FormControlLabelText>
         {infoMessage && (
-          <Pressable onPress={() => Alert.alert(infoMessage)} hitSlop={8}>
+          <Pressable onPress={handleInfo} hitSlop={8}>
             <Info size={14} strokeWidth={2} color={themeColor.typography400} />
           </Pressable>
         )}

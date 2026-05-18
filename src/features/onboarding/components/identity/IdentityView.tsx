@@ -1,9 +1,10 @@
 import { InputFormField, ScreenContainer } from '@shared/components';
-import { useForm, useStore } from '@tanstack/react-form';
+import { defaultFormValidationLogic } from '@shared/constants';
+import { useForm } from '@tanstack/react-form';
 import { ReactNode } from 'react';
 import { View } from 'react-native';
 
-import { IdentityFormData, identityFormSchema, onboardingValidationLogic } from '../../schemas';
+import { IdentityFormData, identityFormSchema } from '../../schemas';
 import { OnboardingStickyFooter } from '../OnboardingStickyFooter';
 import { OnboardingTitle } from '../OnboardingTitle';
 import { BirthdateFormField } from './BirthdateFormField';
@@ -12,16 +13,17 @@ import { CountryFormField } from './CountryFormField';
 type IdentityViewProps = {
   onComplete: (data: IdentityFormData) => void;
   screenHeader?: ReactNode;
+  defaultValues?: IdentityFormData;
 };
 
-export function IdentityView({ onComplete, screenHeader }: IdentityViewProps) {
+export function IdentityView({ onComplete, screenHeader, defaultValues }: IdentityViewProps) {
   const form = useForm({
     defaultValues: {
-      name: '',
-      birthdate: undefined as unknown as Date,
-      countryIso2: '',
+      name: defaultValues?.name ?? '',
+      birthdate: defaultValues?.birthdate ?? (undefined as unknown as Date),
+      countryIso2: defaultValues?.countryIso2 ?? '',
     },
-    validationLogic: onboardingValidationLogic,
+    validationLogic: defaultFormValidationLogic,
     validators: { onDynamic: identityFormSchema },
     onSubmit: async ({ value }) => {
       console.log('identity', value);
@@ -29,17 +31,11 @@ export function IdentityView({ onComplete, screenHeader }: IdentityViewProps) {
     },
   });
 
-  const formValues = useStore(form.store, (s) => s.values);
-  const isComplete =
-    formValues.name.trim().length > 0 &&
-    !!formValues.birthdate &&
-    formValues.countryIso2.length > 0;
-
   return (
     <ScreenContainer
       header={screenHeader}
       withSafeAreaTop
-      stickyBottom={<OnboardingStickyFooter onPress={form.handleSubmit} disabled={!isComplete} />}
+      stickyBottom={<OnboardingStickyFooter onPress={form.handleSubmit} />}
     >
       <View className="flex-col gap-8">
         <OnboardingTitle title="Tell us about you" subtitle="We'll personalize your experience." />

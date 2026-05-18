@@ -1,10 +1,10 @@
 import { TotalSavedCard } from '@features/account/components';
 import { mockAccount, mockAccountHistory } from '@features/account/store';
-import { mockAvailableCurrencies } from '@features/currency/store';
-import { CurrencyCode } from '@features/currency/types';
 import { GreetingView, PriceInput } from '@features/home/components';
 import { CurrencySheet, ScreenContainer } from '@shared/components';
 import { Button, ButtonText } from '@shared/components/ui';
+import { mockAvailableCurrencies } from '@shared/modules/currency/store';
+import { CurrencyCode } from '@shared/modules/currency/types';
 import { isInLast30Days } from '@shared/utils';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';

@@ -1,14 +1,14 @@
 import { mockAccount } from '@features/account/store';
+import { mockFreezedItems } from '@features/vault/store';
+import { CountdownPill, ScreenContainer } from '@shared/components';
 import {
   AuditPriceView,
   AuditStickyFooter,
   AuditSuggestionListView,
   AuditTimePriceView,
-} from '@features/audit/components';
-import { mockSuggestions } from '@features/audit/store';
-import { convertFromUsd } from '@features/currency/utils';
-import { mockFreezedItems } from '@features/vault/store';
-import { CountdownPill, ScreenContainer } from '@shared/components';
+} from '@shared/modules/audit/components';
+import { mockSuggestions } from '@shared/modules/audit/store';
+import { convertFromUsd } from '@shared/modules/currency/utils';
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
 import { View } from 'react-native';
 

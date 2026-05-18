@@ -1,5 +1,5 @@
 import { getAccountPictureUrl } from '@features/account/utils';
-import { getCurrentLevelInfo } from '@features/gamification';
+import { getCurrentLevelInfo } from '@shared/modules/gamification';
 import { Account } from '@shared/types';
 import { Image } from 'expo-image';
 import { Text, View } from 'react-native';

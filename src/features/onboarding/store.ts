@@ -1,5 +1,5 @@
-import { mockCountryToCurrency } from '@features/currency';
 import { Country } from '@shared/components';
+import { mockCountryToCurrency } from '@shared/modules/currency';
 import getUnicodeFlagIcon from 'country-flag-icons/unicode';
 import countries_i18n from 'i18n-iso-countries';
 import en from 'i18n-iso-countries/langs/en.json';

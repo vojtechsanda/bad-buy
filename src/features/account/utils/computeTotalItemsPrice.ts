@@ -1,4 +1,4 @@
-import { convertFromUsd } from '@features/currency/utils';
+import { convertFromUsd } from '@shared/modules/currency/utils';
 import { TrackedItem } from '@shared/types';
 
 /**

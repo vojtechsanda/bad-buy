@@ -1,6 +1,6 @@
-import { CurrencyCode } from '@features/currency/types';
-import { convertAndFormatFromUsd } from '@features/currency/utils';
 import { Button, PremiumLockGate } from '@shared/components';
+import { CurrencyCode } from '@shared/modules/currency/types';
+import { convertAndFormatFromUsd } from '@shared/modules/currency/utils';
 import { AccountSuggestion } from '@shared/types';
 import { RefreshCw } from 'lucide-react-native';
 import { Text, View } from 'react-native';

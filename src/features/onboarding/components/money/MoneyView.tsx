@@ -36,14 +36,6 @@ export function MoneyView({
     onSubmit: async ({ value }) => onComplete(value),
   });
 
-  // const formValues = useStore(form.store, (s) => s.values);
-  // const isComplete =
-  //   formValues.displayCurrency.length > 0 &&
-  //   formValues.hourlyWage > 0 &&
-  //   formValues.wageCurrency.length > 0 &&
-  //   formValues.workHoursPerDay >= 0.5 &&
-  //   formValues.workHoursPerDay <= 24;
-
   const displayCurrency = useStore(form.store, (s) => s.values.displayCurrency);
 
   return (
@@ -88,10 +80,8 @@ export function MoneyView({
             {(field) => (
               <StepperField
                 field={field}
-                infoMessage={{
-                  title: 'Average work hours per day',
-                  message: 'Help us put prices in the ....',
-                }}
+                label="Average work hours per day"
+                infoMessage="Helps us put prices in the context of your workday."
                 min={0.5}
                 max={24}
               />

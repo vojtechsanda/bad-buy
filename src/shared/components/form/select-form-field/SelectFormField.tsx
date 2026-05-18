@@ -6,14 +6,14 @@ type SelectFormFieldProps = {
   onPress: () => void;
   value: string | null;
   placeholder: string;
-  placeholderIcon?: string;
+  isInvalid?: boolean;
 };
 
-export function SelectFormField({ onPress, value, placeholder }: SelectFormFieldProps) {
+export function SelectFormField({ onPress, value, placeholder, isInvalid }: SelectFormFieldProps) {
   return (
     <Pressable
       onPress={onPress}
-      className="h-16 flex-row items-center justify-between rounded-md border border-outline-200 bg-background-0 px-3"
+      className={`h-16 flex-row items-center justify-between rounded-md border bg-background-0 px-3 ${isInvalid ? 'border-error-700' : 'border-outline-200'}`}
     >
       <Text
         className={

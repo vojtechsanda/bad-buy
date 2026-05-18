@@ -3,7 +3,6 @@ import { mockAccount, mockAccountHistory } from '@features/account/store';
 import { GreetingView, PriceInput } from '@features/home/components';
 import { CurrencySheet, ScreenContainer } from '@shared/components';
 import { Button, ButtonText } from '@shared/components/ui';
-import { mockAvailableCurrencies } from '@shared/modules/currency/store';
 import { CurrencyCode } from '@shared/modules/currency/types';
 import { isInLast30Days } from '@shared/utils';
 import { useRouter } from 'expo-router';
@@ -64,7 +63,6 @@ export default function HomeScreen() {
       <CurrencySheet
         isOpen={currencySheetOpen}
         onClose={() => setCurrencySheetOpen(false)}
-        currencies={mockAvailableCurrencies}
         selectedCurrency={currency}
         onSelect={(_currency) => {
           setCurrency(_currency);

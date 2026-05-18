@@ -14,7 +14,9 @@ export function OnboardingShell({ children, step, totalSteps, onBack }: Onboardi
 
   const header = (
     <View className="flex-row items-center gap-3 px-5 py-3">
-      {canGoBack && <BackButton onPress={onBack} />}
+      <View style={{ opacity: canGoBack ? 1 : 0 }} pointerEvents={canGoBack ? 'auto' : 'none'}>
+        <BackButton onPress={onBack} />
+      </View>
       <StepProgressBar current={step} total={totalSteps} />
     </View>
   );

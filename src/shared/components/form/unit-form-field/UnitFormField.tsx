@@ -27,6 +27,9 @@ export function UnitFormField({
   const [amountText, setAmountText] = useState(
     amountField.state.value > 0 ? String(amountField.state.value) : '',
   );
+  const hasBeenSubmitted = unitField.form.state.submissionAttempts > 0;
+  const isUnitInvalid =
+    (unitField.state.meta.isTouched || hasBeenSubmitted) && unitField.state.meta.errors.length > 0;
 
   return (
     <FormField field={amountField} label={label} infoMessage={infoMessage}>
@@ -52,6 +55,7 @@ export function UnitFormField({
             onPress={onUnitPress}
             value={unitField.state.value || null}
             placeholder={unitPlaceholder}
+            isInvalid={isUnitInvalid}
           />
         </View>
       </View>

@@ -1,5 +1,5 @@
 import { mockAvailableCurrencies } from '@features/currency';
-import { CurrencyPickerSheet, FormField, SelectFormField } from '@shared/components';
+import { CurrencySheet, FormField, SelectFormField } from '@shared/components';
 import { AnyFieldApi } from '@tanstack/react-form';
 import { useState } from 'react';
 
@@ -31,7 +31,7 @@ export function CurrencyFormField({
         />
       </FormField>
 
-      <CurrencyPickerSheet
+      <CurrencySheet
         isOpen={showSheet}
         onClose={() => setShowSheet(false)}
         currencies={mockAvailableCurrencies}

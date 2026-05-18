@@ -1,6 +1,6 @@
 import { computeTotalItemsPrice } from '@features/account/utils';
-import { CurrencyCode } from '@features/currency/types';
 import { StatisticsCard } from '@shared/components';
+import { CurrencyCode } from '@shared/modules/currency/types';
 import { TrackedItem } from '@shared/types';
 import { formatPrice } from '@shared/utils';
 

@@ -1,7 +1,7 @@
 import BuySendoffSvg from '@assets/illustrations/buy-sendoff.svg';
 import { mockAccountHistory } from '@features/account/store';
-import { PostDecisionFeedback } from '@features/gamification';
 import { Button, ButtonText, IllustrationSvgFrame, ScreenContainer } from '@shared/components';
+import { PostDecisionFeedback } from '@shared/modules/gamification';
 import { router } from 'expo-router';
 import { Text, View } from 'react-native';
 

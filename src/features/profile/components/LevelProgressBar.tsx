@@ -1,4 +1,4 @@
-import { getCurrentLevelInfo } from '@features/gamification';
+import { getCurrentLevelInfo } from '@shared/modules/gamification';
 import { Account } from '@shared/types';
 import { Text, View } from 'react-native';
 

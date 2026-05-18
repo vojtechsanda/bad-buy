@@ -1,5 +1,5 @@
-import { mockAvailableCurrencies } from '@features/currency';
 import { CurrencySheet, UnitFormField } from '@shared/components';
+import { mockAvailableCurrencies } from '@shared/modules/currency';
 import { AnyFieldApi } from '@tanstack/react-form';
 import { useState } from 'react';
 

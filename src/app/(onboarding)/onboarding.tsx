@@ -1,4 +1,3 @@
-import { getCurrencyForCountry } from '@features/currency/utils';
 import {
   HobbyView,
   IdentityFormData,
@@ -8,6 +7,7 @@ import {
   PromoView,
   moneyFormData,
 } from '@features/onboarding';
+import { getCurrencyForCountry } from '@shared/modules/currency/utils';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { BackHandler } from 'react-native';

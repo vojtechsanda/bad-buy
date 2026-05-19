@@ -4,8 +4,8 @@ import { Check } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 
-import { BottomSheet } from '../../layout/bottom-sheet/BottomSheet';
-import { Input, InputField } from '../../ui/input';
+import { BottomSheet } from '../../../components/layout/bottom-sheet/BottomSheet';
+import { Input, InputField } from '../../../components/ui/input';
 
 type CurrencySheetProps = {
   isOpen: boolean;

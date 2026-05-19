@@ -1,5 +1,5 @@
-import { CurrencySheet, FormField, SelectFormField } from '@shared/components';
-import { mockAvailableCurrencies } from '@shared/modules/currency';
+import { FormField, SelectFormField } from '@shared/components';
+import { CurrencySheet, mockAvailableCurrencies } from '@shared/modules/currency';
 import { AnyFieldApi } from '@tanstack/react-form';
 import { useState } from 'react';
 

@@ -1,5 +1,6 @@
 import { CurrencyCode } from '@features/currency/types';
 import { convertToUsd } from '@features/currency/utils';
+import { SkeletonBar } from '@shared/components';
 import { Account } from '@shared/types';
 import { Text, View } from 'react-native';
 
@@ -20,9 +21,9 @@ export function AuditTimePriceView({
 }: AuditTimePriceViewProps) {
   if (isLoading || !account) {
     return (
-      <View className="items-center gap-2 rounded-lg bg-background-100 px-6 py-8">
-        <View className="h-12 w-32 rounded-md bg-background-200" />
-        <View className="mt-1 h-4 w-48 rounded-md bg-background-200" />
+      <View className="items-center gap-4 rounded-lg bg-background-100 px-6 py-8">
+        <SkeletonBar width={128} height={48} />
+        <SkeletonBar width={192} height={16} />
       </View>
     );
   }

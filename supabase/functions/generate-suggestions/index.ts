@@ -20,10 +20,9 @@ const SUPABASE_ANON_KEY = requireEnv('SUPABASE_ANON_KEY');
 // Gemini config
 // =============================================================================
 
-const GEMINI_MODEL = 'gemini-2.5-flash';
+const GEMINI_MODEL = 'gemini-3.1-flash-lite';
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
-/** Must stay under Supabase Edge Function max duration for your plan. */
-const GEMINI_TIMEOUT_MS = 60_000;
+const GEMINI_TIMEOUT_MS = 30_000;
 
 /** OpenAPI-style schema sent to Gemini for structured JSON output. */
 const GEMINI_RESPONSE_SCHEMA = {

@@ -1,10 +1,10 @@
 import { CurrencyCode } from '@features/currency/types';
 import { convertAndFormatFromUsd } from '@features/currency/utils';
-import { Button, PremiumLockGate } from '@shared/components';
+import { Button, PremiumLockGate, SkeletonRowList } from '@shared/components';
 import { themeColor } from '@shared/constants';
 import { AccountSuggestion } from '@shared/types';
 import { RefreshCw } from 'lucide-react-native';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 type AuditSuggestionListViewProps = {
   currency: CurrencyCode;
@@ -43,8 +43,8 @@ export function AuditSuggestionListView({
         )}
       </View>
 
-      {isLoading && suggestions.length === 0 ? (
-        <ActivityIndicator />
+      {isLoading ? (
+        <SkeletonRowList />
       ) : (
         <View>
           {suggestions.map((suggestion, index) => (

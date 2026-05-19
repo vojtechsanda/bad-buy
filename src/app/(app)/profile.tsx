@@ -1,4 +1,3 @@
-import { TotalSavedCard, mockAccount, mockAccountHistory } from '@features/account';
 import {
   LevelProgressBar,
   PremiumInfoView,
@@ -7,6 +6,7 @@ import {
   ProfileSettings,
 } from '@features/profile';
 import { ScreenContainer } from '@shared/components';
+import { TotalSavedCard, mockAccount, mockAccountHistory } from '@shared/modules/account';
 import { View } from 'react-native';
 
 export default function Profile() {

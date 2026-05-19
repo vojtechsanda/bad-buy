@@ -1,5 +1,4 @@
 import SkipCelebrationSvg from '@assets/illustrations/skip-celebration.svg';
-import { mockAccountHistory } from '@features/account';
 import {
   Button,
   ButtonText,
@@ -7,6 +6,7 @@ import {
   IllustrationSvgFrame,
   ScreenContainer,
 } from '@shared/components';
+import { mockAccountHistory } from '@shared/modules/account';
 import { CurrencyCode } from '@shared/modules/currency';
 import { PostDecisionFeedback } from '@shared/modules/gamification';
 import { formatPrice, playCelebrationHaptics } from '@shared/utils';

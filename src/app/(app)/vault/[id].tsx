@@ -1,6 +1,6 @@
-import { mockAccount } from '@features/account';
 import { mockFreezedItems } from '@features/vault';
 import { CountdownPill, ScreenContainer } from '@shared/components';
+import { mockAccount } from '@shared/modules/account';
 import {
   AuditPriceView,
   AuditStickyFooter,

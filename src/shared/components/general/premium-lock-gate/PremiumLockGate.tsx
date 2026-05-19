@@ -1,5 +1,5 @@
-import { mockAccount } from '@features/account';
 import { PremiumUpsellSheet, PromoRedemptionSheet } from '@shared/components/sheets';
+import { mockAccount } from '@shared/modules/account';
 import { ReactNode, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 

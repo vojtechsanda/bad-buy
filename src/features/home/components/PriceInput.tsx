@@ -1,5 +1,5 @@
 import { decimalPlacePrecision, themeColor } from '@shared/constants';
-import { CurrencyCode } from '@shared/modules/currency/types';
+import { CurrencyCode } from '@shared/modules/currency';
 import { ChevronDown } from 'lucide-react-native';
 import { Pressable, Text, TextInput, View } from 'react-native';
 

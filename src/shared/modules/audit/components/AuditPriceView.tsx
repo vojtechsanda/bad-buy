@@ -1,4 +1,4 @@
-import { CurrencyCode } from '@shared/modules/currency/types';
+import { CurrencyCode } from '@shared/modules/currency';
 import { formatPrice } from '@shared/utils';
 import { Text, View } from 'react-native';
 

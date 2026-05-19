@@ -1,5 +1,5 @@
 import SkipCelebrationSvg from '@assets/illustrations/skip-celebration.svg';
-import { mockAccountHistory } from '@features/account/store';
+import { mockAccountHistory } from '@features/account';
 import {
   Button,
   ButtonText,
@@ -7,7 +7,7 @@ import {
   IllustrationSvgFrame,
   ScreenContainer,
 } from '@shared/components';
-import { CurrencyCode } from '@shared/modules/currency/types';
+import { CurrencyCode } from '@shared/modules/currency';
 import { PostDecisionFeedback } from '@shared/modules/gamification';
 import { formatPrice, playCelebrationHaptics } from '@shared/utils';
 import { Redirect, router, useFocusEffect, useLocalSearchParams } from 'expo-router';

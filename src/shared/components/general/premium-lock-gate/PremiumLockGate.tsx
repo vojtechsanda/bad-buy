@@ -1,4 +1,4 @@
-import { mockAccount } from '@features/account/store';
+import { mockAccount } from '@features/account';
 import { PremiumUpsellSheet, PromoRedemptionSheet } from '@shared/components/sheets';
 import { ReactNode, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';

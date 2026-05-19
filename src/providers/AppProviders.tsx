@@ -1,4 +1,4 @@
-import { AuthProvider } from '@features/auth/AuthProvider';
+import { AuthProvider } from '@features/auth';
 import { GluestackUIProvider } from '@providers/gluestack-ui-provider';
 import React, { ReactNode } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';

@@ -7,7 +7,7 @@ import {
   PromoView,
   moneyFormData,
 } from '@features/onboarding';
-import { getCurrencyForCountry } from '@shared/modules/currency/utils';
+import { getCurrencyForCountry } from '@shared/modules/currency';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { BackHandler } from 'react-native';

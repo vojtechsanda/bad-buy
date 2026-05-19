@@ -1,8 +1,9 @@
-import { computeTotalItemsPrice } from '@features/account/utils';
 import { StatisticsCard } from '@shared/components';
-import { CurrencyCode } from '@shared/modules/currency/types';
+import { CurrencyCode } from '@shared/modules/currency';
 import { TrackedItem } from '@shared/types';
 import { formatPrice } from '@shared/utils';
+
+import { computeTotalItemsPrice } from '../utils';
 
 type TotalSavedCardProps = {
   history: TrackedItem[];

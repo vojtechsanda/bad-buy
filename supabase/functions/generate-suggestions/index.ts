@@ -2,10 +2,13 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.105.1';
 import { corsHeaders } from 'https://esm.sh/@supabase/supabase-js@2.105.1/cors';
 import { z } from 'https://esm.sh/zod@3';
 
+// =============================================================================
+// Environment
+// =============================================================================
+
 function requireEnv(name: string): string {
   const value = Deno.env.get(name);
   if (!value) throw new Error(`Missing required environment variable: ${name}`);
-
   return value;
 }
 
@@ -13,12 +16,48 @@ const GEMINI_API_KEY = requireEnv('GEMINI_API_KEY');
 const SUPABASE_URL = requireEnv('SUPABASE_URL');
 const SUPABASE_ANON_KEY = requireEnv('SUPABASE_ANON_KEY');
 
-const GEMINI_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
-const GEMINI_RETRIES = 1;
+// =============================================================================
+// Gemini config
+// =============================================================================
+
+const GEMINI_MODEL = 'gemini-2.5-flash';
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+/** Must stay under Supabase Edge Function max duration for your plan. */
+const GEMINI_TIMEOUT_MS = 60_000;
+
+/** OpenAPI-style schema sent to Gemini for structured JSON output. */
+const GEMINI_RESPONSE_SCHEMA = {
+  type: 'array',
+  minItems: 5,
+  maxItems: 5,
+  description: 'Exactly 5 alternative purchase suggestions.',
+  items: {
+    type: 'object',
+    required: ['hobby_name', 'name', 'item_emoji', 'price_usd'],
+    propertyOrdering: ['hobby_name', 'name', 'item_emoji', 'price_usd'],
+    properties: {
+      hobby_name: {
+        type: 'string',
+        description: 'One of the hobbies from the prompt, spelled exactly.',
+      },
+      name: { type: 'string', description: 'Product name, 2–5 words.' },
+      item_emoji: { type: 'string', description: 'A single emoji for the item.' },
+      price_usd: {
+        type: 'number',
+        minimum: 0.01,
+        description: 'USD equivalent of a typical local-market price (positive number).',
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Validation schemas
+// =============================================================================
 
 const RequestBodySchema = z.object({
-  force_refresh: z.boolean().optional().default(false),
+  /** USD amount the user is about to spend — used to steer suggestion price range. */
+  price_usd: z.number().positive().optional(),
 });
 
 const GeminiSuggestionSchema = z.object({
@@ -30,8 +69,6 @@ const GeminiSuggestionSchema = z.object({
 
 const GeminiResponseSchema = z.array(GeminiSuggestionSchema).length(5);
 
-// Validates the Gemini HTTP response envelope before we touch any nested fields.
-// Ensures candidates[0].content.parts[0].text exists and is non-empty.
 const GeminiEnvelopeSchema = z.object({
   candidates: z
     .array(
@@ -44,6 +81,10 @@ const GeminiEnvelopeSchema = z.object({
     .min(1),
 });
 
+// =============================================================================
+// Types
+// =============================================================================
+
 type GeminiSuggestion = z.infer<typeof GeminiSuggestionSchema>;
 type Hobby = { id: string; hobby_name: string };
 type SuggestionRow = {
@@ -54,11 +95,26 @@ type SuggestionRow = {
   country: string;
 };
 
-function createJsonResponse(data: unknown, status = 200): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-  });
+// =============================================================================
+// Gemini helpers
+// =============================================================================
+
+function buildPrompt(country: string, hobbyNames: string, budgetUsd?: number): string {
+  const budgetLine = budgetUsd
+    ? `The user is about to spend roughly $${budgetUsd.toFixed(2)} USD. Aim for suggestions around that price range (within ~50% above or below).`
+    : 'Aim for a realistic everyday price range for each suggestion.';
+
+  return `You are helping a user of a personal finance app who lives in ${country}.
+Their hobbies are: ${hobbyNames}.
+
+Generate exactly 5 alternative purchase suggestions they could genuinely enjoy — related to those hobbies, as alternatives when they are about to make an impulse buy.
+
+Requirements:
+- Each suggestion must fit ${country}: realistic local products, availability, and prices (not generic US-only). Use hobby_name from the list above, spelled exactly.
+- price_usd must be the USD equivalent of the typical local price (a positive number).
+- ${budgetLine}
+
+Output must follow the response JSON schema only (no markdown, no extra text).`;
 }
 
 async function fetchWithRetry(
@@ -70,72 +126,49 @@ async function fetchWithRetry(
   const res = await fetch(url, options);
   if (!res.ok && res.status >= 500 && retries > 0) {
     await new Promise((resolve) => setTimeout(resolve, delayMs));
-
     return fetchWithRetry(url, options, retries - 1, delayMs);
   }
-
   return res;
 }
 
-function buildSuggestionsPrompt(country: string, hobbyNames: string): string {
-  return `You are helping a user of a personal finance app who lives in ${country}.
-Their hobbies are: ${hobbyNames}.
-
-Generate exactly 5 alternative purchase suggestions this person could genuinely enjoy — things related to their hobbies, shown as alternatives when they are about to make an impulse buy.
-
-Every suggestion must be appropriate for someone living in ${country}: typical local availability, brands or product types people actually buy there, and prices that reflect what they would realistically pay in that market (not generic US-only pricing). Express each price as price_usd: the USD equivalent of that typical local price, as a number.
-
-Return ONLY a valid JSON array with exactly 5 items. No markdown, no explanation, just the array:
-[
-  {
-    "hobby_name": "<one of the provided hobby names, spelled exactly>",
-    "name": "<item name, 2-5 words>",
-    "item_emoji": "<single emoji>",
-    "price_usd": <typical local-market price for ${country}, converted to USD as a number>
-  }
-]`;
-}
-
-async function callGemini(country: string, hobbyNames: string): Promise<GeminiSuggestion[]> {
-  const prompt = buildSuggestionsPrompt(country, hobbyNames);
-
+async function callGemini(
+  country: string,
+  hobbyNames: string,
+  budgetUsd?: number,
+): Promise<GeminiSuggestion[]> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10_000);
+  const timeout = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
 
   let res: Response;
   try {
-    res = await fetchWithRetry(
-      GEMINI_URL,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-goog-api-key': GEMINI_API_KEY,
+    res = await fetchWithRetry(GEMINI_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': GEMINI_API_KEY },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: buildPrompt(country, hobbyNames, budgetUsd) }] }],
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseJsonSchema: GEMINI_RESPONSE_SCHEMA,
         },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: 'application/json' },
-        }),
-        signal: controller.signal,
-      },
-      GEMINI_RETRIES,
-    );
+      }),
+      signal: controller.signal,
+    });
   } finally {
     clearTimeout(timeout);
   }
 
-  if (!res.ok) throw new Error(`Gemini API responded with status ${res.status}`);
+  if (!res.ok) {
+    const detail = (await res.text()).slice(0, 500);
+    throw new Error(`Gemini ${res.status} (${GEMINI_MODEL}): ${detail}`);
+  }
 
-  const envelopeParsed = GeminiEnvelopeSchema.safeParse(await res.json());
-  if (!envelopeParsed.success) {
-    console.error(
-      '[generate-suggestions] Unexpected Gemini envelope',
-      envelopeParsed.error.flatten(),
-    );
+  const envelope = GeminiEnvelopeSchema.safeParse(await res.json());
+  if (!envelope.success) {
+    console.error('[generate-suggestions] Unexpected Gemini envelope', envelope.error.flatten());
     throw new Error('Gemini returned an unexpected response shape');
   }
-  const rawText = envelopeParsed.data.candidates[0].content.parts[0].text;
 
+  const rawText = envelope.data.candidates[0].content.parts[0].text;
   let rawJson: unknown;
   try {
     rawJson = JSON.parse(rawText);
@@ -155,17 +188,20 @@ async function callGemini(country: string, hobbyNames: string): Promise<GeminiSu
   return parsed.data;
 }
 
+// =============================================================================
+// DB helpers
+// =============================================================================
+
 function toSuggestionRows(
-  aiSuggestions: GeminiSuggestion[],
+  suggestions: GeminiSuggestion[],
   hobbies: Hobby[],
   country: string,
 ): SuggestionRow[] {
-  // Map hobby_name → hobby_id; fall back to first hobby if Gemini misspelled a name
   const hobbyMap = new Map(hobbies.map((h) => [h.hobby_name.toLowerCase(), h.id]));
-  const fallbackHobbyId = hobbies[0].id;
+  const fallbackId = hobbies[0].id;
 
-  return aiSuggestions.map((s) => ({
-    hobby_id: hobbyMap.get(s.hobby_name.toLowerCase()) ?? fallbackHobbyId,
+  return suggestions.map((s) => ({
+    hobby_id: hobbyMap.get(s.hobby_name.toLowerCase()) ?? fallbackId,
     name: s.name,
     item_emoji: s.item_emoji,
     price_usd: s.price_usd,
@@ -173,11 +209,22 @@ function toSuggestionRows(
   }));
 }
 
+// =============================================================================
+// Request handler
+// =============================================================================
+
+function jsonResponse(data: unknown, status = 200): Response {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
 async function handleRequest(req: Request): Promise<Response> {
   const authHeader = req.headers.get('Authorization');
-  if (!authHeader) return createJsonResponse({ error: 'Missing authorization' }, 401);
+  if (!authHeader) return jsonResponse({ error: 'Missing authorization' }, 401);
 
-  // Use user's JWT so RLS applies correctly — we can only see/modify our own data.
+  // Use the caller's JWT so RLS applies; the function only sees that user's rows.
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     global: { headers: { Authorization: authHeader } },
   });
@@ -186,29 +233,23 @@ async function handleRequest(req: Request): Promise<Response> {
     data: { user },
     error: authError,
   } = await supabase.auth.getUser();
-  if (authError || !user) return createJsonResponse({ error: 'Unauthorized' }, 401);
+  if (authError || !user) return jsonResponse({ error: 'Unauthorized' }, 401);
 
-  // Falls back to {} when Content-Type is absent/wrong (uses force_refresh: false by default)
   const rawBody = req.headers.get('content-type')?.includes('application/json')
     ? await req.json()
     : {};
-  const { force_refresh: forceRefresh } = RequestBodySchema.parse(rawBody);
+  const { price_usd: priceUsd } = RequestBodySchema.parse(rawBody);
 
   const { data: account, error: accountError } = await supabase
     .from('account')
     .select('country, premium_expires_at')
     .eq('id', user.id)
     .single();
-  if (accountError || !account) return createJsonResponse({ error: 'Account not found' }, 404);
+  if (accountError || !account) return jsonResponse({ error: 'Account not found' }, 404);
 
+  const isPremium =
+    account.premium_expires_at != null && new Date(account.premium_expires_at) > new Date();
   const { country } = account;
-
-  if (forceRefresh) {
-    const isPremium =
-      account.premium_expires_at != null && new Date(account.premium_expires_at) > new Date();
-    if (!isPremium)
-      return createJsonResponse({ error: 'Premium required to refresh suggestions' }, 403);
-  }
 
   const { data: hobbies, error: hobbiesError } = await supabase
     .from('account_hobby')
@@ -216,43 +257,57 @@ async function handleRequest(req: Request): Promise<Response> {
     .eq('account_id', user.id)
     .eq('is_moderated', true);
   if (hobbiesError) throw hobbiesError;
-  if (!hobbies || hobbies.length === 0) return createJsonResponse({ suggestions: [] });
+  if (!hobbies?.length) return jsonResponse({ suggestions: [] });
 
   const hobbyIds = hobbies.map((h) => h.id);
 
-  if (!forceRefresh) {
+  // Free users: return cached suggestions if any exist for this hobby+country combo.
+  // Premium users: always regenerate so suggestions reflect the current entered price.
+  if (!isPremium) {
     const { data: cached } = await supabase
       .from('account_suggestion')
       .select('*')
       .in('hobby_id', hobbyIds)
       .eq('country', country);
-
-    if (cached && cached.length > 0) return createJsonResponse({ suggestions: cached });
+    if (cached?.length) return jsonResponse({ suggestions: cached });
   }
 
-  const hobbyNames = hobbies.map((h) => h.hobby_name).join(', ');
-  const aiSuggestions = await callGemini(country, hobbyNames);
+  const aiSuggestions = await callGemini(
+    country,
+    hobbies.map((h) => h.hobby_name).join(', '),
+    priceUsd,
+  );
   const rows = toSuggestionRows(aiSuggestions, hobbies, country);
+
+  // Replace all existing suggestions for these hobbies + country so old rows
+  // don't accumulate.
+  const { error: deleteError } = await supabase
+    .from('account_suggestion')
+    .delete()
+    .in('hobby_id', hobbyIds)
+    .eq('country', country);
+  if (deleteError) throw deleteError;
 
   const { data: inserted, error: insertError } = await supabase
     .from('account_suggestion')
-    .upsert(rows, { onConflict: 'hobby_id,country' })
+    .insert(rows)
     .select();
   if (insertError) throw insertError;
 
-  return createJsonResponse({ suggestions: inserted });
+  return jsonResponse({ suggestions: inserted });
 }
 
+// =============================================================================
+// Entry point
+// =============================================================================
+
 Deno.serve(async (req: Request) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
     return await handleRequest(req);
   } catch (err) {
     console.error('[generate-suggestions]', err);
-
-    return createJsonResponse({ error: 'Internal server error' }, 500);
+    return jsonResponse({ error: 'Internal server error' }, 500);
   }
 });

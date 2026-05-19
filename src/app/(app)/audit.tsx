@@ -5,8 +5,9 @@ import {
   AuditTimePriceView,
 } from '@features/audit/components';
 import { AuditStickyFooter } from '@features/audit/components/AuditStickyFooter';
-import { mockSuggestions } from '@features/audit/store';
+import { useSuggestions } from '@features/audit/hooks';
 import { CurrencyCode } from '@features/currency/types';
+import { convertToUsd } from '@features/currency/utils';
 import { ScreenContainer } from '@shared/components';
 import { Redirect, useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
@@ -15,7 +16,8 @@ export default function AuditScreen() {
   const { price, currency } = useLocalSearchParams<{ price: string; currency: CurrencyCode }>();
 
   const account = mockAccount;
-  const suggestions = mockSuggestions;
+  const priceUsd = price && currency ? convertToUsd(price, currency) : undefined;
+  const { suggestions, isLoading, refresh } = useSuggestions(priceUsd);
 
   if (!price || !currency) {
     return <Redirect href="/(app)/home" />;
@@ -28,7 +30,12 @@ export default function AuditScreen() {
 
         <AuditTimePriceView price={price} currency={currency} account={account} />
 
-        <AuditSuggestionListView currency={currency} suggestions={suggestions} />
+        <AuditSuggestionListView
+          currency={currency}
+          suggestions={suggestions}
+          isLoading={isLoading}
+          onRefresh={refresh}
+        />
       </View>
     </ScreenContainer>
   );

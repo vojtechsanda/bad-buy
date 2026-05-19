@@ -5,7 +5,7 @@ import {
   AuditSuggestionListView,
   AuditTimePriceView,
 } from '@features/audit/components';
-import { mockSuggestions } from '@features/audit/store';
+import { useSuggestions } from '@features/audit/hooks';
 import { convertFromUsd } from '@features/currency/utils';
 import { mockFreezedItems } from '@features/vault/store';
 import { CountdownPill, ScreenContainer } from '@shared/components';
@@ -15,7 +15,7 @@ import { View } from 'react-native';
 export default function VaultItemDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const suggestions = mockSuggestions;
+  const { suggestions, isLoading } = useSuggestions();
   const item = mockFreezedItems.find((item) => item.id === id);
   const account = mockAccount;
 
@@ -56,7 +56,7 @@ export default function VaultItemDetail() {
         <AuditSuggestionListView
           currency={item.price_currency}
           suggestions={suggestions}
-          showRefresh={false}
+          isLoading={isLoading}
         />
       </View>
     </ScreenContainer>

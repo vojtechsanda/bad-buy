@@ -1,4 +1,4 @@
-import { mockAccount } from '@features/account/store';
+import { useAccount } from '@features/account/hooks';
 import { BottomSheet } from '@shared/components/layout';
 import { Button, ButtonText } from '@shared/components/ui';
 import { ReactNode, useState } from 'react';
@@ -9,12 +9,12 @@ type PremiumLockGateProps = {
 };
 
 export function PremiumLockGate({ children }: PremiumLockGateProps) {
-  const account = mockAccount;
+  const { account } = useAccount();
 
   const [premiumUpsellSheetOpen, setPremiumUpsellSheetOpen] = useState(false);
 
   const hasActivePremium =
-    account.premium_expires_at && new Date(account.premium_expires_at) > new Date();
+    account?.premium_expires_at != null && new Date(account.premium_expires_at) > new Date();
 
   if (hasActivePremium) {
     return <>{children}</>;

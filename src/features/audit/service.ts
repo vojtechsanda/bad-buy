@@ -1,33 +1,36 @@
 import { supabase } from '@shared/services/supabase';
 import type { AccountSuggestion } from '@shared/types';
 
-async function invokeSuggestions(forceRefresh = false): Promise<AccountSuggestion[]> {
-  // call supabase edge function
+/**
+ * Fetch suggestions for the current user.
+ *
+ * Free users: returns cached suggestions if any exist for the current hobbies + country;
+ * only calls Gemini when there is nothing cached (new hobby or new country).
+ *
+ * Premium users: always calls Gemini so the returned suggestions reflect the current
+ * entered price.
+ *
+ * Pass `priceUsd` to steer Gemini toward alternatives around that budget.
+ */
+export async function fetchSuggestions(priceUsd?: number): Promise<AccountSuggestion[]> {
   const { data, error } = await supabase.functions.invoke<{ suggestions: AccountSuggestion[] }>(
     'generate-suggestions',
-    { body: { force_refresh: forceRefresh } },
+    { body: { price_usd: priceUsd } },
   );
 
-  if (error) throw error;
+  if (error) {
+    const httpError = error as { context?: Response };
+    const status = httpError.context?.status ?? 'unknown';
+    const body = httpError.context
+      ? await httpError.context.text().catch(() => '(unreadable)')
+      : '';
+    console.warn('[generate-suggestions] error', { status, body, message: error.message });
+    throw error;
+  }
+
+  console.log('[generate-suggestions] ok', {
+    suggestionCount: Array.isArray(data?.suggestions) ? data.suggestions.length : null,
+  });
 
   return data?.suggestions ?? [];
-}
-
-/**
- * Get suggestions for the current user.
- *
- * Only generates new suggestions if none exist for the current country and hobbies
- */
-export function fetchSuggestions(): Promise<AccountSuggestion[]> {
-  return invokeSuggestions();
-}
-
-/**
- * Regenerate suggestions for the current user (premium only).
- *
- * Throws a `FunctionsHttpError` on failure. Check `error.context?.status === 403`
- * to distinguish a paywall error from a generic failure.
- */
-export function refreshSuggestions(): Promise<AccountSuggestion[]> {
-  return invokeSuggestions(true);
 }

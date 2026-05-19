@@ -41,7 +41,10 @@ const GEMINI_RESPONSE_SCHEMA = {
         description: 'One of the hobbies from the prompt, spelled exactly.',
       },
       name: { type: 'string', description: 'Product name, 2–5 words.' },
-      item_emoji: { type: 'string', description: 'A single emoji for the item.' },
+      item_emoji: {
+        type: 'string',
+        description: 'A single emoji for the item.',
+      },
       price_usd: {
         type: 'number',
         minimum: 0.01,
@@ -96,6 +99,40 @@ type SuggestionRow = {
 };
 
 // =============================================================================
+// Rate limiting
+// =============================================================================
+
+const FREE_LIMITS = { min: 10, hour: 30, day: 60, month: 100 } as const;
+const PREMIUM_HOUR_CAP = 30;
+
+type WindowName = 'min' | 'hour' | 'day' | 'month';
+type WindowKeys = Record<WindowName, string>;
+
+function getWindowKeys(now: Date): WindowKeys {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const y = now.getUTCFullYear();
+  const mo = pad(now.getUTCMonth() + 1);
+  const d = pad(now.getUTCDate());
+  const h = pad(now.getUTCHours());
+  const m = pad(now.getUTCMinutes());
+  return {
+    min: `min:${y}-${mo}-${d}T${h}:${m}`,
+    hour: `hour:${y}-${mo}-${d}T${h}`,
+    day: `day:${y}-${mo}-${d}`,
+    month: `month:${y}-${mo}`,
+  };
+}
+
+function secondsUntilNextWindow(now: Date, window: WindowName): number {
+  const ms = now.getTime();
+  if (window === 'min') return 60 - Math.floor((ms / 1000) % 60);
+  if (window === 'hour') return 3600 - Math.floor((ms / 1000) % 3600);
+  if (window === 'day') return 86400 - Math.floor((ms / 1000) % 86400);
+  const nextMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
+  return Math.ceil((nextMonth.getTime() - ms) / 1000);
+}
+
+// =============================================================================
 // Gemini helpers
 // =============================================================================
 
@@ -143,7 +180,10 @@ async function callGemini(
   try {
     res = await fetchWithRetry(GEMINI_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': GEMINI_API_KEY },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': GEMINI_API_KEY,
+      },
       body: JSON.stringify({
         contents: [{ parts: [{ text: buildPrompt(country, hobbyNames, budgetUsd) }] }],
         generationConfig: {
@@ -261,6 +301,59 @@ async function handleRequest(req: Request): Promise<Response> {
 
   const hobbyIds = hobbies.map((h) => h.id);
 
+  // --- Rate limiting ---
+  const now = new Date();
+  const windows = getWindowKeys(now);
+  const allWindowKeys = [windows.min, windows.hour, windows.day, windows.month];
+
+  const { data: rlRows, error: rlError } = await supabase.rpc('increment_suggestion_rate_limit', {
+    p_user_id: user.id,
+    p_window_keys: allWindowKeys,
+  });
+  if (rlError) throw rlError;
+
+  const countMap = new Map(
+    (rlRows as Array<{ out_window_key: string; out_count: number }>).map((r) => [
+      r.out_window_key,
+      r.out_count,
+    ]),
+  );
+
+  if (isPremium) {
+    if ((countMap.get(windows.hour) ?? 0) > PREMIUM_HOUR_CAP) {
+      const { data: cached } = await supabase
+        .from('account_suggestion')
+        .select('*')
+        .in('hobby_id', hobbyIds)
+        .eq('country', country);
+      return jsonResponse({ suggestions: cached ?? [] });
+    }
+  } else {
+    const exceeded: WindowName | null =
+      (countMap.get(windows.min) ?? 0) > FREE_LIMITS.min
+        ? 'min'
+        : (countMap.get(windows.hour) ?? 0) > FREE_LIMITS.hour
+          ? 'hour'
+          : (countMap.get(windows.day) ?? 0) > FREE_LIMITS.day
+            ? 'day'
+            : (countMap.get(windows.month) ?? 0) > FREE_LIMITS.month
+              ? 'month'
+              : null;
+
+    if (exceeded) {
+      const retryAfter = secondsUntilNextWindow(now, exceeded);
+      return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
+        status: 429,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json',
+          'Retry-After': String(retryAfter),
+        },
+      });
+    }
+  }
+  // --- End rate limiting ---
+
   // Free users: return cached suggestions if any exist for this hobby+country combo.
   // Premium users: always regenerate so suggestions reflect the current entered price.
   if (!isPremium) {
@@ -277,6 +370,7 @@ async function handleRequest(req: Request): Promise<Response> {
     hobbies.map((h) => h.hobby_name).join(', '),
     priceUsd,
   );
+
   const rows = toSuggestionRows(aiSuggestions, hobbies, country);
 
   // Replace all existing suggestions for these hobbies + country so old rows

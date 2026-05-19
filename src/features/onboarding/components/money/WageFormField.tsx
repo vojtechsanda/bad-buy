@@ -1,4 +1,5 @@
-import { CurrencySheet, UnitFormField } from '@shared/components';
+import { UnitFormField } from '@shared/components';
+import { CurrencySheet } from '@shared/modules/currency';
 import { AnyFieldApi } from '@tanstack/react-form';
 import { useState } from 'react';
 

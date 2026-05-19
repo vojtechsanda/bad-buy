@@ -1,8 +1,9 @@
 import { TotalSavedCard } from '@features/account/components';
 import { mockAccount, mockAccountHistory } from '@features/account/store';
 import { GreetingView, PriceInput } from '@features/home/components';
-import { CurrencySheet, ScreenContainer } from '@shared/components';
+import { ScreenContainer } from '@shared/components';
 import { Button, ButtonText } from '@shared/components/ui';
+import { CurrencySheet } from '@shared/modules/currency';
 import { CurrencyCode } from '@shared/modules/currency/types';
 import { isInLast30Days } from '@shared/utils';
 import { useRouter } from 'expo-router';

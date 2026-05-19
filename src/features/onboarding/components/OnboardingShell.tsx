@@ -13,8 +13,13 @@ export function OnboardingShell({ children, step, totalSteps, onBack }: Onboardi
   const canGoBack = step > 1;
 
   const header = (
-    <View className="flex-row items-center gap-3 px-5 py-3">
-      <View style={{ opacity: canGoBack ? 1 : 0 }} pointerEvents={canGoBack ? 'auto' : 'none'}>
+    <View className="flex-row items-center px-5 py-3">
+      <View
+        style={
+          canGoBack ? { opacity: 1, width: 'auto', marginRight: 12 } : { opacity: 0, width: 0 }
+        }
+        pointerEvents={canGoBack ? 'auto' : 'none'}
+      >
         <BackButton onPress={onBack} />
       </View>
       <StepProgressBar current={step} total={totalSteps} />

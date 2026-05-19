@@ -1,12 +1,11 @@
-import { TotalSavedCard } from '@features/account/components';
-import { mockAccount, mockAccountHistory } from '@features/account/store';
+import { TotalSavedCard, mockAccount, mockAccountHistory } from '@features/account';
 import {
   LevelProgressBar,
   PremiumInfoView,
   ProfileIdentityView,
   ProfileReferral,
   ProfileSettings,
-} from '@features/profile/components';
+} from '@features/profile';
 import { ScreenContainer } from '@shared/components';
 import { View } from 'react-native';
 

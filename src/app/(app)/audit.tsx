@@ -1,13 +1,13 @@
-import { mockAccount } from '@features/account/store';
+import { mockAccount } from '@features/account';
 import { ScreenContainer } from '@shared/components';
 import {
   AuditPriceView,
+  AuditStickyFooter,
   AuditSuggestionListView,
   AuditTimePriceView,
-} from '@shared/modules/audit/components';
-import { AuditStickyFooter } from '@shared/modules/audit/components/AuditStickyFooter';
-import { mockSuggestions } from '@shared/modules/audit/store';
-import { CurrencyCode } from '@shared/modules/currency/types';
+  mockSuggestions,
+} from '@shared/modules/audit';
+import { CurrencyCode } from '@shared/modules/currency';
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
 import { View } from 'react-native';
 

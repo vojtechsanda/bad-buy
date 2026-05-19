@@ -1,4 +1,4 @@
-import { getAccountPictureUrl } from '@features/account/utils';
+import { getAccountPictureUrl } from '@features/account';
 import { getCurrentLevelInfo } from '@shared/modules/gamification';
 import { Account } from '@shared/types';
 import { Image } from 'expo-image';

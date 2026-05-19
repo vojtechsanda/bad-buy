@@ -1,11 +1,10 @@
+import { BottomSheet, Input, InputField } from '@shared/components';
 import { themeColor } from '@shared/constants';
-import { mockAvailableCurrencies } from '@shared/modules/currency';
 import { Check } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 
-import { BottomSheet } from '../../../components/layout/bottom-sheet/BottomSheet';
-import { Input, InputField } from '../../../components/ui/input';
+import { mockAvailableCurrencies } from '../store';
 
 type CurrencySheetProps = {
   isOpen: boolean;

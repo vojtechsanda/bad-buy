@@ -1,5 +1,4 @@
-import { VaultEmptyView, VaultSection } from '@features/vault/components';
-import { mockFreezedItems } from '@features/vault/store';
+import { VaultEmptyView, VaultSection, mockFreezedItems } from '@features/vault';
 import { ScreenContainer } from '@shared/components';
 import { View } from 'react-native';
 

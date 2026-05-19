@@ -1,5 +1,4 @@
-import { CurrencyCode } from '@shared/modules/currency/types';
-import { convertToUsd } from '@shared/modules/currency/utils';
+import { CurrencyCode, convertToUsd } from '@shared/modules/currency';
 import { Account } from '@shared/types';
 import { Text, View } from 'react-native';
 

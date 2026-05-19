@@ -1,6 +1,6 @@
 import { CountdownPill } from '@shared/components';
 import { themeColor } from '@shared/constants';
-import { convertAndFormatFromUsd } from '@shared/modules/currency/utils';
+import { convertAndFormatFromUsd } from '@shared/modules/currency';
 import { TrackedItem } from '@shared/types';
 import { useRouter } from 'expo-router';
 import { ChevronRight, Clock, Snowflake } from 'lucide-react-native';

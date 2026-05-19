@@ -1,5 +1,5 @@
-import { mockAccount } from '@features/account';
 import { ScreenContainer } from '@shared/components';
+import { mockAccount } from '@shared/modules/account';
 import {
   AuditPriceView,
   AuditStickyFooter,

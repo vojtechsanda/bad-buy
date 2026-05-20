@@ -17,8 +17,10 @@ async function listPredefinedHobbies(): Promise<PredefinedHobby[]> {
   return data ?? [];
 }
 
-// Returns all predefined hobbies, grouped by category.
-// Categories are sorted alphabetically; hobbies inside each category preserve their sort_order.
+/*
+ * Returns all predefined hobbies, grouped by category.
+ * Categories are sorted alphabetically; hobbies inside each category preserve their sort_order.
+ */
 async function listGroupedByCategory(): Promise<Record<string, PredefinedHobby[]>> {
   const rows = await listPredefinedHobbies();
 

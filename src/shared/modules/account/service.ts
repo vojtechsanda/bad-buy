@@ -28,11 +28,11 @@ async function redeemCode(input: RedeemCodeInput): Promise<RedeemCodeResponse> {
   const trimmed = input.code.trim().toUpperCase();
   if (!trimmed) throw new RedeemCodeError('not_found');
 
-  // TODO: replace with edge function call
+  // TODO: replace with redeem-code edge function call
 
   return { premium_expires_at: MOCK_PREMIUM_EXPIRES_AT };
 }
 
-export const edgeFunctions = {
+export const accountService = {
   redeemCode,
 };

@@ -1,28 +1,35 @@
 import { PredefinedHobby } from '@shared/types';
 
+import { assertNoError } from './errors';
+import {
+  type ChannelStatus,
+  type RealtimePayload,
+  type RealtimeSubscription,
+  subscribeToTable,
+} from './realtime';
 import { supabase } from '../../services/supabase';
 
 /**
  * Returns all predefined hobbies, sorted by category and sort_order.
  */
-async function listPredefinedHobbies(): Promise<PredefinedHobby[]> {
+async function list(): Promise<PredefinedHobby[]> {
   const { data, error } = await supabase
     .from('predefined_hobby')
     .select('*')
     .order('category', { ascending: true })
     .order('sort_order', { ascending: true });
 
-  if (error) throw error;
+  assertNoError(error);
 
   return data ?? [];
 }
 
-/*
- * Returns all predefined hobbies, grouped by category.
- * Categories are sorted alphabetically; hobbies inside each category preserve their sort_order.
+/**
+ * Returns all predefined hobbies grouped by category.
+ * Categories are sorted alphabetically; hobbies within each category preserve sort_order.
  */
 async function listGroupedByCategory(): Promise<Record<string, PredefinedHobby[]>> {
-  const rows = await listPredefinedHobbies();
+  const rows = await list();
 
   return rows.reduce<Record<string, PredefinedHobby[]>>((acc, hobby) => {
     (acc[hobby.category] ??= []).push(hobby);
@@ -31,7 +38,24 @@ async function listGroupedByCategory(): Promise<Record<string, PredefinedHobby[]
   }, {});
 }
 
+/**
+ * Subscribes to any row changes on the predefined_hobby table.
+ *
+ * @param onError - Optional handler for subscription-level errors.
+ */
+function subscribe(
+  onChange: (payload: RealtimePayload<PredefinedHobby>) => void,
+  onError?: (error: Error, status: ChannelStatus) => void,
+): RealtimeSubscription {
+  return subscribeToTable<PredefinedHobby>(
+    { channel: 'predefined-hobby', table: 'predefined_hobby' },
+    onChange,
+    onError,
+  );
+}
+
 export const predefinedHobbyService = {
-  listPredefinedHobbies,
+  list,
   listGroupedByCategory,
+  subscribe,
 };

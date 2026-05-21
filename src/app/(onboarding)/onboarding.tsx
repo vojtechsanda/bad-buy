@@ -1,11 +1,11 @@
 import {
+  HobbyFormData,
   HobbyView,
+  IdentityFormData,
   IdentityView,
   MoneyView,
   OnboardingShell,
   PromoView,
-  hobbyFormData,
-  identityFormData,
   moneyFormData,
 } from '@features/onboarding';
 import { getCurrencyForCountry } from '@shared/modules/currency';
@@ -18,11 +18,11 @@ export default function Onboarding() {
   const totalSteps = step === 4 ? 4 : 3;
 
   const [identityData, setIdentityData] = useState<{
-    data: identityFormData;
+    data: IdentityFormData;
     currency: string;
   } | null>(null);
   const [moneyData, setMoneyData] = useState<moneyFormData | null>(null);
-  const [hobbyData, setHobbyData] = useState<hobbyFormData | null>(null);
+  const [hobbyData, setHobbyData] = useState<HobbyFormData | null>(null);
 
   useFocusEffect(
     useCallback(() => {

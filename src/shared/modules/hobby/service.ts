@@ -1,6 +1,6 @@
 import { PredefinedHobby } from '@shared/types';
 
-import { supabase } from './supabase';
+import { supabase } from '../../services/supabase';
 
 /**
  * Returns all predefined hobbies, sorted by category and sort_order.

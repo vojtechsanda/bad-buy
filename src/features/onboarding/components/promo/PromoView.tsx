@@ -1,4 +1,4 @@
-import { Input, InputField, ScreenContainer } from '@shared/components';
+import { ErrorMessage, Input, InputField, ScreenContainer } from '@shared/components';
 import { ReactNode, useState } from 'react';
 import { Text, View } from 'react-native';
 
@@ -12,7 +12,7 @@ type PromoViewProps = {
 
 export function PromoView({ onComplete, screenHeader }: PromoViewProps) {
   const [code, setCode] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const error = null;
 
   return (
     <ScreenContainer
@@ -37,10 +37,7 @@ export function PromoView({ onComplete, screenHeader }: PromoViewProps) {
             <Input size="2xl" style={{ height: 56 }}>
               <InputField
                 value={code}
-                onChangeText={(text) => {
-                  setCode(text.toUpperCase());
-                  setError(null);
-                }}
+                onChangeText={(text) => setCode(text.toLocaleUpperCase())}
                 placeholder="ENTER CODE"
                 autoCapitalize="characters"
                 autoCorrect={false}
@@ -48,7 +45,7 @@ export function PromoView({ onComplete, screenHeader }: PromoViewProps) {
                 className="font-mono tracking-widest"
               />
             </Input>
-            {error ? <Text className="mt-1 text-xs text-error-700">{error}</Text> : null}
+            <ErrorMessage message={error} />
           </View>
 
           <Text className="px-12 text-center font-nunito text-body  text-typography-600 ">

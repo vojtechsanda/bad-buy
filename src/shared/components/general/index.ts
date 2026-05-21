@@ -7,4 +7,4 @@ export * from './step-progress-bar';
 export * from './date-picker';
 export * from './back-button';
 export * from './error-message';
-export * from './hobby-chip';
+export * from './selectable-chip';

@@ -10,15 +10,15 @@ import { useForm, useStore } from '@tanstack/react-form';
 import { ReactNode } from 'react';
 import { Text, View } from 'react-native';
 
-import { hobbyFormData, hobbyFormSchema } from '../../schemas';
+import { HobbyFormData, hobbyFormSchema } from '../../schemas';
 import { OnboardingStickyFooter } from '../OnboardingStickyFooter';
 import { OnboardingTitle } from '../OnboardingTitle';
 
 type HobbyViewProps = {
-  onComplete: (data: hobbyFormData) => void;
+  onComplete: (data: HobbyFormData) => void;
   onPromoLinkTap: () => void;
   onSelectionChange?: (ids: string[]) => void;
-  defaultValues?: hobbyFormData;
+  defaultValues?: HobbyFormData;
   screenHeader?: ReactNode;
 };
 
@@ -55,14 +55,16 @@ export function HobbyView({
         <OnboardingStickyFooter
           onPress={form.handleSubmit}
           disabled={!hasMinimum}
-          onPromoLinkTap={hasMinimum ? onPromoLinkTap : undefined}
+          onPromoLinkTap={onPromoLinkTap}
+          promoLinkDisabled={!hasMinimum}
         />
       }
     >
       <View className="gap-6">
         <OnboardingTitle
           title="What are you into?"
-          subtitle="Pick at least 3. We'll use these to suggest alternatives — like 'this jacket = 4 climbing-gym sessions'."
+          subtitle="Pick at least 3. We'll use these to suggest alternatives."
+          infoMessage="For example: 'this jacket = 4 climbing-gym sessions'."
         />
 
         <Text

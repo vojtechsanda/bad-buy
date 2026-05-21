@@ -7,7 +7,7 @@ export const identityFormSchema = z.object({
   countryIso2: z.string().min(2, { message: 'Please select a country' }),
 });
 
-export type identityFormData = z.infer<typeof identityFormSchema>;
+export type IdentityFormData = z.infer<typeof identityFormSchema>;
 
 export const moneyFormSchema = z.object({
   displayCurrency: z.string().min(1, { message: 'Please select a display currency' }),
@@ -28,4 +28,4 @@ export const hobbyFormSchema = z.object({
     .array(z.string())
     .min(MIN_HOBBY_SELECTION, `Select at least ${MIN_HOBBY_SELECTION} hobbies`),
 });
-export type hobbyFormData = z.infer<typeof hobbyFormSchema>;
+export type HobbyFormData = z.infer<typeof hobbyFormSchema>;

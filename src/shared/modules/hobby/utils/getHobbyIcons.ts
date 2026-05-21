@@ -8,6 +8,7 @@ import {
   Code2,
   Coffee,
   Gamepad2,
+  HelpCircle,
   Leaf,
   type LucideIcon,
   Mic,
@@ -41,6 +42,13 @@ const HOBBY_ICON_MAP: Record<string, LucideIcon> = {
   Leaf,
 };
 
-export function getHobbyIcon(name: string): LucideIcon | undefined {
-  return HOBBY_ICON_MAP[name];
+export function getHobbyIcon(name: string): LucideIcon {
+  const icon = HOBBY_ICON_MAP[name];
+  if (!icon) {
+    console.warn(`No icon found for hobby "${name}", using fallback.`);
+
+    return HelpCircle;
+  }
+
+  return icon;
 }

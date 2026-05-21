@@ -28,7 +28,7 @@ export function PromoView({ onComplete, screenHeader }: PromoViewProps) {
       <View className="gap-6">
         <OnboardingTitle
           title="Got a referral code?"
-          subtitle="Enter it below to unlock rewards."
+          subtitle="Enter your promo or referral code to unlock 3 months of Premium."
         />
         <Input size="3xl">
           <InputField

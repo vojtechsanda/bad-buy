@@ -1,13 +1,8 @@
-export type PredefinedHobby = {
-  id: string;
-  name: string;
-  lucide_icon: string;
-  category: string;
-  sort_order: number;
-};
+import type { PredefinedHobby } from '@shared/types';
+
+export type { PredefinedHobby } from '@shared/types';
 
 export const hobbyCategories = ['Sports', 'Music', 'Food', 'Creative', 'Tech', 'Outdoors'] as const;
-
 export const mockHobbies: PredefinedHobby[] = [
   // Sports
   { id: '1', name: 'Cycling', lucide_icon: 'Bike', category: 'Sports', sort_order: 1 },

@@ -1,10 +1,11 @@
 import {
   HobbyView,
-  IdentityFormData,
   IdentityView,
   MoneyView,
   OnboardingShell,
   PromoView,
+  hobbyFormData,
+  identityFormData,
   moneyFormData,
 } from '@features/onboarding';
 import { getCurrencyForCountry } from '@shared/modules/currency';
@@ -14,24 +15,31 @@ import { BackHandler } from 'react-native';
 
 export default function Onboarding() {
   const [step, setStep] = useState(1);
-  const [totalSteps] = useState<3 | 4>(3);
+  const totalSteps = step === 4 ? 4 : 3;
+
   const [identityData, setIdentityData] = useState<{
-    data: IdentityFormData;
+    data: identityFormData;
     currency: string;
   } | null>(null);
   const [moneyData, setMoneyData] = useState<moneyFormData | null>(null);
+  const [hobbyData, setHobbyData] = useState<hobbyFormData | null>(null);
 
   useFocusEffect(
     useCallback(() => {
-      const backHandlerSubscription = BackHandler.addEventListener('hardwareBackPress', () => {
+      const sub = BackHandler.addEventListener('hardwareBackPress', () => {
         if (step > 1) setStep((s) => Math.max(1, s - 1));
 
         return true;
       });
 
-      return () => backHandlerSubscription.remove();
+      return () => sub.remove();
     }, [step]),
   );
+
+  function completeOnboarding() {
+    console.log('onboarding complete', { identityData, moneyData, hobbyData });
+    router.replace('/(app)/home');
+  }
 
   return (
     <OnboardingShell
@@ -49,7 +57,6 @@ export default function Onboarding() {
               screenHeader={header}
               defaultValues={identityData?.data}
               onComplete={(data) => {
-                console.log('identity complete', data);
                 setIdentityData({ data, currency: getCurrencyForCountry(data.countryIso2) });
                 setStep(2);
               }}
@@ -61,7 +68,6 @@ export default function Onboarding() {
               defaultCurrency={identityData.currency}
               defaultValues={moneyData ?? undefined}
               onComplete={(data) => {
-                console.log('money complete', data);
                 setMoneyData(data);
                 setStep(3);
               }}
@@ -70,22 +76,16 @@ export default function Onboarding() {
           {step === 3 && (
             <HobbyView
               screenHeader={header}
-              onComplete={() => {
-                console.log('hobby complete');
-                setStep(4);
+              defaultValues={hobbyData ?? undefined}
+              onSelectionChange={(ids) => setHobbyData({ selectedIds: ids })}
+              onPromoLinkTap={() => setStep(4)}
+              onComplete={(data) => {
+                setHobbyData(data);
+                completeOnboarding();
               }}
             />
           )}
-          {step === 4 && (
-            <PromoView
-              screenHeader={header}
-              onComplete={() => {
-                // TODO: submit to Supabase
-                console.log('onboarding complete', { identityData, moneyData });
-                router.replace('/(app)/home');
-              }}
-            />
-          )}
+          {step === 4 && <PromoView screenHeader={header} onComplete={completeOnboarding} />}
         </>
       )}
     </OnboardingShell>

@@ -1,3 +1,4 @@
+import { MIN_HOBBY_SELECTION } from '@shared/modules/hobby';
 import { z } from 'zod';
 
 export const identityFormSchema = z.object({
@@ -6,7 +7,7 @@ export const identityFormSchema = z.object({
   countryIso2: z.string().min(2, { message: 'Please select a country' }),
 });
 
-export type IdentityFormData = z.infer<typeof identityFormSchema>;
+export type identityFormData = z.infer<typeof identityFormSchema>;
 
 export const moneyFormSchema = z.object({
   displayCurrency: z.string().min(1, { message: 'Please select a display currency' }),
@@ -21,3 +22,10 @@ export const moneyFormSchema = z.object({
 });
 
 export type moneyFormData = z.infer<typeof moneyFormSchema>;
+
+export const hobbyFormSchema = z.object({
+  selectedIds: z
+    .array(z.string())
+    .min(MIN_HOBBY_SELECTION, `Select at least ${MIN_HOBBY_SELECTION} hobbies`),
+});
+export type hobbyFormData = z.infer<typeof hobbyFormSchema>;

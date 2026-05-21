@@ -4,16 +4,16 @@ import { useForm } from '@tanstack/react-form';
 import { ReactNode } from 'react';
 import { View } from 'react-native';
 
-import { IdentityFormData, identityFormSchema } from '../../schemas';
+import { identityFormData, identityFormSchema } from '../../schemas';
 import { OnboardingStickyFooter } from '../OnboardingStickyFooter';
 import { OnboardingTitle } from '../OnboardingTitle';
 import { BirthdateFormField } from './BirthdateFormField';
 import { CountryFormField } from './CountryFormField';
 
 type IdentityViewProps = {
-  onComplete: (data: IdentityFormData) => void;
+  onComplete: (data: identityFormData) => void;
   screenHeader?: ReactNode;
-  defaultValues?: IdentityFormData;
+  defaultValues?: identityFormData;
 };
 
 export function IdentityView({ onComplete, screenHeader, defaultValues }: IdentityViewProps) {
@@ -27,7 +27,7 @@ export function IdentityView({ onComplete, screenHeader, defaultValues }: Identi
     validators: { onDynamic: identityFormSchema },
     onSubmit: async ({ value }) => {
       console.log('identity', value);
-      onComplete(value as IdentityFormData);
+      onComplete(value as identityFormData);
     },
   });
 

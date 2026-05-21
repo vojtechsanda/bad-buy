@@ -9,10 +9,11 @@ export function convertToUsd(
   fromCurrency: CurrencyCode,
   customRate?: number,
 ): number {
-  const rate = customRate !== undefined ? customRate : (mockExchangeRates[fromCurrency] ?? 0);
+  // rate = 1 USD → N units of fromCurrency (matches DB currency_rate.rate convention)
+  const rate = customRate !== undefined ? customRate : (mockExchangeRates[fromCurrency] ?? 1);
   const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
 
-  return numericAmount * rate;
+  return numericAmount / rate;
 }
 
 export function convertAndFormatToUsd(

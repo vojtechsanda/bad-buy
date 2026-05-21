@@ -35,7 +35,7 @@ export type Database = {
           name: string;
           notifications_enabled?: boolean;
           premium_expires_at?: string | null;
-          referral_code: string;
+          referral_code?: string;
           wage_currency: string;
           work_hours_per_day?: number;
         };
@@ -117,6 +117,7 @@ export type Database = {
         Row: {
           country: string;
           generated_at: string;
+          generation_budget_usd: number | null;
           hobby_id: string;
           id: string;
           item_emoji: string | null;
@@ -126,6 +127,7 @@ export type Database = {
         Insert: {
           country: string;
           generated_at?: string;
+          generation_budget_usd?: number | null;
           hobby_id: string;
           id?: string;
           item_emoji?: string | null;
@@ -135,6 +137,7 @@ export type Database = {
         Update: {
           country?: string;
           generated_at?: string;
+          generation_budget_usd?: number | null;
           hobby_id?: string;
           id?: string;
           item_emoji?: string | null;
@@ -356,6 +359,24 @@ export type Database = {
           },
         ];
       };
+      suggestion_rate_limit: {
+        Row: {
+          count: number;
+          user_id: string;
+          window_key: string;
+        };
+        Insert: {
+          count?: number;
+          user_id: string;
+          window_key: string;
+        };
+        Update: {
+          count?: number;
+          user_id?: string;
+          window_key?: string;
+        };
+        Relationships: [];
+      };
       tracked_item: {
         Row: {
           account_id: string;
@@ -421,7 +442,13 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      increment_suggestion_rate_limit: {
+        Args: { p_user_id: string; p_window_keys: string[] };
+        Returns: {
+          out_count: number;
+          out_window_key: string;
+        }[];
+      };
     };
     Enums: {
       notification_type: 'freeze_thawed';

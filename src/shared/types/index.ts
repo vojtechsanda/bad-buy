@@ -1,4 +1,6 @@
-import type { Enums, Tables } from './database';
+import type { Enums, Tables, TablesInsert, TablesUpdate } from './database';
+
+export type { TablesInsert, TablesUpdate };
 
 export type NotificationType = Enums<'notification_type'>;
 export type TrackedItemStatus = Enums<'tracked_item_status'>;
@@ -13,3 +15,4 @@ export type PredefinedHobby = Tables<'predefined_hobby'>;
 export type PromoCode = Tables<'promo_code'>;
 export type ReferralRedemption = Tables<'referral_redemption'>;
 export type TrackedItem = Tables<'tracked_item'>;
+export type TrackedItemSuggestion = Tables<'tracked_item_suggestion'>;

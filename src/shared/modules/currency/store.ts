@@ -4,15 +4,15 @@ import { CurrencyCode } from './types';
 
 export const mockExchangeRates: Record<CurrencyCode, number> = {
   USD: 1,
-  EUR: 1.08,
-  GBP: 1.27,
-  CZK: 0.044,
-  PLN: 0.25,
-  CHF: 1.13,
-  HUF: 0.0028,
-  JPY: 0.0066,
-  CAD: 0.74,
-  AUD: 0.65,
+  EUR: 0.926,
+  GBP: 0.787,
+  CZK: 22.73,
+  PLN: 4.0,
+  CHF: 0.885,
+  HUF: 357.14,
+  JPY: 151.52,
+  CAD: 1.351,
+  AUD: 1.538,
 };
 
 export const mockAvailableCurrencies: Currency[] = [

@@ -10,7 +10,7 @@ import { useForm, useStore } from '@tanstack/react-form';
 import { ReactNode } from 'react';
 import { Text, View } from 'react-native';
 
-import { hobbyFormData } from '../../schemas';
+import { hobbyFormData, hobbyFormSchema } from '../../schemas';
 import { OnboardingStickyFooter } from '../OnboardingStickyFooter';
 import { OnboardingTitle } from '../OnboardingTitle';
 
@@ -32,6 +32,7 @@ export function HobbyView({
   const form = useForm({
     defaultValues: { selectedIds: defaultValues?.selectedIds ?? ([] as string[]) },
     validationLogic: defaultFormValidationLogic,
+    validators: { onDynamic: hobbyFormSchema },
     onSubmit: async ({ value }) => onComplete(value),
   });
 

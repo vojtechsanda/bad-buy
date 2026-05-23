@@ -50,7 +50,6 @@ export function HobbyView({
     <ScreenContainer
       header={screenHeader}
       withSafeAreaTop
-      scrollable
       stickyBottom={
         <OnboardingStickyFooter
           onPress={form.handleSubmit}

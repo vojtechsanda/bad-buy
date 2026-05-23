@@ -2,14 +2,14 @@ import { themeColor } from '@shared/constants';
 import { LucideIcon } from 'lucide-react-native';
 import { Pressable, Text } from 'react-native';
 
-type HobbyChipProps = {
+type SelectableChipProps = {
   label: string;
   icon: LucideIcon;
   selected: boolean;
   onPress: () => void;
 };
 
-export function HobbyChip({ label, icon: Icon, selected, onPress }: HobbyChipProps) {
+export function SelectableChip({ label, icon: Icon, selected, onPress }: SelectableChipProps) {
   return (
     <Pressable
       onPress={onPress}

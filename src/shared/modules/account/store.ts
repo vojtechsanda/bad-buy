@@ -88,3 +88,5 @@ export const mockAccount: Account = {
   wage_currency: 'EUR',
   work_hours_per_day: 8,
 };
+
+export const mockAccountHobbies: string[] = ['1', '6', '9', '12', '15'];

@@ -1,4 +1,5 @@
 import { MIN_HOBBY_SELECTION } from '@shared/modules/hobby';
+import { financialInfoFields } from '@shared/schemas/finance';
 import { z } from 'zod';
 
 export const identityFormSchema = z.object({
@@ -10,17 +11,12 @@ export const identityFormSchema = z.object({
 export type IdentityFormData = z.infer<typeof identityFormSchema>;
 
 export const moneyFormSchema = z.object({
-  displayCurrency: z.string().min(1, { message: 'Please select a display currency' }),
-  hourlyWage: z
-    .number({ error: 'Please enter your hourly wage' })
-    .positive({ message: 'Wage must be greater than 0' }),
-  wageCurrency: z.string().min(1, { message: 'Please select a wage currency' }),
+  ...financialInfoFields,
   workHoursPerDay: z
     .number()
     .min(0.5, { message: 'Min 0.5 hours' })
     .max(24, { message: 'Max 24 hours' }),
 });
-
 export type moneyFormData = z.infer<typeof moneyFormSchema>;
 
 export const hobbyFormSchema = z.object({

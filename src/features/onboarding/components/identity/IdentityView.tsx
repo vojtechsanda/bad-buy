@@ -1,4 +1,4 @@
-import { InputFormField, ScreenContainer } from '@shared/components';
+import { CountryFormField, InputFormField, ScreenContainer } from '@shared/components';
 import { defaultFormValidationLogic } from '@shared/constants';
 import { useForm } from '@tanstack/react-form';
 import { ReactNode } from 'react';
@@ -9,7 +9,6 @@ import { IdentityFormData, identityFormSchema } from '../../schemas';
 import { OnboardingStickyFooter } from '../OnboardingStickyFooter';
 import { OnboardingTitle } from '../OnboardingTitle';
 import { BirthdateFormField } from './BirthdateFormField';
-import { CountryFormField } from './CountryFormField';
 
 type IdentityViewProps = {
   onComplete: (data: IdentityFormData, currency: string) => void;

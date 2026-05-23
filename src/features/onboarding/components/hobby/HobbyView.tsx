@@ -18,7 +18,7 @@ type HobbyViewProps = {
   onComplete: (data: HobbyFormData) => void;
   onPromoLinkTap: () => void;
   onSelectionChange?: (ids: string[]) => void;
-  defaultValues?: HobbyFormData;
+  defaultValues?: HobbyFormData | null;
   screenHeader?: ReactNode;
 };
 

@@ -1,18 +1,11 @@
-import {
-  BottomSheet,
-  Button,
-  ButtonText,
-  PremiumUpsellSheet,
-  PromoRedemptionSheet,
-} from '@shared/components';
+import { PremiumUpsellSheet, PromoRedemptionSheet } from '@shared/components';
 import { Switch } from '@shared/components/ui/switch';
 import { Account } from '@shared/types';
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import { SettingsRow } from './SettingsRow';
-import { DeleteAccountSheet } from './sheets/DeleteAccountSheet';
-import { LogoutSheet } from './sheets/LogoutSheet';
+import { DeleteAccountSheet, LogoutSheet, PersonalInfoEditSheet } from './sheets';
 
 type ProfileSettingsProps = {
   account: Account;
@@ -48,22 +41,11 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
         <SettingsRow label="Delete account" danger onPress={() => setDeleteOpen(true)} isLastRow />
       </View>
 
-      <BottomSheet isOpen={personalInfoOpen} onClose={() => setPersonalInfoOpen(false)}>
-        <Text className="font-nunito-bold text-heading text-typography-900">Personal info</Text>
-        <Text className="mt-2 font-nunito text-body text-typography-600">
-          Personal info edit sheet — coming soon.
-        </Text>
-        <View className="mt-6">
-          <Button
-            variant="outline"
-            action="primary"
-            size="md"
-            onPress={() => setPersonalInfoOpen(false)}
-          >
-            <ButtonText>Close</ButtonText>
-          </Button>
-        </View>
-      </BottomSheet>
+      <PersonalInfoEditSheet
+        isOpen={personalInfoOpen}
+        onClose={() => setPersonalInfoOpen(false)}
+        account={account}
+      />
 
       <PremiumUpsellSheet
         isOpen={upsellOpen}

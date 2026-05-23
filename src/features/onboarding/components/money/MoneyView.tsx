@@ -1,4 +1,4 @@
-import { ScreenContainer } from '@shared/components';
+import { CurrencyFormField, ScreenContainer, WageFormField } from '@shared/components';
 import { StepperField } from '@shared/components/form/stepper-field';
 import { defaultFormValidationLogic } from '@shared/constants';
 import { useForm, useStore } from '@tanstack/react-form';
@@ -8,14 +8,12 @@ import { View } from 'react-native';
 import { moneyFormData, moneyFormSchema } from '../../schemas';
 import { OnboardingStickyFooter } from '../OnboardingStickyFooter';
 import { OnboardingTitle } from '../OnboardingTitle';
-import { CurrencyFormField } from './CurrencyFormField';
-import { WageFormField } from './WageFormField';
 
 type MoneyViewProps = {
   onComplete: (data: moneyFormData) => void;
   defaultCurrency: string;
   screenHeader?: ReactNode;
-  defaultValues?: moneyFormData;
+  defaultValues?: moneyFormData | null;
 };
 
 export function MoneyView({

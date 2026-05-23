@@ -9,5 +9,4 @@ export const personalInfoEditSchema = financialInfoSchema.extend({
     .min(1, { message: 'Min 1 hour' })
     .max(16, { message: 'Max 16 hours' }),
 });
-
 export type PersonalInfoEditData = z.infer<typeof personalInfoEditSchema>;

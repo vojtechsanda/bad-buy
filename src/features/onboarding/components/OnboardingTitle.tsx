@@ -1,6 +1,5 @@
-import { themeColor } from '@shared/constants';
-import { Info } from 'lucide-react-native';
-import { Alert, Pressable, Text, View } from 'react-native';
+import { InfoAlertButton } from '@shared/components/general/info-alert-button/InfoAlertButton';
+import { Text, View } from 'react-native';
 
 type OnboardingTitleProps = {
   title: string;
@@ -16,11 +15,7 @@ export function OnboardingTitle({ title, subtitle, infoMessage }: OnboardingTitl
         <View className="flex-row items-center gap-1.5">
           <Text className="flex-1 font-nunito text-heading text-typography-500">
             {subtitle}
-            {infoMessage && (
-              <Pressable onPress={() => Alert.alert('Better suggestions', infoMessage)} hitSlop={8}>
-                <Info size={14} strokeWidth={2} color={themeColor.typography400} />
-              </Pressable>
-            )}
+            {infoMessage && <InfoAlertButton title="Better suggestions" message={infoMessage} />}
           </Text>
         </View>
       )}

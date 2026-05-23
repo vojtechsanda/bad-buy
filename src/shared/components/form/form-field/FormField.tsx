@@ -1,13 +1,12 @@
+import { InfoAlertButton } from '@shared/components';
 import {
   FormControl,
   FormControlLabel,
   FormControlLabelText,
 } from '@shared/components/ui/form-control';
-import { themeColor } from '@shared/constants';
 import { AnyFieldApi } from '@tanstack/react-form';
-import { Info } from 'lucide-react-native';
 import { ReactNode } from 'react';
-import { Alert, Pressable, Text } from 'react-native';
+import { Text } from 'react-native';
 
 type FormFieldProps = {
   field: AnyFieldApi;
@@ -33,20 +32,12 @@ export function FormField({
   const subText = isInvalid ? errorMessage : (helperText ?? '');
   const subTextColor = isInvalid ? 'text-error-700' : 'text-typography-500';
 
-  const handleInfo = () => {
-    if (!infoMessage) return;
-    Alert.alert(label, infoMessage);
-  };
-
   return (
     <FormControl isInvalid={isInvalid}>
       <FormControlLabel className="gap-1.5">
         <FormControlLabelText>{label}</FormControlLabelText>
-        {infoMessage && (
-          <Pressable onPress={handleInfo} hitSlop={8}>
-            <Info size={14} strokeWidth={2} color={themeColor.typography400} />
-          </Pressable>
-        )}
+        {infoMessage && <InfoAlertButton title={label} message={infoMessage} />}
+
         {labelTrailing}
       </FormControlLabel>
       {typeof children === 'function' ? children(isInvalid) : children}

@@ -1,4 +1,4 @@
-import { HobbyChip } from '@shared/components';
+import { SelectableChip } from '@shared/components';
 import { Text, View } from 'react-native';
 
 import { PredefinedHobby } from '../store';
@@ -22,7 +22,7 @@ export function HobbyCategoryGroup({
       <Text className="font-nunito-bold text-body text-typography-900">{category}</Text>
       <View className="flex-row flex-wrap gap-2">
         {hobbies.map((hobby) => (
-          <HobbyChip
+          <SelectableChip
             key={hobby.id}
             label={hobby.name}
             icon={getHobbyIcon(hobby.lucide_icon)}

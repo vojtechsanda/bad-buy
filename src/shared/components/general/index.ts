@@ -8,3 +8,4 @@ export * from './date-picker';
 export * from './back-button';
 export * from './error-message';
 export * from './selectable-chip';
+export * from './info-alert-button';

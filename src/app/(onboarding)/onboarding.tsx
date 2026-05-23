@@ -26,13 +26,13 @@ export default function Onboarding() {
 
   useFocusEffect(
     useCallback(() => {
-      const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+      const backhandlerSubscription = BackHandler.addEventListener('hardwareBackPress', () => {
         if (step > 1) setStep((s) => Math.max(1, s - 1));
 
         return true;
       });
 
-      return () => sub.remove();
+      return () => backhandlerSubscription.remove();
     }, [step]),
   );
 

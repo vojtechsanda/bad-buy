@@ -16,7 +16,6 @@ export const moneyFormSchema = financialInfoSchema.extend({
     .min(0.5, { message: 'Min 0.5 hours' })
     .max(24, { message: 'Max 24 hours' }),
 });
-
 export type moneyFormData = z.infer<typeof moneyFormSchema>;
 
 export const hobbyFormSchema = z.object({

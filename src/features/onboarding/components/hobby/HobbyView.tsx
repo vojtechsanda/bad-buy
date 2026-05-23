@@ -1,11 +1,6 @@
 import { ScreenContainer } from '@shared/components';
 import { defaultFormValidationLogic } from '@shared/constants';
-import {
-  HobbyCategoryGroup,
-  MIN_HOBBY_SELECTION,
-  hobbyCategories,
-  mockHobbies,
-} from '@shared/modules/hobby';
+import { MIN_HOBBY_SELECTION, PredefinedHobbyGrid } from '@shared/modules/hobby';
 import { useForm, useStore } from '@tanstack/react-form';
 import { ReactNode } from 'react';
 import { Text, View } from 'react-native';
@@ -74,17 +69,7 @@ export function HobbyView({
           {selectedIds.length} / minimum {MIN_HOBBY_SELECTION} selected
         </Text>
 
-        <View className="gap-6">
-          {hobbyCategories.map((category) => (
-            <HobbyCategoryGroup
-              key={category}
-              category={category}
-              hobbies={mockHobbies.filter((h) => h.category === category)}
-              selectedIds={selectedIds}
-              onToggle={toggleHobby}
-            />
-          ))}
-        </View>
+        <PredefinedHobbyGrid selectedIds={selectedIds} onToggle={toggleHobby} />
       </View>
     </ScreenContainer>
   );

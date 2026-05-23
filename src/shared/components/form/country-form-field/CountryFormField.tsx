@@ -1,8 +1,7 @@
 import { CountrySheet, FormField, SelectFormField } from '@shared/components';
+import { mockCountries } from '@shared/constants';
 import { AnyFieldApi } from '@tanstack/react-form';
 import { useState } from 'react';
-
-import { mockCountries } from '../../store';
 
 type CountryFormFieldProps = { field: AnyFieldApi };
 

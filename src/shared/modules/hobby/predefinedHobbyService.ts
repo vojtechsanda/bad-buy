@@ -1,13 +1,12 @@
-import { PredefinedHobby } from '@shared/types';
-
-import { assertNoError } from './errors';
 import {
   type ChannelStatus,
   type RealtimePayload,
   type RealtimeSubscription,
   subscribeToTable,
-} from './realtime';
-import { supabase } from '../../services/supabase';
+} from '@shared/services/realtime';
+import { supabase } from '@shared/services/supabase';
+import { PredefinedHobby } from '@shared/types';
+import { assertNoError } from '@shared/utils/errors';
 
 /**
  * Returns all predefined hobbies, sorted by category and sort_order.

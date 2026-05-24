@@ -35,8 +35,9 @@ export function HobbyView({
   const hasMinimum = selectedIds.length >= MIN_HOBBY_SELECTION;
 
   function toggleHobby(id: string) {
-    const current = form.state.values.selectedIds;
-    const next = current.includes(id) ? current.filter((i) => i !== id) : [...current, id];
+    const next = selectedIds.includes(id)
+      ? selectedIds.filter((i) => i !== id)
+      : [...selectedIds, id];
     form.setFieldValue('selectedIds', next);
     onSelectionChange?.(next);
   }

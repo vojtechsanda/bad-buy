@@ -66,7 +66,7 @@ export default function Onboarding() {
             <MoneyView
               screenHeader={header}
               defaultCurrency={identityData.currency}
-              defaultValues={moneyData ?? undefined}
+              defaultValues={moneyData}
               onComplete={(data) => {
                 setMoneyData(data);
                 setStep(3);
@@ -76,7 +76,7 @@ export default function Onboarding() {
           {step === 3 && (
             <HobbyView
               screenHeader={header}
-              defaultValues={hobbyData ?? undefined}
+              defaultValues={hobbyData}
               onSelectionChange={(ids) => setHobbyData({ selectedIds: ids })}
               onPromoLinkTap={() => setStep(4)}
               onComplete={(data) => {

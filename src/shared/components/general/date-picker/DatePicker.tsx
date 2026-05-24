@@ -46,6 +46,37 @@ export function DatePicker({ isOpen, onClose, value, onChange, maximumDate }: Da
           </Button>
         </BottomSheet>
       )}
+
+      {Platform.OS === 'web' && (
+        <BottomSheet isOpen={isOpen} onClose={onClose}>
+          <Text className="mb-4 font-nunito-bold text-heading text-typography-900">
+            Select date
+          </Text>
+          <input
+            type="date"
+            value={value.toLocaleDateString('en-CA')}
+            max={maximumDate?.toLocaleDateString('en-CA')}
+            onChange={(e) => {
+              if (e.target.value) {
+                const [year, month, day] = e.target.value.split('-').map(Number);
+                onChange(new Date(year, month - 1, day));
+              }
+            }}
+            style={{
+              width: '100%',
+              padding: '12px',
+              fontSize: '16px',
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px',
+              marginBottom: '16px',
+              color: '#111827',
+            }}
+          />
+          <Button onPress={onClose} className="mt-4">
+            <ButtonText className="font-nunito-bold text-white">Done</ButtonText>
+          </Button>
+        </BottomSheet>
+      )}
     </>
   );
 }

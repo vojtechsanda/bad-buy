@@ -4,18 +4,19 @@ import type { AccountSuggestion } from '@shared/types';
 /**
  * Fetch suggestions for the current user.
  *
- * Free users: returns cached suggestions if any exist for the current hobbies + country;
- * only calls Gemini when there is nothing cached (new hobby or new country).
- *
- * Premium users: always calls Gemini so the returned suggestions reflect the current
- * entered price.
+ * Both free and premium users are served from the cache unless `forceRefresh` is true.
+ * A forced refresh bypasses the cache and triggers a new Gemini call — only available
+ * to premium users via the explicit refresh button on the audit screen.
  *
  * Pass `priceUsd` to steer Gemini toward alternatives around that budget.
  */
-export async function fetchSuggestions(priceUsd?: number): Promise<AccountSuggestion[]> {
+export async function fetchSuggestions(
+  priceUsd?: number,
+  forceRefresh = false,
+): Promise<AccountSuggestion[]> {
   const { data, error } = await supabase.functions.invoke<{ suggestions: AccountSuggestion[] }>(
     'generate-suggestions',
-    { body: { price_usd: priceUsd } },
+    { body: { price_usd: priceUsd, force_refresh: forceRefresh } },
   );
 
   if (error) {

@@ -154,6 +154,32 @@ export type Database = {
           },
         ];
       };
+      country: {
+        Row: {
+          code: string;
+          default_currency: string;
+          name: string;
+        };
+        Insert: {
+          code: string;
+          default_currency: string;
+          name: string;
+        };
+        Update: {
+          code?: string;
+          default_currency?: string;
+          name?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'country_default_currency_fkey';
+            columns: ['default_currency'];
+            isOneToOne: false;
+            referencedRelation: 'currency';
+            referencedColumns: ['code'];
+          },
+        ];
+      };
       currency: {
         Row: {
           code: string;

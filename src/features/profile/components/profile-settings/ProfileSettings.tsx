@@ -1,3 +1,4 @@
+import { mockAccountHobbies } from '@shared/modules/account';
 import { Account } from '@shared/types';
 import { useState } from 'react';
 import { View } from 'react-native';
@@ -32,7 +33,11 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
         onClose={() => setPersonalInfoOpen(false)}
         account={account}
       />
-      <HobbiesSheet isOpen={hobbiesOpen} onClose={() => setHobbiesOpen(false)} />
+      <HobbiesSheet
+        isOpen={hobbiesOpen}
+        onClose={() => setHobbiesOpen(false)}
+        hobbyIds={mockAccountHobbies} // TODO: replace with account.hobby_ids (#121)
+      />
       <LogoutSheet isOpen={logoutOpen} onClose={() => setLogoutOpen(false)} />
       <DeleteAccountSheet isOpen={deleteAccountOpen} onClose={() => setDeleteAccountOpen(false)} />
     </View>

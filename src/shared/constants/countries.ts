@@ -1,12 +1,12 @@
 import { Country } from '@shared/components';
 import { mockCountryToCurrency } from '@shared/modules/currency';
 import getUnicodeFlagIcon from 'country-flag-icons/unicode';
-import countries_i18n from 'i18n-iso-countries';
+import countries_i18n from 'i18n-iso-countries/index';
 import en from 'i18n-iso-countries/langs/en.json';
 
 countries_i18n.registerLocale(en);
 
-const getCountryName = (iso2: string) => countries_i18n.getName(iso2, 'en') ?? iso2;
+const getCountryName = (iso2: string): string => countries_i18n.getName(iso2, 'en') ?? iso2;
 
 const allIso2: string[] = (() => {
   try {

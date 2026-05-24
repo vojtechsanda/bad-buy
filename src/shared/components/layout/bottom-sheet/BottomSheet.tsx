@@ -1,6 +1,7 @@
 import { UIActionsheet } from '@shared/components/ui/actionsheet';
 import { BlurView } from 'expo-blur';
 import { ReactNode } from 'react';
+import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useScreenContainerBlurRefContext } from '../screen-container';
@@ -23,8 +24,30 @@ export function BottomSheet({
 }: BottomSheetProps) {
   const insets = useSafeAreaInsets();
   const snapPoints = typeof heightMode === 'number' ? [heightMode * 100] : undefined;
-
   const blurRef = useScreenContainerBlurRefContext();
+
+  if (Platform.OS === 'web') {
+    return (
+      <UIActionsheet isOpen={isOpen} onClose={onClose} snapPoints={snapPoints}>
+        <UIActionsheet.Backdrop className="absolute inset-0 bg-typography-900/40" />
+        <UIActionsheet.Content
+          className="rounded-t-lg px-5 shadow-floating"
+          style={{
+            paddingBottom: insets.bottom + 24,
+            backgroundColor: '#FFFFFF',
+            paddingHorizontal: 24,
+          }}
+        >
+          {showHandle && (
+            <UIActionsheet.DragIndicatorWrapper className="w-full items-center pb-2 pt-5">
+              <UIActionsheet.DragIndicator className="h-1 w-9 rounded-full bg-outline-200" />
+            </UIActionsheet.DragIndicatorWrapper>
+          )}
+          {children}
+        </UIActionsheet.Content>
+      </UIActionsheet>
+    );
+  }
 
   return (
     <UIActionsheet isOpen={isOpen} onClose={onClose} snapPoints={snapPoints} useRNModal>

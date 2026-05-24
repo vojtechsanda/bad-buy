@@ -669,13 +669,13 @@ When read, notifications are filtered out of the panel by default. There is no "
 
 ### 5.11 Edge Functions
 
-| Function                | Trigger                                                                                               | Purpose                                                                                                                                                                                                                                                                              |
-| ----------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `generate-suggestions`  | Called from app when audit page loads and no fresh suggestions exist for the user's hobbies + country | Calls AI provider, stores rows in `user_suggestion`                                                                                                                                                                                                                                  |
-| `sync-currency-rates`   | `pg_cron`, daily at 04:00 UTC                                                                         | Fetches USD-base rates from fawazahmed0/exchange-api; upserts into `currency` (code, name, symbol) first, then upserts into `currency_rate` (base `USD`, target, rate, fetched_at). Parses API response with a Zod schema before writing. `pg_cron` job is registered via migration. |
-| `moderate-custom-hobby` | Called from app when premium user adds a custom hobby                                                 | Async moderation; sets `is_moderated = true` if it passes                                                                                                                                                                                                                            |
-| `redeem-code`           | Called when user submits a code                                                                       | Validates code (exists, not self, not previously redeemed by this user, has uses left for seed codes), grants 3 months to redeemer (and to referrer if user-referral), inserts `referral_redemption` row                                                                             |
-| `process-thawed-items`  | `pg_cron`, every 5 minutes                                                                            | Finds tracked_items where `status = 'frozen' AND freeze_until <= now()` AND no notification row exists yet; creates `notification` row + sends push if user opted in                                                                                                                 |
+| Function                | Trigger                                                                                                        | Purpose                                                                                                                                                                                                                                                                              |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `generate-suggestions`  | Called from app on audit load (cache miss for any tier) or on explicit premium refresh (`force_refresh: true`) | Calls AI provider (Gemini), stores rows in `account_suggestion`; both free and premium users are served from cache unless a forced refresh is requested                                                                                                                              |
+| `sync-currency-rates`   | `pg_cron`, daily at 04:00 UTC                                                                                  | Fetches USD-base rates from fawazahmed0/exchange-api; upserts into `currency` (code, name, symbol) first, then upserts into `currency_rate` (base `USD`, target, rate, fetched_at). Parses API response with a Zod schema before writing. `pg_cron` job is registered via migration. |
+| `moderate-custom-hobby` | Called from app when premium user adds a custom hobby                                                          | Async moderation; sets `is_moderated = true` if it passes                                                                                                                                                                                                                            |
+| `redeem-code`           | Called when user submits a code                                                                                | Validates code (exists, not self, not previously redeemed by this user, has uses left for seed codes), grants 3 months to redeemer (and to referrer if user-referral), inserts `referral_redemption` row                                                                             |
+| `process-thawed-items`  | `pg_cron`, every 5 minutes                                                                                     | Finds tracked_items where `status = 'frozen' AND freeze_until <= now()` AND no notification row exists yet; creates `notification` row + sends push if user opted in                                                                                                                 |
 
 ### 5.12 Row Level Security
 
@@ -1242,13 +1242,13 @@ Screens are documented in the order a new user would encounter them.
 
 6. **Alternatives section header** (horizontal row, padded):
    - Left: heading (`heading`): "What else this could buy"
-   - Right: `RefreshCw` icon button (Gluestack `Button` variant `link` with icon-only). For free users, the button has a small `PRO` badge overlay (`PremiumLockBadge` component). Tapping (free): opens the **Premium upsell sheet**. Tapping (premium): refetches suggestions, the button shows a brief spinner state during the fetch.
+   - Right: `RefreshCw` icon button (Gluestack `Button` variant `link` with icon-only). For free users, the button has a small `PRO` badge overlay (`PremiumLockBadge` component). Tapping (free): opens the **Premium upsell sheet**. Tapping (premium): triggers a forced refresh, bypassing the cache; the button is disabled while the fetch is in flight.
 
-7. **Alternatives list** (vertical stack of 5 rows):
+7. **Alternatives list** (vertical stack of up to 5 rows):
    - Each row: emoji (left, ~32px), name (`body-lg`, primary), price (`body`, `text-secondary`, right-aligned). One row per suggestion. Rows separated by a thin `border` divider.
-   - The 5 suggestions are pulled from `user_suggestion`. If fewer than 5 exist for the user's hobbies, the system shows what it has plus a placeholder: "More coming soon."
+   - Suggestions are pulled from `account_suggestion`. Both free and premium users are served from the cache on initial audit load; premium users bypass the cache only on an explicit refresh tap.
    - **AI failure state:** if the suggestions call fails entirely, this section shows centered text in `text-secondary` ("Couldn't load suggestions") + a small primary "Try again" button. The work-hours block above remains intact.
-   - **Loading state:** while suggestions are being generated for the first time, this section shows a centered spinner with caption "Brewing some ideas…".
+   - **Loading state:** skeleton rows (`SkeletonRowList`) fill the section to maintain height while suggestions are loading or refreshing.
 
 8. Vertical spacing (`8`).
 
@@ -1769,28 +1769,27 @@ A consolidated reference of every non-default state across screens.
 
 ### 12.1 Empty States
 
-| Screen                    | Empty Condition                  | Treatment                                                                                                           |
-| ------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Home — saved amount       | No skipped items in last 30 days | Amount renders as "—". Caption: "Nothing yet — your first skip will land here."                                     |
-| Audit — alternatives list | Fewer than 5 suggestions exist   | Show what's there + placeholder row "More coming soon."                                                             |
-| Vault                     | No tracked items at all          | Centered illustration + headline "Nothing on ice." + caption "When you freeze a decision, it'll wait for you here." |
-| Notifications panel       | No unread notifications          | Centered text "You're all caught up." in `text-secondary`. No illustration.                                         |
-| Profile — referral block  | (always populated, never empty)  | —                                                                                                                   |
+| Screen                   | Empty Condition                  | Treatment                                                                                                           |
+| ------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Home — saved amount      | No skipped items in last 30 days | Amount renders as "—". Caption: "Nothing yet — your first skip will land here."                                     |
+| Vault                    | No tracked items at all          | Centered illustration + headline "Nothing on ice." + caption "When you freeze a decision, it'll wait for you here." |
+| Notifications panel      | No unread notifications          | Centered text "You're all caught up." in `text-secondary`. No illustration.                                         |
+| Profile — referral block | (always populated, never empty)  | —                                                                                                                   |
 
 ### 12.2 Loading States
 
-| Screen                                | Loading Condition                                  | Treatment                                                                               |
-| ------------------------------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Login / Register submit               | Network call in flight                             | Button label replaced with `Spinner`, button disabled                                   |
-| Onboarding step submit                | Saving user                                        | Same as above                                                                           |
-| Audit — work hours                    | (instantaneous, no loading)                        | —                                                                                       |
-| Audit — alternatives                  | First call to `generate-suggestions` for this user | Centered `Spinner` in alternatives section + caption "Brewing some ideas…"              |
-| Audit — refresh suggestions (premium) | Refresh in flight                                  | `RefreshCw` icon spins; rows briefly fade to half opacity                               |
-| Code redemption                       | Backend validating                                 | Submit button shows `Spinner`                                                           |
-| Freeze sheet submit                   | Creating tracked_item                              | Submit button shows `Spinner`                                                           |
-| Vault list                            | Initial load                                       | Skeleton rows (3–4 placeholder rows with shimmering `surface-alt` blocks)               |
-| Profile                               | Initial load                                       | Skeleton blocks (avatar circle, name line, progress bar, stat card, settings list rows) |
-| Notifications panel                   | Loading from Supabase                              | Brief skeleton, then content. (Usually negligible.)                                     |
+| Screen                                | Loading Condition                                     | Treatment                                                                               |
+| ------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Login / Register submit               | Network call in flight                                | Button label replaced with `Spinner`, button disabled                                   |
+| Onboarding step submit                | Saving user                                           | Same as above                                                                           |
+| Audit — work hours                    | (instantaneous, no loading)                           | —                                                                                       |
+| Audit — alternatives                  | Initial load (cache miss) or explicit premium refresh | `SkeletonRowList` fills the section to maintain height while fetching                   |
+| Audit — refresh suggestions (premium) | Refresh in flight                                     | Refresh button disabled for the duration of the fetch                                   |
+| Code redemption                       | Backend validating                                    | Submit button shows `Spinner`                                                           |
+| Freeze sheet submit                   | Creating tracked_item                                 | Submit button shows `Spinner`                                                           |
+| Vault list                            | Initial load                                          | Skeleton rows (3–4 placeholder rows with shimmering `surface-alt` blocks)               |
+| Profile                               | Initial load                                          | Skeleton blocks (avatar circle, name line, progress bar, stat card, settings list rows) |
+| Notifications panel                   | Loading from Supabase                                 | Brief skeleton, then content. (Usually negligible.)                                     |
 
 ### 12.3 Error States
 

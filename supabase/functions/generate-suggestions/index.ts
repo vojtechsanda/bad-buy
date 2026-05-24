@@ -58,6 +58,8 @@ function jsonResponse(
 const RequestBodySchema = z.object({
   /** USD amount the user is about to spend — used to steer suggestion price range. */
   price_usd: z.number().positive().optional(),
+  /** When true, skip the cache and always call the AI provider. Premium-only action on the client. */
+  force_refresh: z.boolean().optional(),
 });
 
 // =============================================================================
@@ -85,7 +87,7 @@ async function handleRequest(req: Request): Promise<Response> {
   if (!bodyResult.success) {
     return jsonResponse({ error: 'Invalid request body', detail: bodyResult.error.flatten() }, 400);
   }
-  const { price_usd: priceUsd } = bodyResult.data;
+  const { price_usd: priceUsd, force_refresh: forceRefresh = false } = bodyResult.data;
 
   const { data: account, error: accountError } = await fetchAccount(supabase, user.id);
   if (accountError || !account) return jsonResponse({ error: 'Account not found' }, 404);
@@ -100,9 +102,9 @@ async function handleRequest(req: Request): Promise<Response> {
 
   const hobbyIds = hobbies.map((h: { id: string }) => h.id);
 
-  // Free users: serve from cache before touching the rate limit counter.
-  // The counter only increments when we are actually about to call Gemini.
-  if (!isPremium) {
+  // Serve from cache for all users unless an explicit refresh was requested.
+  // The rate-limit counter only increments when we are actually about to call Gemini.
+  if (!forceRefresh) {
     const { data: cached } = await fetchCachedSuggestions(supabase, hobbyIds, country);
     if (cached?.length) return jsonResponse({ suggestions: cached });
   }

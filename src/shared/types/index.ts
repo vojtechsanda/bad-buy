@@ -8,6 +8,7 @@ export type TrackedItemStatus = Enums<'tracked_item_status'>;
 export type Account = Tables<'account'>;
 export type AccountHobby = Tables<'account_hobby'>;
 export type AccountSuggestion = Tables<'account_suggestion'>;
+export type CountryRow = Tables<'country'>;
 export type Currency = Tables<'currency'>;
 export type CurrencyRate = Tables<'currency_rate'>;
 export type Notification = Tables<'notification'>;

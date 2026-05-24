@@ -100,6 +100,13 @@ async function handleRequest(req: Request): Promise<Response> {
 
   const hobbyIds = hobbies.map((h: { id: string }) => h.id);
 
+  // Free users: serve from cache before touching the rate limit counter.
+  // The counter only increments when we are actually about to call Gemini.
+  if (!isPremium) {
+    const { data: cached } = await fetchCachedSuggestions(supabase, hobbyIds, country);
+    if (cached?.length) return jsonResponse({ suggestions: cached });
+  }
+
   const now = new Date();
   const windows = getWindowKeys(now);
   const allWindowKeys = [windows.min, windows.hour, windows.day, windows.month];
@@ -119,11 +126,6 @@ async function handleRequest(req: Request): Promise<Response> {
         'Retry-After': String(retryAfter),
       });
     }
-  }
-
-  if (!isPremium) {
-    const { data: cached } = await fetchCachedSuggestions(supabase, hobbyIds, country);
-    if (cached?.length) return jsonResponse({ suggestions: cached });
   }
 
   const aiSuggestions = await callGemini(

@@ -79,6 +79,7 @@ export default function VaultItemDetail() {
           price={displayedPrice}
           currency={vaultItem.price_currency}
           account={account}
+          isLoading={isAccountLoading}
         />
 
         <AuditSuggestionListView

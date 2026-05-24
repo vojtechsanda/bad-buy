@@ -1,16 +1,14 @@
-import { CountrySheet, FormField, SelectFormField } from '@shared/components';
+import { type Country, CountrySheet, FormField, SelectFormField } from '@shared/components';
 import { AnyFieldApi } from '@tanstack/react-form';
 import { useState } from 'react';
 
-import { mockCountries } from '../../store';
+type CountryFormFieldProps = { field: AnyFieldApi; countries: Country[] };
 
-type CountryFormFieldProps = { field: AnyFieldApi };
-
-export function CountryFormField({ field }: CountryFormFieldProps) {
+export function CountryFormField({ field, countries }: CountryFormFieldProps) {
   const [showSheet, setShowSheet] = useState(false);
 
   const selected = field.state.value
-    ? (mockCountries.find((c) => c.iso2 === field.state.value) ?? null)
+    ? (countries.find((c) => c.iso2 === field.state.value) ?? null)
     : null;
   const displayValue = selected ? `${selected.flag} ${selected.name}` : null;
 
@@ -28,7 +26,7 @@ export function CountryFormField({ field }: CountryFormFieldProps) {
       </FormField>
 
       <CountrySheet
-        countries={mockCountries}
+        countries={countries}
         isOpen={showSheet}
         onClose={() => setShowSheet(false)}
         onSelect={(iso2) => {

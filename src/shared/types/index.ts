@@ -1,5 +1,6 @@
 import type { Enums, Tables, TablesInsert, TablesUpdate } from './database';
 
+export * from './stream';
 export type { TablesInsert, TablesUpdate };
 
 export type NotificationType = Enums<'notification_type'>;

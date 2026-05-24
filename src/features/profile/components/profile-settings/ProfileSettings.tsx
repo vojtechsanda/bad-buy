@@ -24,6 +24,7 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
   return (
     <View className="divide-y divide-outline-200 rounded-md bg-background-0 shadow shadow-black/10">
       <SettingsRow label="Personal info" onPress={() => setIsPersonalInfoOpen(true)} />
+      {/* TODO: call triggerBackgroundSuggestionsRefresh() (from @shared/modules/audit) on hobby save */}
       <SettingsRow label="Hobbies" onPress={() => setIsHobbiesOpen(true)} />
       <SettingsRow label="Redeem code" onPress={() => setIsPromoOpen(true)} />
       <SettingsRow
@@ -41,6 +42,7 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
         isLastRow
       />
 
+      {/* TODO: call triggerBackgroundSuggestionsRefresh() (from @shared/modules/audit) on country save */}
       <PersonalInfoEditSheet
         isOpen={isPersonalInfoOpen}
         onClose={() => setIsPersonalInfoOpen(false)}

@@ -9,8 +9,6 @@ CREATE TABLE IF NOT EXISTS country (
   default_currency  text        NOT NULL REFERENCES currency(code)
 );
 
--- No RLS needed — country is public read-only reference data.
-
 INSERT INTO country (code, name, default_currency) VALUES
   -- Europe – Eurozone
   ('AD', 'Andorra',                   'EUR'),

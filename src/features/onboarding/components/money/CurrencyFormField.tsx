@@ -1,7 +1,8 @@
 import { FormField, SelectFormField } from '@shared/components';
-import { CurrencySheet, mockAvailableCurrencies } from '@shared/modules/currency';
+import { CurrencySheet, currencyService } from '@shared/modules/currency';
+import { type Currency } from '@shared/types';
 import { AnyFieldApi } from '@tanstack/react-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type CurrencyFormFieldProps = {
   field: AnyFieldApi;
@@ -17,8 +18,13 @@ export function CurrencyFormField({
   pinnedCurrency,
 }: CurrencyFormFieldProps) {
   const [showSheet, setShowSheet] = useState(false);
+  const [currencies, setCurrencies] = useState<Currency[]>([]);
 
-  const currency = mockAvailableCurrencies.find((c) => c.code === field.state.value);
+  useEffect(() => {
+    currencyService.listCurrencies().then(setCurrencies);
+  }, []);
+
+  const currency = currencies.find((c) => c.code === field.state.value);
   const displayValue = currency ? `${currency.code} · ${currency.name}` : field.state.value || null;
 
   return (
@@ -42,6 +48,7 @@ export function CurrencyFormField({
           field.handleChange(code);
           field.handleBlur();
         }}
+        currencies={currencies}
         pinnedCurrency={pinnedCurrency}
       />
     </>

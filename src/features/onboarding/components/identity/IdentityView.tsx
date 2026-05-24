@@ -1,4 +1,4 @@
-import { InputFormField, ScreenContainer } from '@shared/components';
+import { type Country, InputFormField, ScreenContainer } from '@shared/components';
 import { defaultFormValidationLogic } from '@shared/constants';
 import { useForm } from '@tanstack/react-form';
 import { ReactNode } from 'react';
@@ -14,9 +14,15 @@ type IdentityViewProps = {
   onComplete: (data: IdentityFormData) => void;
   screenHeader?: ReactNode;
   defaultValues?: IdentityFormData;
+  countries: Country[];
 };
 
-export function IdentityView({ onComplete, screenHeader, defaultValues }: IdentityViewProps) {
+export function IdentityView({
+  onComplete,
+  screenHeader,
+  defaultValues,
+  countries,
+}: IdentityViewProps) {
   const form = useForm({
     defaultValues: {
       name: defaultValues?.name ?? '',
@@ -54,7 +60,7 @@ export function IdentityView({ onComplete, screenHeader, defaultValues }: Identi
             {(field) => <BirthdateFormField field={field} />}
           </form.Field>
           <form.Field name="countryIso2">
-            {(field) => <CountryFormField field={field} />}
+            {(field) => <CountryFormField field={field} countries={countries} />}
           </form.Field>
         </View>
       </View>

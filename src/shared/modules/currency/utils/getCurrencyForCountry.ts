@@ -1,5 +1,6 @@
-import { USD_CODE } from '../constants';
-import { mockCountryToCurrency } from '../store';
+import { type CountryRow } from '@shared/types';
 
-export const getCurrencyForCountry = (iso2: string): string =>
-  mockCountryToCurrency[iso2.toUpperCase()] ?? USD_CODE;
+import { USD_CODE } from '../constants';
+
+export const getCurrencyForCountry = (iso2: string, countries: CountryRow[]): string =>
+  countries.find((c) => c.code === iso2.toUpperCase())?.default_currency ?? USD_CODE;

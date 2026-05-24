@@ -169,5 +169,6 @@ INSERT INTO currency (code, name, symbol) VALUES
   ('YER', 'Yemeni Rial',                                   '﷼'),
   ('ZAR', 'Rand',                                          'R'),
   ('ZMW', 'Zambian Kwacha',                                'ZK'),
-  ('ZWL', 'Zimbabwe Dollar',                               '$')
+  ('ZWL', 'Zimbabwe Dollar',                               '$'),
+  ('ZWG', 'Zimbabwe Gold',                                 'ZiG')
 ON CONFLICT DO NOTHING;

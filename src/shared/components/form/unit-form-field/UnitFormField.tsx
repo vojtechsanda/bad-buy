@@ -39,8 +39,9 @@ export function UnitFormField({
             <InputField
               value={amountText}
               onChangeText={(text) => {
-                setAmountText(text);
-                const n = parseFloat(text);
+                const sanitized = text.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+                setAmountText(sanitized);
+                const n = parseFloat(sanitized);
                 amountField.handleChange(isNaN(n) ? 0 : n);
               }}
               onBlur={() => amountField.handleBlur()}

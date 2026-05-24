@@ -19,7 +19,12 @@ export function SelectableChip({ label, icon: Icon, selected, onPress }: Selecta
           : 'border border-outline-200 bg-background-0'
       }`}
     >
-      <Icon size={16} strokeWidth={2} color={selected ? 'white' : themeColor.primary500} />
+      <Icon
+        size={16}
+        strokeWidth={2}
+        color={selected ? 'white' : themeColor.primary500}
+        pointerEvents="none"
+      />
       <Text
         className={`font-nunito-bold text-body ${selected ? 'text-white' : 'text-typography-600'}`}
       >

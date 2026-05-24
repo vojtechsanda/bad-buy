@@ -16,7 +16,6 @@ type AuditSuggestionListViewProps = {
   suggestions: SuggestionItem[];
   isLoading?: boolean;
   onRefresh?: () => void;
-  showRefresh?: boolean;
 };
 
 export function AuditSuggestionListView({
@@ -24,7 +23,6 @@ export function AuditSuggestionListView({
   suggestions,
   isLoading = false,
   onRefresh,
-  showRefresh = true,
 }: AuditSuggestionListViewProps) {
   const { convertAndFormatFromUsd } = useConvertFromUsd();
 
@@ -34,7 +32,7 @@ export function AuditSuggestionListView({
         <Text className="font-nunito-bold text-heading text-typography-900">
           What else this could buy
         </Text>
-        {showRefresh && onRefresh && (
+        {onRefresh && (
           <PremiumLockGate>
             <Button
               variant="solid"

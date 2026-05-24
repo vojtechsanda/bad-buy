@@ -29,10 +29,6 @@ export async function fetchSuggestions(
     throw error;
   }
 
-  console.log('[generate-suggestions] ok', {
-    suggestionCount: Array.isArray(data?.suggestions) ? data.suggestions.length : null,
-  });
-
   return data?.suggestions ?? [];
 }
 

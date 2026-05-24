@@ -6,18 +6,19 @@ import {
   PremiumLockGate,
 } from '@shared/components';
 import { themeColor } from '@shared/constants';
-import { mockAccountHobbies } from '@shared/modules/account';
 import { MIN_HOBBY_SELECTION, PredefinedHobbyGrid } from '@shared/modules/hobby';
 import { X } from 'lucide-react-native';
 import { useState } from 'react';
-import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { AddCustomHobbySheet } from './AddCustomHobbySheet';
 
-type HobbiesSheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'>;
+type HobbiesSheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'> & {
+  hobbyIds: string[];
+};
 
-export function HobbiesSheet({ isOpen, onClose }: HobbiesSheetProps) {
-  const [selectedIds, setSelectedIds] = useState<string[]>(mockAccountHobbies);
+export function HobbiesSheet({ isOpen, onClose, hobbyIds }: HobbiesSheetProps) {
+  const [selectedIds, setSelectedIds] = useState<string[]>(hobbyIds);
   const [customHobbies, setCustomHobbies] = useState<string[]>([]);
   const [addCustomOpen, setAddCustomOpen] = useState(false);
   const [showMinMessage, setShowMinMessage] = useState(false);
@@ -29,18 +30,15 @@ export function HobbiesSheet({ isOpen, onClose }: HobbiesSheetProps) {
       return;
     }
     setShowMinMessage(false);
-    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
+    setSelectedIds((previousIds) =>
+      previousIds.includes(id)
+        ? previousIds.filter((selectedId) => selectedId !== id)
+        : [...previousIds, id],
+    );
   }
 
   function removeCustomHobby(name: string) {
-    setCustomHobbies((prev) => prev.filter((h) => h !== name));
-  }
-
-  function confirmRemoveCustomHobby(name: string) {
-    Alert.alert('Remove hobby?', `"${name}" will be removed from your list.`, [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Remove', style: 'destructive', onPress: () => removeCustomHobby(name) },
-    ]);
+    setCustomHobbies((previousHobbies) => previousHobbies.filter((hobby) => hobby !== name));
   }
 
   const handleSave = () => {
@@ -89,7 +87,7 @@ export function HobbiesSheet({ isOpen, onClose }: HobbiesSheetProps) {
                       className="flex-row items-center gap-1.5 rounded-full border border-primary-500 bg-primary-500 px-4 py-3"
                     >
                       <Text className="font-nunito-bold text-body text-white">{name}</Text>
-                      <Pressable onPress={() => confirmRemoveCustomHobby(name)} hitSlop={6}>
+                      <Pressable onPress={() => removeCustomHobby(name)} hitSlop={6}>
                         <X size={14} color="white" />
                       </Pressable>
                     </View>
@@ -119,7 +117,7 @@ export function HobbiesSheet({ isOpen, onClose }: HobbiesSheetProps) {
         isOpen={addCustomOpen}
         onClose={() => setAddCustomOpen(false)}
         existingNames={customHobbies}
-        onAdd={(name) => setCustomHobbies((prev) => [...prev, name])}
+        onAdd={(newHobby) => setCustomHobbies((previousHobbies) => [...previousHobbies, newHobby])}
       />
     </>
   );

@@ -17,7 +17,7 @@ type AddCustomHobbySheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'> & {
 };
 
 const addHobbySchema = z.object({
-  name: z.string().min(1, { message: 'Enter a hobby name' }),
+  name: z.string().trim().min(1, { message: 'Enter a hobby name' }),
 });
 
 export function AddCustomHobbySheet({
@@ -55,8 +55,8 @@ export function AddCustomHobbySheet({
           name="name"
           validators={{
             onChange: ({ value }) => {
-              const trimmed = value.trim();
-              if (trimmed && existingNames.includes(trimmed)) {
+              const trimmedValue = value.trim();
+              if (trimmedValue && existingNames.includes(trimmedValue)) {
                 return { message: 'This hobby already exists' };
               }
             },

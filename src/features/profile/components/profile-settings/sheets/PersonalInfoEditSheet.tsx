@@ -35,17 +35,21 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
       onClose();
     },
   });
+  const handleClose = () => {
+    form.reset();
+    onClose();
+  };
 
   const displayCurrency = useStore(form.store, (s) => s.values.displayCurrency);
 
   return (
-    <BottomSheet isOpen={isOpen} onClose={onClose} heightMode={0.92}>
+    <BottomSheet isOpen={isOpen} onClose={handleClose} heightMode={0.92}>
       <View style={{ flex: 1 }}>
         <View className="mb-4 flex-row items-center justify-between">
           <Text className="font-nunito-bold text-heading text-typography-900">
             Edit personal info
           </Text>
-          <Pressable onPress={onClose} hitSlop={8}>
+          <Pressable onPress={handleClose} hitSlop={8}>
             <X size={20} color={themeColor.typography400} />
           </Pressable>
         </View>

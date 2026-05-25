@@ -99,7 +99,7 @@ export function HobbiesSheet({ isOpen, onClose, hobbyIds }: HobbiesSheetProps) {
 
           <PredefinedHobbyGrid selectedIds={selectedIds} onToggle={toggleHobby} />
 
-          <PremiumLockGate>
+          <PremiumLockGate noBadgeOverflowX>
             <View className="flex-row gap-2">
               <View className="flex-1" style={{ minWidth: 0 }}>
                 <Input size="2xl">

@@ -5,9 +5,15 @@ import { Pressable, Text, View } from 'react-native';
 
 type PremiumLockGateProps = {
   children: ReactNode;
+  noBadgeOverflowX?: boolean;
+  noBadgeOverflowY?: boolean;
 };
 
-export function PremiumLockGate({ children }: PremiumLockGateProps) {
+export function PremiumLockGate({
+  children,
+  noBadgeOverflowX = false,
+  noBadgeOverflowY = false,
+}: PremiumLockGateProps) {
   const account = mockAccount;
 
   const [upsellOpen, setUpsellOpen] = useState(false);
@@ -26,7 +32,9 @@ export function PremiumLockGate({ children }: PremiumLockGateProps) {
         <View pointerEvents="none" style={{ opacity: 0.6 }}>
           {children}
         </View>
-        <View className="absolute -right-1 -top-1 rounded-full bg-accent-500 px-1.5 py-px">
+        <View
+          className={`absolute  rounded-full bg-accent-500 px-1.5 py-px ${noBadgeOverflowX ? 'right-0' : '-right-1'} ${noBadgeOverflowY ? 'top-0' : '-top-1'}`}
+        >
           <Text className="whitespace-nowrap font-nunito-extrabold text-[8px] uppercase tracking-wider text-typography-0">
             PRO
           </Text>

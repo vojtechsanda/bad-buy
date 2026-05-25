@@ -15,7 +15,11 @@ export function OnboardingTitle({ title, subtitle, infoMessage }: OnboardingTitl
         <View className="flex-row items-center gap-1.5">
           <Text className="flex-1 font-nunito text-heading text-typography-500">
             {subtitle}
-            {infoMessage && <InfoAlertButton title="Better suggestions" message={infoMessage} />}
+            {infoMessage && (
+              <View className="pl-1.5">
+                <InfoAlertButton title="Better suggestions" message={infoMessage} />
+              </View>
+            )}
           </Text>
         </View>
       )}

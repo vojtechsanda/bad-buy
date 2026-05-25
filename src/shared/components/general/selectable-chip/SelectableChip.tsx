@@ -13,7 +13,7 @@ export function SelectableChip({ label, icon: Icon, selected, onPress }: Selecta
   return (
     <Pressable
       onPress={onPress}
-      className={`flex-row items-center gap-1.5 rounded-full px-5 py-4 ${
+      className={`flex-row items-center gap-1.5 rounded-full px-5 py-3 ${
         selected
           ? 'border border-primary-500 bg-primary-500'
           : 'border border-outline-200 bg-background-0'

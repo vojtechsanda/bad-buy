@@ -17,7 +17,7 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
   const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
 
   return (
-    <View className="overflow-hidden rounded-2xl border border-outline-100">
+    <View className="divide-y divide-outline-200 rounded-md bg-background-0 shadow shadow-black/10">
       <SettingsRow label="Personal info" onPress={() => setPersonalInfoOpen(true)} />
       <SettingsRow label="Hobbies" onPress={() => setHobbiesOpen(true)} />
       <SettingsRow label="Log out" onPress={() => setLogoutOpen(true)} />

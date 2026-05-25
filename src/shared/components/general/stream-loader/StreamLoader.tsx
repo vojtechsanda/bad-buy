@@ -1,7 +1,8 @@
+import { Spinner } from '@shared/components/ui/spinner';
 import { useStream } from '@shared/hooks/useStream';
 import type { Stream } from '@shared/types/stream';
 import { ReactNode } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 type StreamLoaderProps<T> = {
   stream: Stream<T>;
@@ -22,7 +23,7 @@ export function StreamLoader<T>({
     if (errorBuilder) return <>{errorBuilder(error)}</>;
 
     return (
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center justify-center bg-white">
         <Text className="font-nunito text-body-sm text-error-700">{error.message}</Text>
       </View>
     );
@@ -30,8 +31,8 @@ export function StreamLoader<T>({
 
   if (isLoading || data === null) {
     return (
-      <View className="flex-1 items-center justify-center gap-4">
-        <ActivityIndicator />
+      <View className="flex-1 items-center justify-center gap-4 bg-white">
+        <Spinner className="text-primary-500" />
         {loadingMessage ? (
           <Text className="font-nunito text-body-sm text-typography-600">{loadingMessage}</Text>
         ) : null}

@@ -55,7 +55,7 @@ export function BottomSheet({
         <UIActionsheet.Backdrop className="absolute inset-0 bg-typography-900/40" />
         <UIActionsheet.Content
           className="rounded-t-lg bg-background-0 px-5 shadow-floating"
-          style={{ paddingBottom: insets.bottom + 24 }}
+          style={{ paddingBottom: insets.bottom + 24, maxHeight: '80%' }}
         >
           {showHandle && (
             <UIActionsheet.DragIndicatorWrapper className="w-full items-center pb-2 pt-5">

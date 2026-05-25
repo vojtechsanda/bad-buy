@@ -43,62 +43,60 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
   const displayCurrency = useStore(form.store, (s) => s.values.displayCurrency);
 
   return (
-    <BottomSheet isOpen={isOpen} onClose={handleClose} heightMode={0.92}>
-      <View style={{ flex: 1 }}>
-        <View className="mb-4">
-          <SheetHeader title="Edit personal info" />
+    <BottomSheet isOpen={isOpen} onClose={handleClose}>
+      <View className="mb-4">
+        <SheetHeader title="Edit personal info" />
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View className="gap-6 pb-4">
+          <form.Field name="countryIso2">
+            {(field) => <CountryFormField field={field} />}
+          </form.Field>
+
+          <form.Field name="displayCurrency">
+            {(field) => (
+              <CurrencyFormField
+                field={field}
+                label="Show prices in"
+                infoMessage="The currency you'll see prices displayed in throughout the app."
+                pinnedCurrency={account.display_currency}
+              />
+            )}
+          </form.Field>
+
+          <form.Field name="hourlyWage">
+            {(wageField) => (
+              <form.Field name="wageCurrency">
+                {(currencyField) => (
+                  <WageFormField
+                    wageField={wageField}
+                    currencyField={currencyField}
+                    pinnedCurrency={displayCurrency}
+                  />
+                )}
+              </form.Field>
+            )}
+          </form.Field>
+
+          <form.Field name="workHoursPerDay">
+            {(field) => (
+              <StepperField
+                field={field}
+                label="Average work hours per day"
+                infoMessage="Helps us put prices in the context of your workday."
+                min={1}
+                max={16}
+              />
+            )}
+          </form.Field>
         </View>
+      </ScrollView>
 
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-          <View className="gap-6 pb-4">
-            <form.Field name="countryIso2">
-              {(field) => <CountryFormField field={field} />}
-            </form.Field>
-
-            <form.Field name="displayCurrency">
-              {(field) => (
-                <CurrencyFormField
-                  field={field}
-                  label="Show prices in"
-                  infoMessage="The currency you'll see prices displayed in throughout the app."
-                  pinnedCurrency={account.display_currency}
-                />
-              )}
-            </form.Field>
-
-            <form.Field name="hourlyWage">
-              {(wageField) => (
-                <form.Field name="wageCurrency">
-                  {(currencyField) => (
-                    <WageFormField
-                      wageField={wageField}
-                      currencyField={currencyField}
-                      pinnedCurrency={displayCurrency}
-                    />
-                  )}
-                </form.Field>
-              )}
-            </form.Field>
-
-            <form.Field name="workHoursPerDay">
-              {(field) => (
-                <StepperField
-                  field={field}
-                  label="Average work hours per day"
-                  infoMessage="Helps us put prices in the context of your workday."
-                  min={1}
-                  max={16}
-                />
-              )}
-            </form.Field>
-          </View>
-        </ScrollView>
-
-        <View className="border-t border-outline-200 pt-3">
-          <Button size="lg" action="primary" onPress={form.handleSubmit}>
-            <ButtonText>Save</ButtonText>
-          </Button>
-        </View>
+      <View className="border-t border-outline-200 pt-3">
+        <Button size="lg" action="primary" onPress={form.handleSubmit}>
+          <ButtonText>Save</ButtonText>
+        </Button>
       </View>
     </BottomSheet>
   );

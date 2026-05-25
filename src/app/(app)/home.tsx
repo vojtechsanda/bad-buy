@@ -1,8 +1,9 @@
 import { GreetingView, PriceInput } from '@features/home';
-import { ScreenContainer } from '@shared/components';
+import { ScreenContainer, StreamLoader } from '@shared/components';
 import { Button, ButtonText } from '@shared/components/ui';
 import { TotalSavedCard, mockAccount, mockAccountHistory } from '@shared/modules/account';
 import { CurrencyCode, CurrencySheet } from '@shared/modules/currency';
+import type { Account, Stream } from '@shared/types';
 import { isInLast30Days } from '@shared/utils';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
@@ -28,46 +29,60 @@ export default function HomeScreen() {
     isInLast30Days(new Date(item.created_at)),
   );
 
+  const stream: Stream<Account> = (onData) => {
+    onData(mockAccount);
+
+    return () => {};
+  };
+
   return (
-    <ScreenContainer>
-      <View className="gap-8">
-        <GreetingView name={account.name} />
+    <StreamLoader stream={stream}>
+      {(account) => {
+        console.log('StreamLoader data received:', account.name);
 
-        <TotalSavedCard
-          history={last30DaysHistory}
-          currency={account.display_currency}
-          label="Saved in last 30 days"
-        />
+        return (
+          <ScreenContainer>
+            <View className="gap-8">
+              <GreetingView name={account.name} />
 
-        <View className="gap-6">
-          <PriceInput
-            value={price}
-            onValueChange={setPrice}
-            currency={currency}
-            onCurrencyTap={() => setCurrencySheetOpen(true)}
-            autoFocus={true}
-          />
-          <Button
-            variant="solid"
-            action="primary"
-            size="lg"
-            isDisabled={!isPriceValid}
-            onPress={handleSeeTheCost}
-          >
-            <ButtonText>See the cost</ButtonText>
-          </Button>
-        </View>
-      </View>
+              <TotalSavedCard
+                history={last30DaysHistory}
+                currency={account.display_currency}
+                label="Saved in last 30 days"
+              />
 
-      <CurrencySheet
-        isOpen={currencySheetOpen}
-        onClose={() => setCurrencySheetOpen(false)}
-        selectedCurrency={currency}
-        onSelect={(_currency) => {
-          setCurrency(_currency);
-          setCurrencySheetOpen(false);
-        }}
-      />
-    </ScreenContainer>
+              <View className="gap-6">
+                <PriceInput
+                  value={price}
+                  onValueChange={setPrice}
+                  currency={currency}
+                  onCurrencyTap={() => setCurrencySheetOpen(true)}
+                  autoFocus={true}
+                />
+                <Button
+                  variant="solid"
+                  action="primary"
+                  size="lg"
+                  isDisabled={!isPriceValid}
+                  onPress={handleSeeTheCost}
+                >
+                  <ButtonText>See the cost</ButtonText>
+                </Button>
+              </View>
+            </View>
+
+            <CurrencySheet
+              isOpen={currencySheetOpen}
+              onClose={() => setCurrencySheetOpen(false)}
+              selectedCurrency={currency}
+              onSelect={(_currency) => {
+                setCurrency(_currency);
+                setCurrencySheetOpen(false);
+              }}
+            />
+          </ScreenContainer>
+        );
+      }}
+    </StreamLoader>
   );
 }

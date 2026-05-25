@@ -5,33 +5,41 @@ import {
   ProfileReferral,
   ProfileSettings,
 } from '@features/profile';
-import { ScreenContainer } from '@shared/components';
+import { ScreenContainer, StreamLoader } from '@shared/components';
 import { TotalSavedCard, mockAccount, mockAccountHistory } from '@shared/modules/account';
+import type { Account, Stream } from '@shared/types';
 import { View } from 'react-native';
 
 export default function Profile() {
-  const account = mockAccount;
-  const accountHistory = mockAccountHistory;
+  const stream: Stream<Account> = (onData) => {
+    onData(mockAccount);
+
+    return () => {};
+  };
 
   return (
-    <ScreenContainer>
-      <View className="gap-6">
-        <ProfileIdentityView account={account} />
+    <StreamLoader stream={stream}>
+      {(account) => (
+        <ScreenContainer>
+          <View className="gap-6">
+            <ProfileIdentityView account={account} />
 
-        <LevelProgressBar account={account} />
+            <LevelProgressBar account={account} />
 
-        <TotalSavedCard
-          history={accountHistory}
-          currency={account.display_currency}
-          label="Total saved"
-        />
+            <TotalSavedCard
+              history={mockAccountHistory}
+              currency={account.display_currency}
+              label="Total saved"
+            />
 
-        <PremiumInfoView account={account} />
+            <PremiumInfoView account={account} />
 
-        <ProfileReferral account={account} />
+            <ProfileReferral account={account} />
 
-        <ProfileSettings account={account} />
-      </View>
-    </ScreenContainer>
+            <ProfileSettings account={account} />
+          </View>
+        </ScreenContainer>
+      )}
+    </StreamLoader>
   );
 }

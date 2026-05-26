@@ -1,5 +1,6 @@
 import { BottomSheet, BottomSheetProps, SheetActions, SheetHeader } from '@shared/components';
 import { themeColor } from '@shared/constants';
+import { accountService } from '@shared/modules/account';
 import { TriangleAlert } from 'lucide-react-native';
 import { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
@@ -11,8 +12,8 @@ export function DeleteAccountSheet({ isOpen, onClose }: DeleteAccountSheetProps)
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    // TODO: wire account deletion
-    // TODO: call signOut() after deletion so root navigation reacts (#74)
+
+    accountService.deleteAccount();
   };
 
   const handleClose = () => {

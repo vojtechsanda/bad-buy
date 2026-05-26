@@ -1,5 +1,5 @@
-import { ScreenContainer } from '@shared/components';
-import { mockAccount } from '@shared/modules/account';
+import { FullSizeError, FullSizeSpinner, ScreenContainer } from '@shared/components';
+import { useAccountSWR } from '@shared/modules/account';
 import {
   AuditPriceView,
   AuditStickyFooter,
@@ -7,7 +7,9 @@ import {
   AuditTimePriceView,
   mockSuggestions,
 } from '@shared/modules/audit';
-import { CurrencyCode } from '@shared/modules/currency';
+import { CurrencyCode, convertToUsd, mockExchangeRates } from '@shared/modules/currency';
+import { NewDecisionInput, trackedItemService } from '@shared/services';
+import { useFrozenItemsSWR, useTrackedItemsSWR } from '@shared/swr';
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
 import { View } from 'react-native';
 
@@ -16,25 +18,65 @@ export default function AuditScreen() {
 
   const { price, currency } = useLocalSearchParams<{ price: string; currency: CurrencyCode }>();
 
-  const account = mockAccount;
+  const { account, isLoading } = useAccountSWR();
+
+  const { invalidateTrackedItems } = useTrackedItemsSWR();
+  const { invalidateFrozenItems } = useFrozenItemsSWR();
+
+  const invalidatedHistory = () => {
+    invalidateTrackedItems();
+    invalidateFrozenItems();
+  };
+
+  if (isLoading) return <FullSizeSpinner />;
+  if (!account) return <FullSizeError message="Unable to load profile, please try again later" />;
+
   const suggestions = mockSuggestions;
 
   if (!price || !currency) {
     return <Redirect href="/(app)/home" />;
   }
 
+  const decisionPayload: NewDecisionInput = {
+    conversion_rate_snapshot: mockExchangeRates[currency],
+    price_currency: currency,
+    price_usd: convertToUsd(price, currency),
+    suggestions,
+  };
+
   return (
     <ScreenContainer
       stickyBottom={
         <AuditStickyFooter
-          onSkip={() =>
-            router.push({
-              pathname: '/(app)/skip',
-              params: { price, currency },
-            })
-          }
-          onBuy={() => router.push('/(app)/buy')}
-          onFreeze={() => {}}
+          onSkip={async () => {
+            try {
+              await trackedItemService.recordDecision(decisionPayload, 'skipped');
+
+              invalidatedHistory();
+
+              router.push({
+                pathname: '/(app)/skip',
+                params: { price, currency },
+              });
+            } catch (e) {
+              console.error('Error:', JSON.stringify(e));
+            }
+          }}
+          onBuy={async () => {
+            try {
+              await trackedItemService.recordDecision(decisionPayload, 'bought');
+
+              invalidatedHistory();
+
+              router.push('/(app)/buy');
+            } catch (e) {
+              console.error('Error:', JSON.stringify(e));
+            }
+          }}
+          onFreeze={() => {
+            // TODO: Open freeze sheet and based on that freeze
+            invalidatedHistory();
+          }}
         />
       }
     >

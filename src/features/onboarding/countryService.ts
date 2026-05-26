@@ -2,11 +2,11 @@ import {
   type ChannelStatus,
   type RealtimePayload,
   type RealtimeSubscription,
-  assertNoError,
   subscribeToTable,
   supabase,
 } from '@shared/services';
 import { type CountryRow } from '@shared/types';
+import { assertNoError } from '@shared/utils';
 
 let countryListCache: CountryRow[] | null = null;
 

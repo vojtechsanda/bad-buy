@@ -3,10 +3,8 @@ import {
   type ChannelStatus,
   type RealtimePayload,
   type RealtimeSubscription,
-  assertNoError,
   subscribeToTable,
   supabase,
-  unwrapRow,
 } from '@shared/services';
 import {
   type TablesInsert,
@@ -15,6 +13,7 @@ import {
   type TrackedItemStatus,
   type TrackedItemSuggestion,
 } from '@shared/types';
+import { assertNoError, unwrapRow } from '@shared/utils';
 
 export type SuggestionInput = {
   name: string;

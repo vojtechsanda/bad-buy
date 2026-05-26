@@ -3,12 +3,11 @@ import {
   type ChannelStatus,
   type RealtimePayload,
   type RealtimeSubscription,
-  assertNoError,
   subscribeToTable,
   supabase,
-  unwrapRow,
 } from '@shared/services';
 import { type AccountHobby, type TablesInsert } from '@shared/types';
+import { assertNoError, unwrapRow } from '@shared/utils';
 
 /**
  * Returns all hobbies for the currently authenticated user, ordered by creation time.

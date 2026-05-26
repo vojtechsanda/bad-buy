@@ -2,11 +2,11 @@ import {
   type ChannelStatus,
   type RealtimePayload,
   type RealtimeSubscription,
-  assertNoError,
   subscribeToTable,
   supabase,
 } from '@shared/services';
 import { type Currency, type CurrencyRate } from '@shared/types';
+import { assertNoError } from '@shared/utils';
 
 import { USD_CODE } from './constants';
 import { mockExchangeRates } from './store';

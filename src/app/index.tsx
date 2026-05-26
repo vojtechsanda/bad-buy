@@ -1,12 +1,11 @@
 import { useAuth } from '@features/auth';
+import { FullSizeSpinner } from '@shared/components';
 import { Redirect } from 'expo-router';
 
 export default function Index() {
   const { isLoading, isLogged } = useAuth();
 
-  // TODO(#127): replace with loading screen
-  if (isLoading) return null;
+  if (isLoading) return <FullSizeSpinner />;
 
   return <Redirect href={isLogged ? '/(app)/home' : '/(auth)/landing'} />;
-  // return <Redirect href={'/(onboarding)/onboarding'} />;
 }

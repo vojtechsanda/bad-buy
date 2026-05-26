@@ -9,6 +9,7 @@ import {
 import { type Currency, type CurrencyRate } from '@shared/types';
 
 import { USD_CODE } from './constants';
+import { mockExchangeRates } from './store';
 import { type CurrencyCode } from './types';
 
 let currencyListCache: Currency[] | null = null;
@@ -57,7 +58,7 @@ async function getRate(targetCurrency: CurrencyCode): Promise<number> {
 
   if (data) return data.rate;
 
-  return 1;
+  return mockExchangeRates[targetCurrency] ?? 1;
 }
 
 /**

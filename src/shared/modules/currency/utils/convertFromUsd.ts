@@ -8,7 +8,7 @@ export function convertFromUsd(
   customRate?: number,
 ): number {
   // rate = 1 USD = N units of target currency
-  const rate = customRate !== undefined ? customRate : 1;
+  const rate = customRate !== undefined ? customRate : (mockExchangeRates[toCurrency] ?? 1);
   const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
 
   return numericAmount * rate;

@@ -6,22 +6,15 @@ import {
   MoneyView,
   OnboardingShell,
   PromoView,
-  buildCountryList,
-  countryService,
   moneyFormData,
 } from '@features/onboarding';
-import { getCurrencyForCountry } from '@shared/modules/currency';
-import { type CountryRow } from '@shared/types';
 import { router, useFocusEffect } from 'expo-router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { BackHandler } from 'react-native';
 
 export default function Onboarding() {
   const [step, setStep] = useState(1);
   const totalSteps = step === 4 ? 4 : 3;
-
-  const [countryRows, setCountryRows] = useState<CountryRow[]>([]);
-  const displayCountries = useMemo(() => buildCountryList(countryRows), [countryRows]);
 
   const [identityData, setIdentityData] = useState<{
     data: IdentityFormData;
@@ -29,15 +22,6 @@ export default function Onboarding() {
   } | null>(null);
   const [moneyData, setMoneyData] = useState<moneyFormData | null>(null);
   const [hobbyData, setHobbyData] = useState<HobbyFormData | null>(null);
-
-  useEffect(() => {
-    countryService
-      .listCountries()
-      .then(setCountryRows)
-      .catch((err) => {
-        console.error('[onboarding] Failed to load countries:', err);
-      });
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -71,12 +55,8 @@ export default function Onboarding() {
             <IdentityView
               screenHeader={header}
               defaultValues={identityData?.data}
-              countries={displayCountries}
-              onComplete={(data) => {
-                setIdentityData({
-                  data,
-                  currency: getCurrencyForCountry(data.countryIso2, countryRows),
-                });
+              onComplete={(data, currency) => {
+                setIdentityData({ data, currency });
                 setStep(2);
               }}
             />

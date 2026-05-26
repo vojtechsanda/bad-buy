@@ -7,6 +7,7 @@ import {
   OnboardingShell,
   PromoView,
   moneyFormData,
+  useCreateAccountFn,
 } from '@features/onboarding';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
@@ -34,6 +35,12 @@ export default function Onboarding() {
       return () => backhandlerSubscription.remove();
     }, [step]),
   );
+
+  const createAccount = useCreateAccountFn({
+    hobbyData,
+    identityData: identityData?.data ?? null,
+    moneyData,
+  });
 
   function completeOnboarding() {
     console.log('onboarding complete', { identityData, moneyData, hobbyData });
@@ -77,14 +84,27 @@ export default function Onboarding() {
               screenHeader={header}
               defaultValues={hobbyData}
               onSelectionChange={(ids) => setHobbyData({ selectedIds: ids })}
-              onPromoLinkTap={() => setStep(4)}
-              onComplete={(data) => {
+              onPromoLinkTap={async () => {
+                await createAccount();
+
+                setStep(4);
+              }}
+              onComplete={async (data) => {
                 setHobbyData(data);
+
+                await createAccount();
+
                 completeOnboarding();
               }}
             />
           )}
-          {step === 4 && <PromoView screenHeader={header} onComplete={completeOnboarding} />}
+          {step === 4 && (
+            <PromoView
+              screenHeader={header}
+              onComplete={completeOnboarding}
+              onSkip={completeOnboarding}
+            />
+          )}
         </>
       )}
     </OnboardingShell>

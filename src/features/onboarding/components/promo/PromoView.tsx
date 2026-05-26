@@ -1,4 +1,5 @@
 import { ErrorMessage, Input, InputField, ScreenContainer } from '@shared/components';
+import { redeemCodeService, useAccountSWR } from '@shared/modules/account';
 import { ReactNode, useState } from 'react';
 import { Text, View } from 'react-native';
 
@@ -7,12 +8,29 @@ import { OnboardingTitle } from '../OnboardingTitle';
 
 type PromoViewProps = {
   onComplete: () => void;
+  onSkip: () => void;
   screenHeader?: ReactNode;
 };
 
-export function PromoView({ onComplete, screenHeader }: PromoViewProps) {
+export function PromoView({ onComplete, onSkip, screenHeader }: PromoViewProps) {
   const [code, setCode] = useState('');
-  const error = null;
+  const [error, setError] = useState<string | null>(null);
+
+  const { invalidateAccount } = useAccountSWR();
+
+  const handleCodeRedemption = async () => {
+    try {
+      setError(null);
+
+      await redeemCodeService.redeemCode({ code });
+
+      invalidateAccount();
+
+      onComplete();
+    } catch {
+      setError("Couldn't redeem promo code, please try again later.");
+    }
+  };
 
   return (
     <ScreenContainer
@@ -20,9 +38,9 @@ export function PromoView({ onComplete, screenHeader }: PromoViewProps) {
       withSafeAreaTop
       stickyBottom={
         <OnboardingStickyFooter
-          onPress={onComplete}
+          onPress={handleCodeRedemption}
           disabled={code.length === 0}
-          onSkip={onComplete}
+          onSkip={onSkip}
         />
       }
     >

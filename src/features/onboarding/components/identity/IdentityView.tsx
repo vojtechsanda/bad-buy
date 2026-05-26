@@ -1,9 +1,10 @@
-import { type Country, InputFormField, ScreenContainer } from '@shared/components';
+import { InputFormField, ScreenContainer } from '@shared/components';
 import { defaultFormValidationLogic } from '@shared/constants';
 import { useForm } from '@tanstack/react-form';
 import { ReactNode } from 'react';
 import { View } from 'react-native';
 
+import { useCountries } from '../../hooks';
 import { IdentityFormData, identityFormSchema } from '../../schemas';
 import { OnboardingStickyFooter } from '../OnboardingStickyFooter';
 import { OnboardingTitle } from '../OnboardingTitle';
@@ -11,18 +12,14 @@ import { BirthdateFormField } from './BirthdateFormField';
 import { CountryFormField } from './CountryFormField';
 
 type IdentityViewProps = {
-  onComplete: (data: IdentityFormData) => void;
+  onComplete: (data: IdentityFormData, currency: string) => void;
   screenHeader?: ReactNode;
   defaultValues?: IdentityFormData;
-  countries: Country[];
 };
 
-export function IdentityView({
-  onComplete,
-  screenHeader,
-  defaultValues,
-  countries,
-}: IdentityViewProps) {
+export function IdentityView({ onComplete, screenHeader, defaultValues }: IdentityViewProps) {
+  const { countries, resolveCurrency } = useCountries();
+
   const form = useForm({
     defaultValues: {
       name: defaultValues?.name ?? '',
@@ -33,7 +30,8 @@ export function IdentityView({
     validators: { onDynamic: identityFormSchema },
     onSubmit: async ({ value }) => {
       console.log('identity', value);
-      onComplete(value as IdentityFormData);
+      const data = value as IdentityFormData;
+      onComplete(data, resolveCurrency(data.countryIso2));
     },
   });
 

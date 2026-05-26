@@ -1,8 +1,9 @@
 import { BottomSheet, Input, InputField } from '@shared/components';
 import { themeColor } from '@shared/constants';
+import { currencyService } from '@shared/modules/currency/currencyService';
 import { type Currency } from '@shared/types';
 import { Check } from 'lucide-react-native';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 
 type CurrencySheetProps = {
@@ -10,7 +11,7 @@ type CurrencySheetProps = {
   onClose: () => void;
   selectedCurrency: string;
   onSelect: (code: string) => void;
-  currencies: Currency[];
+  currencies?: Currency[];
   pinnedCurrency?: string;
 };
 
@@ -23,6 +24,15 @@ export function CurrencySheet({
   pinnedCurrency,
 }: CurrencySheetProps) {
   const [search, setSearch] = useState('');
+  const [fetchedCurrencies, setFetchedCurrencies] = useState<Currency[]>([]);
+
+  useEffect(() => {
+    if (!currencies) {
+      currencyService.listCurrencies().then(setFetchedCurrencies);
+    }
+  }, [currencies]);
+
+  const resolvedCurrencies = currencies ?? fetchedCurrencies;
 
   const handleClose = () => {
     setSearch('');
@@ -31,12 +41,12 @@ export function CurrencySheet({
 
   const data = useMemo(() => {
     const filtered = search
-      ? currencies.filter(
+      ? resolvedCurrencies.filter(
           (c) =>
             c.code.toLowerCase().includes(search.toLowerCase()) ||
             c.name.toLowerCase().includes(search.toLowerCase()),
         )
-      : currencies;
+      : resolvedCurrencies;
 
     if (!pinnedCurrency) return filtered;
 
@@ -44,7 +54,7 @@ export function CurrencySheet({
       ...filtered.filter((c) => c.code === pinnedCurrency),
       ...filtered.filter((c) => c.code !== pinnedCurrency),
     ];
-  }, [search, pinnedCurrency, currencies]);
+  }, [search, pinnedCurrency, resolvedCurrencies]);
 
   return (
     <BottomSheet isOpen={isOpen} onClose={handleClose} heightMode={0.6}>

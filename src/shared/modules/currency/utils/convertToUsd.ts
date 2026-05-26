@@ -9,7 +9,7 @@ export function convertToUsd(
   customRate?: number,
 ): number {
   // rate = 1 USD → N units of fromCurrency (matches DB currency_rate.rate convention)
-  const rate = customRate !== undefined ? customRate : 1;
+  const rate = customRate !== undefined ? customRate : (mockExchangeRates[fromCurrency] ?? 1);
   const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
 
   return numericAmount / rate;

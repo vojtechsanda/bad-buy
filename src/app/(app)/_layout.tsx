@@ -1,15 +1,20 @@
 import { useAuth } from '@features/auth';
-import { AppTabs, AppTopBar } from '@shared/components';
+import { AppTabs, AppTopBar, FullSizeSpinner } from '@shared/components';
+import { useAccountSWR } from '@shared/modules/account';
 import { Redirect, Tabs } from 'expo-router';
 
 export default function AppLayout() {
-  const { isLogged, isLoading } = useAuth();
+  const { isLogged, isLoading: isAuthLoading } = useAuth();
+  const { isLoading: isAccountLoading, account } = useAccountSWR();
 
-  // TODO(#127): replace with loading screen
-  if (isLoading) return null;
+  if (isAuthLoading || isAccountLoading) return <FullSizeSpinner />;
 
   if (!isLogged) {
     return <Redirect href="/(auth)/landing" />;
+  }
+
+  if (!account) {
+    return <Redirect href="/(onboarding)/onboarding" />;
   }
 
   return (

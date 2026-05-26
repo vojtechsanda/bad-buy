@@ -10,3 +10,5 @@ export * from './error-message';
 export * from './selectable-chip';
 export * from './info-alert-button';
 export * from './stream-loader';
+export * from './full-size-spinner';
+export * from './full-size-error';

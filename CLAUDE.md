@@ -103,6 +103,18 @@ NativeWind (Tailwind for React Native) + Gluestack UI v3. The Babel config sets 
 - **Formatter callbacks over static string props:** when a component renders text that callers need to customise, accept a `format*?: (value) => string` callback rather than a prefix/suffix prop. Example: `CountdownPill` exposes `formatExpireAtLabel?` so callers can produce `"Thaws in 5h 3m"` without new props.
 - **Optional override params on utility functions:** add an optional `customRate?` parameter to conversion utils rather than creating a separate snapshot-rate variant. The live rate is the default; callers that have a frozen snapshot pass it explicitly.
 
+## Before committing
+
+Always run Prettier on changed files before committing:
+
+```bash
+./node_modules/.bin/prettier --write <changed files>
+```
+
+Or to format everything: `./node_modules/.bin/prettier --write .`
+
+CI runs `prettier --check` on every PR and will fail if formatting is off. The pre-commit hook runs `lint-staged` which covers `src/` automatically, but files outside `src/` (e.g. `supabase/functions/`) must be formatted manually before staging.
+
 ## Conventions enforced by tooling
 
 - **Commits** must follow Conventional Commits _and_ start with a lowercase letter (custom commitlint rule in `commitlint.config.js`). Husky's `commit-msg` hook enforces this.

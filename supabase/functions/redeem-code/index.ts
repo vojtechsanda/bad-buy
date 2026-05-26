@@ -103,8 +103,15 @@ async function handleRequest(req: Request): Promise<Response> {
   if (alreadyRedeemed) return jsonResponse({ error: 'already_redeemed' }, 400);
 
   // Resolve code — promo codes take precedence over referral codes
-  const { data: promoCode } = await fetchPromoCode(supabase, code);
-  const { data: referrer } = promoCode ? { data: null } : await fetchReferrer(supabase, code);
+  const { data: promoCode, error: promoCodeError } = await fetchPromoCode(supabase, code);
+  if (promoCodeError) throw promoCodeError;
+
+  let referrer = null;
+  if (!promoCode) {
+    const { data: fetchedReferrer, error: referrerError } = await fetchReferrer(supabase, code);
+    if (referrerError) throw referrerError;
+    referrer = fetchedReferrer;
+  }
 
   if (!promoCode && !referrer) {
     return jsonResponse({ error: 'code_not_found' }, 400);

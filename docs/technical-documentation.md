@@ -672,7 +672,7 @@ When read, notifications are filtered out of the panel by default. There is no "
 | Function                | Trigger                                                                                               | Purpose                                                                                                                                                                                                  |
 | ----------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `generate-suggestions`  | Called from app when audit page loads and no fresh suggestions exist for the user's hobbies + country | Calls AI provider, stores rows in `user_suggestion`                                                                                                                                                      |
-| `sync-currency-rates`   | `pg_cron`, daily at 04:00 UTC                                                                         | Fetches USD-base rates from a free API (e.g., exchangerate.host), upserts into `currency_rate`                                                                                                           |
+| `sync-currency-rates`   | `pg_cron`, daily at 04:00 UTC                                                                         | Fetches USD-base rates from fawazahmed0/exchange-api; upserts into `currency` (code, name, symbol) first, then upserts into `currency_rate` (base `USD`, target, rate, fetched_at). Parses API response with a Zod schema before writing. `pg_cron` job is registered via migration. |
 | `moderate-custom-hobby` | Called from app when premium user adds a custom hobby                                                 | Async moderation; sets `is_moderated = true` if it passes                                                                                                                                                |
 | `redeem-code`           | Called when user submits a code                                                                       | Validates code (exists, not self, not previously redeemed by this user, has uses left for seed codes), grants 3 months to redeemer (and to referrer if user-referral), inserts `referral_redemption` row |
 | `process-thawed-items`  | `pg_cron`, every 5 minutes                                                                            | Finds tracked_items where `status = 'frozen' AND freeze_until <= now()` AND no notification row exists yet; creates `notification` row + sends push if user opted in                                     |
@@ -920,6 +920,12 @@ For freshly entered prices on the home page, the user is entering directly in th
 ### 8.7 Rate Sync
 
 Daily at 04:00 UTC via `pg_cron` calling the `sync-currency-rates` Edge Function. If the sync fails, rates remain at the last successful sync's values (acceptable per ADR-004 R1).
+
+**API:** `fawazahmed0/exchange-api` (no API key, CDN-hosted, unlimited requests). Endpoint: `cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json`. Response shape: `{ date: string, usd: { [isoCode: string]: number } }` — validated with Zod before writing.
+
+**Write order:** The function upserts into `currency` (code, name, symbol) before upserting into `currency_rate`, because `currency_rate` has a FK constraint on `currency(code)`. This keeps the `currency` table in sync with whatever codes the API returns, with no separate seeding step required.
+
+**pg_cron wiring:** Registered via a Supabase migration using `cron.schedule(...)`, not via the dashboard, so it is reproducible across environments.
 
 ---
 
@@ -1751,7 +1757,7 @@ Conventions that apply across every form in the app:
 
 Zod also guards non-form boundaries:
 
-- **`currency_rate` API response.** The daily cron (`sync-currency-rates`) parses the upstream API's JSON with a Zod schema before upserting into the `currency_rate` table. A schema mismatch is logged and the previous rates are kept (per ADR-004 R1).
+- **`currency_rate` API response.** The daily cron (`sync-currency-rates`) parses the fawazahmed0 API's JSON with a Zod schema before upserting into `currency` and `currency_rate`. A schema mismatch is logged and the previous rates are kept (per ADR-004 R1).
 
 Search params (`/audit?price=…&currency=…`) and AsyncStorage cached values are explicitly out of scope for Zod in v1 — the values are written by trusted code paths in the same app and parsing them adds noise without catching real bugs.
 
@@ -1870,7 +1876,7 @@ These are decisions that were intentionally deferred or that will need attention
 
 1. **Final hobby seed list.** ~40 hobbies across categories — needs to be enumerated and reviewed with the team. The schema is ready; the content is not.
 2. **Final seed promo codes.** The team needs to choose how many initial seed codes to mint (e.g., one `LAUNCH2026` with 500 uses, plus event-specific codes).
-3. **Free exchange rate API choice.** ADR-004 mentions "a currency exchange API" generically. Recommended: `exchangerate.host` (no API key, returns USD-base) or `openexchangerates.org` free tier (1k calls/month, USD-base). Pick one before implementing the cron.
+3. ~~**Free exchange rate API choice.**~~ **Resolved:** `fawazahmed0/exchange-api` for live rates (see §8.7). Currency metadata (name, symbol) is derived from the same API response and upserted into the `currency` table by the Edge Function itself.
 4. **AI provider for `generate-suggestions`.** Likely an LLM call (OpenAI / Anthropic). Cost estimate, prompt design, JSON output schema — to be defined in a follow-up technical spec.
 5. **DiceBear style.** DiceBear has many styles (`avataaars`, `bottts`, `lorelei`, `notionists`, etc.). Recommend `lorelei` or `notionists` for the calm aesthetic. Final choice: TBD.
 

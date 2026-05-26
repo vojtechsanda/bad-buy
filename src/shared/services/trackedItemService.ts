@@ -215,6 +215,24 @@ async function listFrozen(): Promise<TrackedItem[]> {
 }
 
 /**
+ * Returns all tracked items for the current user, ordered by created_at
+ * ascending so newest items are at the top.
+ */
+async function list(): Promise<TrackedItem[]> {
+  const accountId = await authService.getCurrentUserId();
+
+  const { data, error } = await supabase
+    .from('tracked_item')
+    .select('*')
+    .eq('account_id', accountId)
+    .order('created_at', { ascending: true });
+
+  assertNoError(error);
+
+  return data ?? [];
+}
+
+/**
  * Returns a single tracked item by id.
  */
 async function getById(id: string): Promise<TrackedItem> {
@@ -266,6 +284,7 @@ export const trackedItemService = {
   refreeze,
   recordDecision,
   decide,
+  list,
   listFrozen,
   getById,
   getSuggestions,

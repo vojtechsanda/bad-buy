@@ -1,5 +1,6 @@
 import { formatPrice } from '@shared/utils';
 
+import { mockExchangeRates } from '../store';
 import { CurrencyCode } from '../types';
 
 export function convertFromUsd(

@@ -1,6 +1,7 @@
 import { formatPrice } from '@shared/utils';
 
 import { USD_CODE } from '../constants';
+import { mockExchangeRates } from '../store';
 import { CurrencyCode } from '../types';
 
 export function convertToUsd(

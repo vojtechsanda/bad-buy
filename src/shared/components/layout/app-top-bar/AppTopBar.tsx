@@ -16,6 +16,7 @@ export function AppTopBar({ title }: AppTopBarProps) {
 
   // TODO: Connect to notifications and show badge when there are unread notifications
   const showBadge = false;
+  const showNotificationBell = false;
 
   return (
     <View
@@ -27,12 +28,14 @@ export function AppTopBar({ title }: AppTopBarProps) {
         <Text className="font-nunito-bold text-heading text-typography-900">{title}</Text>
       </View>
 
-      <View>
-        <Bell size={22} strokeWidth={1.75} color={themeColor.typography900} />
-        {showBadge && (
-          <View className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-accent-500" />
-        )}
-      </View>
+      {showNotificationBell && (
+        <View>
+          <Bell size={22} strokeWidth={1.75} color={themeColor.typography900} />
+          {showBadge && (
+            <View className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-accent-500" />
+          )}
+        </View>
+      )}
     </View>
   );
 }

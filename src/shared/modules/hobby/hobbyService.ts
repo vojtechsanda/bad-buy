@@ -8,7 +8,7 @@ import {
   supabase,
   unwrapRow,
 } from '@shared/services';
-import { type AccountHobby, type PredefinedHobby, type TablesInsert } from '@shared/types';
+import { type AccountHobby, type TablesInsert } from '@shared/types';
 
 /**
  * Returns all hobbies for the currently authenticated user, ordered by creation time.
@@ -30,13 +30,21 @@ async function list(): Promise<AccountHobby[]> {
 /**
  * Adds a single predefined hobby for the current user.
  */
-async function add(predefinedHobby: PredefinedHobby): Promise<AccountHobby> {
+async function add(hobbyId: string): Promise<AccountHobby> {
   const accountId = await authService.getCurrentUserId();
+
+  const { data: predefinedHobby, error: fetchError } = await supabase
+    .from('predefined_hobby')
+    .select('id, name')
+    .eq('id', hobbyId)
+    .single();
+
+  assertNoError(fetchError);
 
   const row: TablesInsert<'account_hobby'> = {
     account_id: accountId,
-    hobby_name: predefinedHobby.name,
-    predefined_hobby_id: predefinedHobby.id,
+    hobby_name: predefinedHobby!.name,
+    predefined_hobby_id: predefinedHobby!.id,
     is_moderated: true,
   };
 
@@ -48,12 +56,19 @@ async function add(predefinedHobby: PredefinedHobby): Promise<AccountHobby> {
 /**
  * Bulk-inserts predefined hobbies for the current user (e.g. in the onboarding).
  */
-async function addMany(predefinedHobbies: PredefinedHobby[]): Promise<AccountHobby[]> {
-  if (predefinedHobbies.length === 0) return [];
+async function addMany(hobbyIds: string[]): Promise<AccountHobby[]> {
+  if (hobbyIds.length === 0) return [];
 
   const accountId = await authService.getCurrentUserId();
 
-  const rows: TablesInsert<'account_hobby'>[] = predefinedHobbies.map((hobby) => ({
+  const { data: predefinedHobbies, error: fetchError } = await supabase
+    .from('predefined_hobby')
+    .select('id, name')
+    .in('id', hobbyIds);
+
+  assertNoError(fetchError);
+
+  const rows: TablesInsert<'account_hobby'>[] = (predefinedHobbies ?? []).map((hobby) => ({
     account_id: accountId,
     hobby_name: hobby.name,
     predefined_hobby_id: hobby.id,

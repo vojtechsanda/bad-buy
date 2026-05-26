@@ -5,10 +5,6 @@ const RATES_URL =
 const NAMES_URL =
   'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json';
 
-// =============================================================================
-// Schemas
-// =============================================================================
-
 const RatesResponseSchema = z.object({
   date: z.string(),
   usd: z.record(z.string(), z.number()),
@@ -16,15 +12,7 @@ const RatesResponseSchema = z.object({
 
 const NamesResponseSchema = z.record(z.string(), z.string());
 
-// =============================================================================
-// Types
-// =============================================================================
-
 export type FetchedRate = { code: string; rate: number };
-
-// =============================================================================
-// Fetch helpers
-// =============================================================================
 
 export async function fetchRates(): Promise<FetchedRate[]> {
   const res = await fetch(RATES_URL);

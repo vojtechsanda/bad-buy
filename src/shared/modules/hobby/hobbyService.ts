@@ -33,18 +33,18 @@ async function list(): Promise<AccountHobby[]> {
 async function add(hobbyId: string): Promise<AccountHobby> {
   const accountId = await authService.getCurrentUserId();
 
-  const { data: predefinedHobby, error: fetchError } = await supabase
+  const { data: predefinedHobbyRow, error: fetchError } = await supabase
     .from('predefined_hobby')
     .select('id, name')
     .eq('id', hobbyId)
     .single();
 
-  assertNoError(fetchError);
+  const predefinedHobby = unwrapRow(predefinedHobbyRow, fetchError, 'hobbyService.add');
 
   const row: TablesInsert<'account_hobby'> = {
     account_id: accountId,
-    hobby_name: predefinedHobby!.name,
-    predefined_hobby_id: predefinedHobby!.id,
+    hobby_name: predefinedHobby.name,
+    predefined_hobby_id: predefinedHobby.id,
     is_moderated: true,
   };
 

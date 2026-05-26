@@ -3,6 +3,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.105.1';
 import { fetchNames, fetchRates } from './api.ts';
 import { ISO_4217_CODES } from './constants.ts';
 import { upsertCurrencies, upsertRates } from './db.ts';
+
 function requireEnv(name: string): string {
   const value = Deno.env.get(name);
   if (!value) throw new Error(`Missing required environment variable: ${name}`);

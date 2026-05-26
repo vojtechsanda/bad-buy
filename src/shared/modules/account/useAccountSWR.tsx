@@ -10,7 +10,7 @@ export function useAccountSWR() {
   return {
     account: data,
     isLoading,
-    isError: error,
+    error,
     invalidateAccount: mutate,
   };
 }

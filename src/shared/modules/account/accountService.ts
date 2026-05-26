@@ -3,12 +3,11 @@ import {
   type ChannelStatus,
   type RealtimePayload,
   type RealtimeSubscription,
-  assertNoError,
   subscribeToTable,
   supabase,
-  unwrapRow,
 } from '@shared/services';
 import { Account, type TablesInsert } from '@shared/types';
+import { assertNoError, unwrapRow } from '@shared/utils';
 
 export type CreateAccountPayload = Required<
   Pick<

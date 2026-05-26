@@ -16,7 +16,7 @@ export default function HomeScreen() {
   const { trackedItems, isLoading: isTrackedItemsLoading } = useTrackedItemsSWR();
 
   const [price, setPrice] = useState('');
-  const [currency, setCurrency] = useState<CurrencyCode | null>(null);
+  const [currency, setCurrency] = useState<CurrencyCode | null>(account?.display_currency ?? null);
   const [currencySheetOpen, setCurrencySheetOpen] = useState(false);
 
   if (isLoading || isTrackedItemsLoading) return <FullSizeSpinner />;
@@ -28,7 +28,8 @@ export default function HomeScreen() {
   const isPriceValid = price.length > 0 && parseFloat(price) > 0;
 
   const handleSeeTheCost = () => {
-    router.push(`/(app)/audit?price=${price}&currency=${currency}`);
+    router.push(`/(app)/audit?price=${price}&currency=${currency ?? account.display_currency}`);
+
     setPrice('');
   };
 

@@ -47,7 +47,7 @@ function jsonResponse(data: unknown, status = 200): Response {
 // =============================================================================
 
 const RequestBodySchema = z.object({
-  code: z.string().min(1),
+  code: z.string().trim().min(1),
 });
 
 // =============================================================================

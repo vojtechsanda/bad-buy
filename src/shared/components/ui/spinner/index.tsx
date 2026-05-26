@@ -14,7 +14,14 @@ const Spinner = React.forwardRef<
   React.ComponentRef<typeof ActivityIndicator>,
   React.ComponentProps<typeof ActivityIndicator>
 >(function Spinner(
-  { className, color, focusable = false, 'aria-label': ariaLabel = 'loading', ...props },
+  {
+    className,
+    color,
+    focusable = false,
+    'aria-label': ariaLabel = 'loading',
+    size = 'large',
+    ...props
+  },
   ref,
 ) {
   return (
@@ -22,6 +29,7 @@ const Spinner = React.forwardRef<
       ref={ref}
       focusable={focusable}
       aria-label={ariaLabel}
+      size={size}
       {...props}
       color={color}
       className={spinnerStyle({ class: className })}

@@ -46,20 +46,25 @@ async function handleRequest(): Promise<Response> {
   // Upsert currencies first — currency_rate has a FK on currency(code).
   // ignoreDuplicates keeps existing curated symbols intact; only new codes get inserted.
   // The code itself is used as the symbol fallback for codes not yet in the table.
-  const currencyRows = rates.map(({ code }) => ({
-    code,
-    name: names.get(code) ?? code,
-    symbol: code,
-  }));
+  const currencyRows = rates
+    .map(({ code }) => ({
+      code,
+      name: names.get(code) ?? code,
+      symbol: code,
+    }))
+    .filter((row) => row.name.trim().length > 0);
 
   await upsertCurrencies(supabase, currencyRows);
 
-  const rateRows = rates.map(({ code, rate }) => ({
-    base: 'USD',
-    target: code,
-    rate,
-    fetched_at: fetchedAt,
-  }));
+  const validCodes = new Set(currencyRows.map((r) => r.code));
+  const rateRows = rates
+    .filter(({ code }) => validCodes.has(code))
+    .map(({ code, rate }) => ({
+      base: 'USD',
+      target: code,
+      rate,
+      fetched_at: fetchedAt,
+    }));
 
   await upsertRates(supabase, rateRows);
 

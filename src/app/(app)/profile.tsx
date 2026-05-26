@@ -5,41 +5,40 @@ import {
   ProfileReferral,
   ProfileSettings,
 } from '@features/profile';
-import { ScreenContainer, StreamLoader } from '@shared/components';
-import { TotalSavedCard, mockAccount, mockAccountHistory } from '@shared/modules/account';
-import type { Account, Stream } from '@shared/types';
+import { FullSizeError, FullSizeSpinner, ScreenContainer } from '@shared/components';
+import { TotalSavedCard, useAccountSWR } from '@shared/modules/account';
+import { useTrackedItemsSWR } from '@shared/swr';
 import { View } from 'react-native';
 
 export default function Profile() {
-  const stream: Stream<Account> = (onData) => {
-    onData(mockAccount);
+  const { account, isLoading } = useAccountSWR();
+  const { trackedItems, isLoading: isTrackedItemsLoading } = useTrackedItemsSWR();
 
-    return () => {};
-  };
+  if (isLoading || isTrackedItemsLoading) return <FullSizeSpinner />;
+  if (!account) return <FullSizeError message="Unable to load account, please try again later" />;
+  if (!trackedItems) {
+    return <FullSizeError message="Unable to load history, please try again later" />;
+  }
 
   return (
-    <StreamLoader stream={stream}>
-      {(account) => (
-        <ScreenContainer>
-          <View className="gap-6">
-            <ProfileIdentityView account={account} />
+    <ScreenContainer>
+      <View className="gap-6">
+        <ProfileIdentityView account={account} />
 
-            <LevelProgressBar account={account} />
+        <LevelProgressBar account={account} />
 
-            <TotalSavedCard
-              history={mockAccountHistory}
-              currency={account.display_currency}
-              label="Total saved"
-            />
+        <TotalSavedCard
+          history={trackedItems}
+          currency={account.display_currency}
+          label="Total saved"
+        />
 
-            <PremiumInfoView account={account} />
+        <PremiumInfoView account={account} />
 
-            <ProfileReferral account={account} />
+        <ProfileReferral account={account} />
 
-            <ProfileSettings account={account} />
-          </View>
-        </ScreenContainer>
-      )}
-    </StreamLoader>
+        <ProfileSettings account={account} />
+      </View>
+    </ScreenContainer>
   );
 }

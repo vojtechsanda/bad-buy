@@ -20,7 +20,7 @@ export default function HomeScreen() {
   const [currencySheetOpen, setCurrencySheetOpen] = useState(false);
 
   if (isLoading || isTrackedItemsLoading) return <FullSizeSpinner />;
-  if (!account) return <FullSizeError message="Unable to load profile, please try again later" />;
+  if (!account) return <FullSizeError message="Unable to load account, please try again later" />;
   if (!trackedItems) {
     return <FullSizeError message="Unable to load history, please try again later" />;
   }

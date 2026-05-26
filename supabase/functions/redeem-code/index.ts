@@ -55,9 +55,7 @@ const RequestBodySchema = z.object({
 
 /** Stacks `months` of premium on top of `currentExpiry`, or starts from now if free. */
 function stackPremium(currentExpiry: string | null, months: number): string {
-  const base = currentExpiry
-    ? Math.max(Date.now(), new Date(currentExpiry).getTime())
-    : Date.now();
+  const base = currentExpiry ? Math.max(Date.now(), new Date(currentExpiry).getTime()) : Date.now();
   const result = new Date(base);
   result.setMonth(result.getMonth() + months);
   return result.toISOString();

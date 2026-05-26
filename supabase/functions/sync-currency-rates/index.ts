@@ -1,8 +1,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.105.1';
 
 import { fetchNames, fetchRates } from './api.ts';
+import { ISO_4217_CODES } from './constants.ts';
 import { upsertCurrencies, upsertRates } from './db.ts';
-
 function requireEnv(name: string): string {
   const value = Deno.env.get(name);
   if (!value) throw new Error(`Missing required environment variable: ${name}`);
@@ -34,6 +34,7 @@ async function handleRequest(): Promise<Response> {
 
   // Currencies before rates (FK); upsert only inserts new codes, symbol falls back to code.
   const currencyRows = rates
+    .filter(({ code }) => ISO_4217_CODES.has(code))
     .map(({ code }) => ({
       code,
       name: names.get(code) ?? code,

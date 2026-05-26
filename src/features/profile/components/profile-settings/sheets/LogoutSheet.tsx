@@ -1,10 +1,12 @@
+import { authService } from '@features/auth';
 import { BottomSheet, BottomSheetProps, SheetActions, SheetHeader } from '@shared/components';
 
 type LogoutSheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'>;
 
 export function LogoutSheet({ isOpen, onClose }: LogoutSheetProps) {
-  const handleLogout = () => {
-    // TODO: wire to signOut() from auth session (#74)
+  const handleLogout = async () => {
+    await authService.signOut();
+
     onClose();
   };
 

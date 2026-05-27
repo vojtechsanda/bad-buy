@@ -8,7 +8,7 @@ import {
   WageFormField,
 } from '@shared/components';
 import { StepperField } from '@shared/components/form/stepper-field';
-import { defaultFormValidationLogic } from '@shared/constants';
+import { defaultFormValidationLogic, mockCountries } from '@shared/constants';
 import { personalInfoEditSchema } from '@shared/schemas/personalInfo';
 import { Account } from '@shared/types';
 import { useForm, useStore } from '@tanstack/react-form';
@@ -50,7 +50,7 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="gap-6 pb-4">
           <form.Field name="countryIso2">
-            {(field) => <CountryFormField field={field} />}
+            {(field) => <CountryFormField field={field} countries={mockCountries} />}
           </form.Field>
 
           <form.Field name="displayCurrency">

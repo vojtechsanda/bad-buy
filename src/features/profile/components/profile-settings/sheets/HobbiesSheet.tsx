@@ -1,6 +1,7 @@
 import {
   BottomSheet,
   BottomSheetProps,
+  PremiumLockGate,
   SelectableChip,
   SheetActions,
   SheetHeader,
@@ -53,9 +54,9 @@ export function HobbiesSheet({ isOpen, onClose, hobbyIds }: HobbiesSheetProps) {
           <Text className="font-nunito-semibold text-body-sm text-typography-400">
             {selectedIds.length + customHobbies.length} selected
           </Text>
-          {/* <PremiumLockGate noBadgeOverflowX> */}
-          <AddCustomHobbyForm onAdd={addCustomHobby} />
-          {/* </PremiumLockGate> */}
+          <PremiumLockGate noBadgeOverflowX>
+            <AddCustomHobbyForm onAdd={addCustomHobby} />
+          </PremiumLockGate>
 
           {customHobbies.length > 0 && (
             <View className="flex-row flex-wrap gap-2">

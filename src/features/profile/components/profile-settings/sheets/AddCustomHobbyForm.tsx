@@ -1,15 +1,27 @@
+import { InInputButton } from '@shared/components';
 import { FormField } from '@shared/components/form/form-field';
-import { Button, ButtonText, Input, InputField } from '@shared/components/ui';
+import { Input, InputField } from '@shared/components/ui';
+import { defaultFormValidationLogic } from '@shared/constants';
 import { useForm } from '@tanstack/react-form';
+import { useState } from 'react';
 import { View } from 'react-native';
+import { z } from 'zod';
+
+const addCustomHobbyFormSchema = z.object({
+  name: z.string().trim().min(2, { message: 'Please enter a hobby name' }),
+});
 
 type AddCustomHobbyFormProps = {
   onAdd: (name: string) => void;
 };
 
 export function AddCustomHobbyForm({ onAdd }: AddCustomHobbyFormProps) {
+  const [isFocused, setIsFocused] = useState(false);
+
   const form = useForm({
     defaultValues: { name: '' },
+    validationLogic: defaultFormValidationLogic,
+    validators: { onDynamic: addCustomHobbyFormSchema },
     onSubmit: async ({ value }) => {
       onAdd(value.name.trim());
       form.reset();
@@ -17,34 +29,30 @@ export function AddCustomHobbyForm({ onAdd }: AddCustomHobbyFormProps) {
   });
 
   return (
-    <form.Field
-      name="name"
-      validators={{
-        onBlur: ({ value }) => (!value.trim() ? 'Please enter a hobby name' : undefined),
-        onChange: ({ value }) => (!value.trim() ? 'Please enter a hobby name' : undefined),
-      }}
-    >
+    <form.Field name="name">
       {(field) => (
         <FormField field={field} label="Custom hobby">
-          <View className="flex-row gap-2">
-            <View className="flex-1" style={{ minWidth: 0 }}>
-              <Input size="3xl">
+          {(isInvalid) => (
+            <View
+              className={`h-16 flex-row items-center gap-2 rounded-md border bg-background-0 px-2 ${isInvalid ? 'border-error-700' : isFocused ? 'border-primary-500' : 'border-outline-200'}`}
+            >
+              <Input className="flex-1 border-0" size="xl">
                 <InputField
                   value={field.state.value}
                   onChangeText={field.handleChange}
-                  onBlur={field.handleBlur}
-                  placeholder="Add a hobby…"
+                  onBlur={() => {
+                    field.handleBlur();
+                    setIsFocused(false);
+                  }}
+                  onFocus={() => setIsFocused(true)}
                   autoCorrect={false}
                   returnKeyType="done"
                   onSubmitEditing={form.handleSubmit}
-                  className="text-xl"
                 />
               </Input>
+              <InInputButton onPress={form.handleSubmit} content="Add" />
             </View>
-            <Button size="lg" action="primary" variant="outline" onPress={form.handleSubmit}>
-              <ButtonText>Add</ButtonText>
-            </Button>
-          </View>
+          )}
         </FormField>
       )}
     </form.Field>

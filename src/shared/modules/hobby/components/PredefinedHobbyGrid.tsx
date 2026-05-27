@@ -3,12 +3,12 @@ import { View } from 'react-native';
 import { hobbyCategories, mockHobbies } from '../store';
 import { HobbyCategoryGroup } from './HobbyCategoryGroup';
 
-type Props = {
+type PredefinedHobbyGridProps = {
   selectedIds: string[];
   onToggle: (id: string) => void;
 };
 
-export function PredefinedHobbyGrid({ selectedIds, onToggle }: Props) {
+export function PredefinedHobbyGrid({ selectedIds, onToggle }: PredefinedHobbyGridProps) {
   return (
     <View className="gap-6">
       {hobbyCategories.map((category) => (

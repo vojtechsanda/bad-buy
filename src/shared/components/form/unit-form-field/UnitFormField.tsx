@@ -40,6 +40,8 @@ export function UnitFormField({
               value={amountText}
               onChangeText={(text) => {
                 const sanitized = text.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+                // strip non-numeric characters; collapse multiple dots to prevent "1.2.3"
+                // so in other words, allow only valid number input
                 setAmountText(sanitized);
                 const n = parseFloat(sanitized);
                 amountField.handleChange(isNaN(n) ? 0 : n);

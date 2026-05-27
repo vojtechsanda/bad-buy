@@ -1,5 +1,5 @@
 import { MIN_HOBBY_SELECTION } from '@shared/modules/hobby';
-import { financialInfoFields } from '@shared/schemas/finance';
+import { financialInfoSchema } from '@shared/schemas/finance';
 import { z } from 'zod';
 
 export const identityFormSchema = z.object({
@@ -10,13 +10,13 @@ export const identityFormSchema = z.object({
 
 export type IdentityFormData = z.infer<typeof identityFormSchema>;
 
-export const moneyFormSchema = z.object({
-  ...financialInfoFields,
+export const moneyFormSchema = financialInfoSchema.extend({
   workHoursPerDay: z
     .number()
     .min(0.5, { message: 'Min 0.5 hours' })
     .max(24, { message: 'Max 24 hours' }),
 });
+
 export type moneyFormData = z.infer<typeof moneyFormSchema>;
 
 export const hobbyFormSchema = z.object({
@@ -24,4 +24,5 @@ export const hobbyFormSchema = z.object({
     .array(z.string())
     .min(MIN_HOBBY_SELECTION, `Select at least ${MIN_HOBBY_SELECTION} hobbies`),
 });
+
 export type HobbyFormData = z.infer<typeof hobbyFormSchema>;

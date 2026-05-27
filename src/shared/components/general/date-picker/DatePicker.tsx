@@ -1,7 +1,4 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { BottomSheet } from '@shared/components/layout';
-import { Button, ButtonText } from '@shared/components/ui';
-import { Platform, Text } from 'react-native';
 
 type DatePickerProps = {
   isOpen: boolean;
@@ -12,71 +9,18 @@ type DatePickerProps = {
 };
 
 export function DatePicker({ isOpen, onClose, value, onChange, maximumDate }: DatePickerProps) {
+  if (!isOpen) return null;
+
   return (
-    <>
-      {Platform.OS === 'android' && isOpen && (
-        <DateTimePicker
-          value={value}
-          mode="date"
-          display="default"
-          maximumDate={maximumDate}
-          onChange={(_, date) => {
-            onClose();
-            if (date) onChange(date);
-          }}
-        />
-      )}
-
-      {Platform.OS === 'ios' && (
-        <BottomSheet isOpen={isOpen} onClose={onClose}>
-          <Text className="mb-4 font-nunito-bold text-heading text-typography-900">
-            Select date
-          </Text>
-          <DateTimePicker
-            value={value}
-            mode="date"
-            display="spinner"
-            maximumDate={maximumDate}
-            onChange={(_, date) => {
-              if (date) onChange(date);
-            }}
-          />
-          <Button onPress={onClose} className="mt-4">
-            <ButtonText className="font-nunito-bold text-white">Done</ButtonText>
-          </Button>
-        </BottomSheet>
-      )}
-
-      {Platform.OS === 'web' && (
-        <BottomSheet isOpen={isOpen} onClose={onClose}>
-          <Text className="mb-4 font-nunito-bold text-heading text-typography-900">
-            Select date
-          </Text>
-          <input
-            type="date"
-            value={value.toLocaleDateString('en-CA')}
-            max={maximumDate?.toLocaleDateString('en-CA')}
-            onChange={(e) => {
-              if (e.target.value) {
-                const [year, month, day] = e.target.value.split('-').map(Number);
-                onChange(new Date(year, month - 1, day));
-              }
-            }}
-            style={{
-              width: '100%',
-              padding: '12px',
-              fontSize: '16px',
-              border: '1px solid #e5e7eb',
-              borderRadius: '8px',
-              marginBottom: '16px',
-              color: '#111827',
-            }}
-          />
-          <Button onPress={onClose} className="mt-4">
-            <ButtonText className="font-nunito-bold text-white">Done</ButtonText>
-          </Button>
-        </BottomSheet>
-      )}
-    </>
+    <DateTimePicker
+      value={value}
+      mode="date"
+      display="default"
+      maximumDate={maximumDate}
+      onChange={(_, date) => {
+        onClose();
+        if (date) onChange(date);
+      }}
+    />
   );
 }

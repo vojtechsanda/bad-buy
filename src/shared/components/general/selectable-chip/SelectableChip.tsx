@@ -1,15 +1,22 @@
 import { themeColor } from '@shared/constants';
-import { LucideIcon } from 'lucide-react-native';
+import { LucideIcon, X } from 'lucide-react-native';
 import { Pressable, Text } from 'react-native';
 
 type SelectableChipProps = {
   label: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
   selected: boolean;
-  onPress: () => void;
+  onPress?: () => void;
+  onRemove?: () => void;
 };
 
-export function SelectableChip({ label, icon: Icon, selected, onPress }: SelectableChipProps) {
+export function SelectableChip({
+  label,
+  icon: Icon,
+  selected,
+  onPress,
+  onRemove,
+}: SelectableChipProps) {
   return (
     <Pressable
       onPress={onPress}
@@ -19,17 +26,24 @@ export function SelectableChip({ label, icon: Icon, selected, onPress }: Selecta
           : 'border border-outline-200 bg-background-0'
       }`}
     >
-      <Icon
-        size={16}
-        strokeWidth={2}
-        color={selected ? 'white' : themeColor.primary500}
-        pointerEvents="none"
-      />
+      {Icon && (
+        <Icon
+          size={16}
+          strokeWidth={2}
+          color={selected ? 'white' : themeColor.primary500}
+          pointerEvents="none"
+        />
+      )}
       <Text
         className={`font-nunito-bold text-body ${selected ? 'text-white' : 'text-typography-600'}`}
       >
         {label}
       </Text>
+      {onRemove && (
+        <Pressable onPress={onRemove} hitSlop={6}>
+          <X size={14} color="white" />
+        </Pressable>
+      )}
     </Pressable>
   );
 }

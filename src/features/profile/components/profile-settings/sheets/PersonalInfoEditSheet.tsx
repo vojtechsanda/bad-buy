@@ -1,10 +1,9 @@
 import {
   BottomSheet,
   BottomSheetProps,
-  Button,
-  ButtonText,
   CountryFormField,
   CurrencyFormField,
+  SheetActions,
   SheetHeader,
   WageFormField,
 } from '@shared/components';
@@ -93,11 +92,7 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
         </View>
       </ScrollView>
 
-      <View className="border-t border-outline-200 pt-3">
-        <Button size="lg" action="primary" onPress={form.handleSubmit}>
-          <ButtonText>Save</ButtonText>
-        </Button>
-      </View>
+      <SheetActions confirmLabel="Save" onConfirm={form.handleSubmit} onCancel={handleClose} />
     </BottomSheet>
   );
 }

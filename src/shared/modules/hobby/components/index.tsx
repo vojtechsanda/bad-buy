@@ -1,2 +1,2 @@
 export * from './HobbyCategoryGroup';
-export * from './HobbyGrid';
+export * from './PredefinedHobbyGrid';

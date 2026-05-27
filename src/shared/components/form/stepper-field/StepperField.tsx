@@ -1,11 +1,9 @@
-import { Input, InputField } from '@shared/components';
+import { InInputButton, Input, InputField } from '@shared/components';
 import { FormField } from '@shared/components/form/form-field';
 import { AnyFieldApi } from '@tanstack/react-form';
 import { Minus, Plus } from 'lucide-react-native';
 import { useState } from 'react';
 import { View } from 'react-native';
-
-import { StepperButton } from './StepperButton';
 
 type StepperFieldProps = {
   field: AnyFieldApi;
@@ -48,11 +46,11 @@ export function StepperField({
               keyboardType="number-pad"
             />
           </Input>
-          <StepperButton
+          <InInputButton
             onPress={() => value > min && field.handleChange(value - step)}
             Icon={Minus}
           />
-          <StepperButton
+          <InInputButton
             onPress={() => value < max && field.handleChange(value + step)}
             Icon={Plus}
           />

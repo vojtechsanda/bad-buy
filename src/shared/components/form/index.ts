@@ -8,3 +8,4 @@ export * from './unit-form-field';
 export * from './country-form-field';
 export * from './currency-form-field';
 export * from './wage-form-field';
+export * from './in-input-button';

@@ -48,7 +48,7 @@ export function HobbiesSheet({ isOpen, onClose, hobbyIds }: HobbiesSheetProps) {
         <SheetHeader title="Hobbies" />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View className="gap-6 pb-4">
           <Text className="font-nunito-semibold text-body-sm text-typography-400">
             {selectedIds.length + customHobbies.length} selected
@@ -57,10 +57,12 @@ export function HobbiesSheet({ isOpen, onClose, hobbyIds }: HobbiesSheetProps) {
           <AddCustomHobbyForm onAdd={addCustomHobby} />
           {/* </PremiumLockGate> */}
 
-          <View className="flex-row flex-wrap gap-2">
-            {customHobbies.length > 0 && (
+          {customHobbies.length > 0 && (
+            <View className="flex-row flex-wrap gap-2">
               <View className="gap-3">
-                <Text className="font-nunito-bold text-body text-typography-900">My hobbies</Text>
+                <Text className="font-nunito-bold text-body text-typography-900">
+                  My custom hobbies
+                </Text>
                 <View className="flex-row flex-wrap gap-2">
                   {customHobbies.map((name) => (
                     <SelectableChip
@@ -72,8 +74,8 @@ export function HobbiesSheet({ isOpen, onClose, hobbyIds }: HobbiesSheetProps) {
                   ))}
                 </View>
               </View>
-            )}
-          </View>
+            </View>
+          )}
 
           <PredefinedHobbyGrid selectedIds={selectedIds} onToggle={toggleHobby} />
         </View>

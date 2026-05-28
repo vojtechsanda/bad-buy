@@ -46,9 +46,14 @@ async function handleRequest(req: Request): Promise<Response> {
   } = await authClient.auth.getUser();
   if (authError || !user) return jsonResponse({ error: 'Unauthorized' }, 401);
 
-  const rawBody = req.headers.get('content-type')?.includes('application/json')
-    ? await req.json()
-    : {};
+  let rawBody: unknown = {};
+  if (req.headers.get('content-type')?.includes('application/json')) {
+    try {
+      rawBody = await req.json();
+    } catch {
+      return jsonResponse({ error: 'Invalid JSON' }, 400);
+    }
+  }
   const bodyResult = RequestBodySchema.safeParse(rawBody);
   if (!bodyResult.success) {
     return jsonResponse({ error: 'Invalid request body', detail: bodyResult.error.flatten() }, 400);
@@ -64,7 +69,11 @@ async function handleRequest(req: Request): Promise<Response> {
     return jsonResponse({ premium_expires_at: premiumExpiresAt });
   } catch (err) {
     const e = err as { code?: string; message?: string };
-    if (e.code === SQLSTATE_APP_ERROR && e.message !== undefined && e.message in APP_ERROR_STATUS) {
+    if (
+      e.code === SQLSTATE_APP_ERROR &&
+      e.message !== undefined &&
+      Object.hasOwn(APP_ERROR_STATUS, e.message)
+    ) {
       return jsonResponse({ error: e.message }, APP_ERROR_STATUS[e.message]);
     }
     throw err;
@@ -73,6 +82,10 @@ async function handleRequest(req: Request): Promise<Response> {
 
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+
+  if (req.method !== 'POST') {
+    return new Response(null, { status: 405, headers: { ...corsHeaders, Allow: 'POST, OPTIONS' } });
+  }
 
   try {
     return await handleRequest(req);

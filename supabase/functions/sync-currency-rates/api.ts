@@ -1,9 +1,6 @@
 import { z } from 'https://esm.sh/zod@3';
 
-const RATES_URL =
-  'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json';
-const NAMES_URL =
-  'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json';
+import { NAMES_URL, RATES_URL } from './constants.ts';
 
 const RatesResponseSchema = z.object({
   date: z.string(),

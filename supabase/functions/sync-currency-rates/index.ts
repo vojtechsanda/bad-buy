@@ -1,8 +1,12 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.105.1';
 
 import { fetchNames, fetchRates } from './api.ts';
-import { ISO_4217_CODES } from './constants.ts';
-import { upsertCurrencies, upsertRates } from './db.ts';
+import {
+  fetchCountryCurrencyCodes,
+  resetMissingCountryCurrencies,
+  upsertCurrencies,
+  upsertRates,
+} from './db.ts';
 
 function requireEnv(name: string): string {
   const value = Deno.env.get(name);
@@ -29,13 +33,17 @@ function jsonResponse(data: unknown, status = 200): Response {
 async function handleRequest(): Promise<Response> {
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-  const [rates, names] = await Promise.all([fetchRates(), fetchNames()]);
+  const [rates, names, countryCurrencyCodes] = await Promise.all([
+    fetchRates(),
+    fetchNames(),
+    fetchCountryCurrencyCodes(supabase),
+  ]);
 
   const fetchedAt = new Date().toISOString();
 
   // Currencies before rates (FK); upsert only inserts new codes, symbol falls back to code.
   const currencyRows = rates
-    .filter(({ code }) => ISO_4217_CODES.has(code))
+    .filter(({ code }) => countryCurrencyCodes.has(code))
     .map(({ code }) => ({
       code,
       name: names.get(code) ?? code,
@@ -56,6 +64,7 @@ async function handleRequest(): Promise<Response> {
     }));
 
   await upsertRates(supabase, rateRows);
+  await resetMissingCountryCurrencies(supabase, validCodes);
 
   return jsonResponse({ synced: rateRows.length, fetched_at: fetchedAt });
 }

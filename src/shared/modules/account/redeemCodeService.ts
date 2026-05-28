@@ -3,17 +3,12 @@ import {
   type RealtimePayload,
   type RealtimeSubscription,
   subscribeToTable,
+  supabase,
 } from '@shared/services';
 import { type ReferralRedemption } from '@shared/types';
+import { FunctionsHttpError } from '@supabase/supabase-js';
 
-const MOCK_PREMIUM_EXPIRES_AT = '2026-12-31T23:59:59.999Z';
-
-export type RedeemCodeErrorCode =
-  | 'not_found'
-  | 'max_uses_reached'
-  | 'self_referral'
-  | 'already_redeemed'
-  | 'unknown';
+import { EDGE_ERROR_MAP, type RedeemCodeErrorCode } from './constants';
 
 export class RedeemCodeError extends Error {
   readonly code: RedeemCodeErrorCode;
@@ -36,9 +31,20 @@ async function redeemCode(input: RedeemCodeInput): Promise<RedeemCodeResponse> {
   const trimmed = input.code.trim().toUpperCase();
   if (!trimmed) throw new RedeemCodeError('not_found');
 
-  // TODO: replace with redeem-code edge function call
+  const { data, error } = await supabase.functions.invoke('redeem-code', {
+    body: { code: trimmed },
+  });
 
-  return { premium_expires_at: MOCK_PREMIUM_EXPIRES_AT };
+  if (error) {
+    if (error instanceof FunctionsHttpError) {
+      const body = await error.context.json().catch(() => null);
+      const code = EDGE_ERROR_MAP[body?.error] ?? 'unknown';
+      throw new RedeemCodeError(code, error.message);
+    }
+    throw new RedeemCodeError('unknown', error.message);
+  }
+
+  return { premium_expires_at: data.premium_expires_at };
 }
 
 /**

@@ -39,7 +39,11 @@ async function add(hobbyId: string): Promise<AccountHobby> {
     .eq('id', hobbyId)
     .single();
 
-  const predefinedHobby = unwrapRow(predefinedHobbyRow, fetchError, 'hobbyService.add');
+  const predefinedHobby = unwrapRow(
+    predefinedHobbyRow,
+    fetchError,
+    'hobbyService.add.fetchPredefinedHobby',
+  );
 
   const row: TablesInsert<'account_hobby'> = {
     account_id: accountId,
@@ -50,7 +54,7 @@ async function add(hobbyId: string): Promise<AccountHobby> {
 
   const { data, error } = await supabase.from('account_hobby').insert(row).select().single();
 
-  return unwrapRow(data, error, 'hobbyService.add');
+  return unwrapRow(data, error, 'hobbyService.add.insertAccountHobby');
 }
 
 /**

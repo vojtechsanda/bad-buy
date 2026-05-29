@@ -2,24 +2,14 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.105.1';
 
 import { SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL, requireEnv } from '../_shared/env.ts';
 import { fetchNames, fetchRates } from './api.ts';
-import {
-  fetchCountryCurrencyCodes,
-  resetMissingCountryCurrencies,
-  upsertCurrencies,
-  upsertRates,
-} from './db.ts';
+import { fetchCountryCurrencyCodes, upsertCurrencies, upsertRates } from './db.ts';
 
 const CRON_SECRET = requireEnv('CRON_SECRET');
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
 
 function jsonResponse(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
   });
 }
 
@@ -57,14 +47,11 @@ async function handleRequest(): Promise<Response> {
     }));
 
   await upsertRates(supabase, rateRows);
-  await resetMissingCountryCurrencies(supabase, validCodes);
 
   return jsonResponse({ synced: rateRows.length, fetched_at: fetchedAt });
 }
 
 Deno.serve(async (req: Request) => {
-  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
-
   if (req.method !== 'POST') {
     return jsonResponse({ error: 'Method not allowed' }, 405);
   }

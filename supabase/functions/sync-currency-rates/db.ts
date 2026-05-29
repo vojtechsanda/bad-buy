@@ -25,34 +25,3 @@ export async function upsertRates(supabase: SupabaseClient, rows: RateRow[]) {
   });
   if (error) throw error;
 }
-
-/**
- * For any country whose default_currency wasn't synced, fall back to USD.
- */
-export async function resetMissingCountryCurrencies(
-  supabase: SupabaseClient,
-  validCodes: Set<string>,
-) {
-  const { data: countries, error: fetchError } = await supabase
-    .from('country')
-    .select('code, default_currency');
-  if (fetchError) throw fetchError;
-
-  const missing = (countries ?? [])
-    .filter(
-      (row: { code: string; default_currency: string }) => !validCodes.has(row.default_currency),
-    )
-    .map((row: { code: string; default_currency: string }) => row.code);
-
-  if (missing.length === 0) return;
-
-  const { error: updateError } = await supabase
-    .from('country')
-    .update({ default_currency: 'USD' })
-    .in('code', missing);
-  if (updateError) throw updateError;
-
-  console.log(
-    `[sync-currency-rates] Reset default_currency to USD for ${missing.length} countries: ${missing.join(', ')}`,
-  );
-}

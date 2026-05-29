@@ -1,5 +1,6 @@
 import { accountService, useAccountSWR } from '@shared/modules/account';
 import { convertToUsd } from '@shared/modules/currency';
+import { Alert } from 'react-native';
 
 import { HobbyFormData, IdentityFormData, moneyFormData } from '../schemas';
 
@@ -17,19 +18,25 @@ export function useCreateAccountFn({ hobbyData, identityData, moneyData }: UseCr
 
     const accountMethod = account ? accountService.update : accountService.create;
 
-    await accountMethod({
-      name: identityData.name,
-      birthdate: identityData.birthdate.toISOString(),
-      country: identityData.countryIso2,
-      display_currency: moneyData.displayCurrency,
-      wage_currency: moneyData.wageCurrency,
-      hourly_wage_usd: convertToUsd(moneyData.hourlyWage, moneyData.wageCurrency),
-      work_hours_per_day: moneyData.workHoursPerDay,
-    });
+    try {
+      await accountMethod({
+        name: identityData.name,
+        birthdate: identityData.birthdate.toISOString(),
+        country: identityData.countryIso2,
+        display_currency: moneyData.displayCurrency,
+        wage_currency: moneyData.wageCurrency,
+        hourly_wage_usd: convertToUsd(moneyData.hourlyWage, moneyData.wageCurrency),
+        work_hours_per_day: moneyData.workHoursPerDay,
+      });
 
-    // TODO(#177): uncomment once the service is adjusted
-    // await hobbyService.addMany(hobbyData.selectedIds)
+      // TODO(#177): uncomment once the service is adjusted
+      // await hobbyService.addMany(hobbyData.selectedIds)
+    } catch (e) {
+      console.error(JSON.stringify(e));
 
-    invalidateAccount();
+      Alert.alert('Error', "Couldn't create user account, please try again later.");
+    } finally {
+      invalidateAccount();
+    }
   };
 }

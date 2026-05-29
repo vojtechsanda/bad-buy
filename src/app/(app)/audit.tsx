@@ -11,7 +11,7 @@ import { CurrencyCode, convertToUsd, mockExchangeRates } from '@shared/modules/c
 import { NewDecisionInput, trackedItemService } from '@shared/services';
 import { useFrozenItemsSWR, useTrackedItemsSWR } from '@shared/swr';
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 
 export default function AuditScreen() {
   const router = useRouter();
@@ -61,7 +61,9 @@ export default function AuditScreen() {
                 params: { price, currency },
               });
             } catch (e) {
-              console.error('Error:', JSON.stringify(e));
+              console.error(JSON.stringify(e));
+
+              Alert.alert('Error', "Couldn't apply the skip choice, please try again later.");
             }
           }}
           onBuy={async () => {
@@ -72,7 +74,8 @@ export default function AuditScreen() {
 
               router.push('/(app)/buy');
             } catch (e) {
-              console.error('Error:', JSON.stringify(e));
+              console.error(JSON.stringify(e));
+              Alert.alert('Error', "Couldn't apply the buy choice, please try again later.");
             }
           }}
           onFreeze={() => {

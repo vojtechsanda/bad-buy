@@ -3,7 +3,7 @@ import { themeColor } from '@shared/constants';
 import { accountService } from '@shared/modules/account';
 import { TriangleAlert } from 'lucide-react-native';
 import { useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, Alert, View } from 'react-native';
 
 type DeleteAccountSheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'>;
 
@@ -12,8 +12,15 @@ export function DeleteAccountSheet({ isOpen, onClose }: DeleteAccountSheetProps)
 
   const handleDelete = async () => {
     setIsDeleting(true);
+    try {
+      accountService.deleteAccount();
+    } catch (e) {
+      console.error(JSON.stringify(e));
 
-    accountService.deleteAccount();
+      Alert.alert('Error', "Couldn't delete your account, please try again later.");
+
+      setIsDeleting(false);
+    }
   };
 
   const handleClose = () => {

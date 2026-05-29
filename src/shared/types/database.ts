@@ -463,6 +463,41 @@ export type Database = {
           },
         ];
       };
+      tracked_item_suggestion: {
+        Row: {
+          created_at: string;
+          id: string;
+          item_emoji: string | null;
+          name: string;
+          price_usd: number;
+          tracked_item_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          item_emoji?: string | null;
+          name: string;
+          price_usd: number;
+          tracked_item_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          item_emoji?: string | null;
+          name?: string;
+          price_usd?: number;
+          tracked_item_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'tracked_item_suggestion_tracked_item_id_fkey';
+            columns: ['tracked_item_id'];
+            isOneToOne: false;
+            referencedRelation: 'tracked_item';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -474,6 +509,10 @@ export type Database = {
           out_count: number;
           out_window_key: string;
         }[];
+      };
+      redeem_code: {
+        Args: { p_code: string; p_user_id: string };
+        Returns: string;
       };
     };
     Enums: {

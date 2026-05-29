@@ -1,4 +1,5 @@
 import { accountService, useAccountSWR } from '@shared/modules/account';
+import { convertToUsd } from '@shared/modules/currency';
 
 import { HobbyFormData, IdentityFormData, moneyFormData } from '../schemas';
 
@@ -22,7 +23,7 @@ export function useCreateAccountFn({ hobbyData, identityData, moneyData }: UseCr
       country: identityData.countryIso2,
       display_currency: moneyData.displayCurrency,
       wage_currency: moneyData.wageCurrency,
-      hourly_wage_usd: moneyData.hourlyWage,
+      hourly_wage_usd: convertToUsd(moneyData.hourlyWage, moneyData.wageCurrency),
       work_hours_per_day: moneyData.workHoursPerDay,
     });
 

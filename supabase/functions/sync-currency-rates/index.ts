@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.105.1';
 
+import { SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL, requireEnv } from '../_shared/env.ts';
 import { fetchNames, fetchRates } from './api.ts';
 import {
   fetchCountryCurrencyCodes,
@@ -8,15 +9,7 @@ import {
   upsertRates,
 } from './db.ts';
 
-function requireEnv(name: string): string {
-  const value = Deno.env.get(name);
-  if (!value) throw new Error(`Missing required environment variable: ${name}`);
-
-  return value;
-}
-
-const SUPABASE_URL = requireEnv('SUPABASE_URL');
-const SUPABASE_SERVICE_ROLE_KEY = requireEnv('SUPABASE_SERVICE_ROLE_KEY');
+const CRON_SECRET = requireEnv('CRON_SECRET');
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -76,8 +69,8 @@ Deno.serve(async (req: Request) => {
     return jsonResponse({ error: 'Method not allowed' }, 405);
   }
 
-  const authHeader = req.headers.get('authorization');
-  if (authHeader !== `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`) {
+  const cronSecret = req.headers.get('x-cron-secret');
+  if (cronSecret !== CRON_SECRET) {
     return jsonResponse({ error: 'Unauthorized' }, 401);
   }
 

@@ -22,10 +22,12 @@ export default function AuditScreen() {
 
   const { invalidateTrackedItems } = useTrackedItemsSWR();
   const { invalidateFrozenItems } = useFrozenItemsSWR();
+  const { invalidateAccount } = useAccountSWR();
 
-  const invalidatedHistory = () => {
+  const invalidateSWR = () => {
     invalidateTrackedItems();
     invalidateFrozenItems();
+    invalidateAccount();
   };
 
   if (isLoading) return <FullSizeSpinner />;
@@ -52,7 +54,7 @@ export default function AuditScreen() {
             try {
               await trackedItemService.recordDecision(decisionPayload, 'skipped');
 
-              invalidatedHistory();
+              invalidateSWR();
 
               router.push({
                 pathname: '/(app)/skip',
@@ -66,7 +68,7 @@ export default function AuditScreen() {
             try {
               await trackedItemService.recordDecision(decisionPayload, 'bought');
 
-              invalidatedHistory();
+              invalidateSWR();
 
               router.push('/(app)/buy');
             } catch (e) {
@@ -75,7 +77,7 @@ export default function AuditScreen() {
           }}
           onFreeze={() => {
             // TODO: Open freeze sheet and based on that freeze
-            invalidatedHistory();
+            invalidateSWR();
           }}
         />
       }

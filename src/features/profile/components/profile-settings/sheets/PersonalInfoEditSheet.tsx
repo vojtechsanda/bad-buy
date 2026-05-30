@@ -9,6 +9,7 @@ import {
 } from '@shared/components';
 import { StepperField } from '@shared/components/form/stepper-field';
 import { defaultFormValidationLogic, mockCountries } from '@shared/constants';
+import { convertFromUsd } from '@shared/modules/currency';
 import { personalInfoEditSchema } from '@shared/schemas/personalInfo';
 import { Account } from '@shared/types';
 import { useForm, useStore } from '@tanstack/react-form';
@@ -23,7 +24,7 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
     defaultValues: {
       countryIso2: account.country,
       displayCurrency: account.display_currency,
-      hourlyWage: account.hourly_wage_usd,
+      hourlyWage: convertFromUsd(account.hourly_wage_usd, account.wage_currency),
       wageCurrency: account.wage_currency,
       workHoursPerDay: account.work_hours_per_day,
     },

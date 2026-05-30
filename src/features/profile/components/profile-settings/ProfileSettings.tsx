@@ -38,39 +38,43 @@ export function ProfileSettings({ account, accountHobbies }: ProfileSettingsProp
   async function handleNotificationsToggle(newValue: boolean) {
     if (newValue === notificationsEnabled) return;
 
-    if (newValue) {
-      const status = await pushNotificationService.getPermissionStatus();
-
-      if (status === 'granted') {
-        await accountService.update({ notifications_enabled: true });
-        setOsGranted(true);
-        await invalidateAccount();
-      } else if (status === 'undetermined') {
-        const result = await pushNotificationService.requestPermission();
-        if (result === 'granted') {
-          setOsGranted(true);
-          await accountService.update({ notifications_enabled: true });
-          await invalidateAccount();
-        } else {
-          Alert.alert(
-            'Notifications off',
-            'You declined the notification permission. You can enable it anytime from here.',
-          );
-        }
-      } else {
-        Alert.alert(
-          'Notifications off',
-          'Enable notifications in your device settings to get reminded when a frozen decision is ready.',
-          [
-            { text: 'Not now', style: 'cancel' },
-            { text: 'Open Settings', onPress: () => Linking.openSettings() },
-          ],
-        );
-      }
-    } else {
+    if (!newValue) {
       await accountService.update({ notifications_enabled: false });
       await invalidateAccount();
+
+      return;
     }
+
+    const status = await pushNotificationService.getPermissionStatus();
+
+    if (status === 'denied') {
+      Alert.alert(
+        'Notifications off',
+        'Enable notifications in your device settings to get reminded when a frozen decision is ready.',
+        [
+          { text: 'Not now', style: 'cancel' },
+          { text: 'Open Settings', onPress: () => Linking.openSettings() },
+        ],
+      );
+
+      return;
+    }
+
+    if (status === 'undetermined') {
+      const result = await pushNotificationService.requestPermission();
+      if (result !== 'granted') {
+        Alert.alert(
+          'Notifications off',
+          'You declined the notification permission. You can enable it anytime from here.',
+        );
+
+        return;
+      }
+      setOsGranted(true);
+    }
+
+    await accountService.update({ notifications_enabled: true });
+    await invalidateAccount();
   }
 
   return (
@@ -88,16 +92,6 @@ export function ProfileSettings({ account, accountHobbies }: ProfileSettingsProp
             onValueChange={handleNotificationsToggle}
           />
         }
-      />
-      {/* TODO: remove before shipping */}
-      <SettingsRow
-        label="[DEV] Test notification (10s)"
-        onPress={async () => {
-          const fakeId = 'dev-test-' + Date.now();
-          const freezeUntil = new Date(Date.now() + 10_000).toISOString();
-          await pushNotificationService.scheduleFreezeNotification(fakeId, freezeUntil);
-          Alert.alert('Scheduled', 'A test notification will fire in 10 seconds.');
-        }}
       />
       <SettingsRow label="Log out" onPress={() => setIsLogoutOpen(true)} />
       <SettingsRow

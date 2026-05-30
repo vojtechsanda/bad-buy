@@ -1,5 +1,4 @@
 import * as Notifications from 'expo-notifications';
-import { AndroidImportance, SchedulableTriggerInputTypes } from 'expo-notifications';
 import { Platform } from 'react-native';
 
 type PermissionStatus = 'granted' | 'denied' | 'undetermined';
@@ -9,7 +8,7 @@ async function ensureAndroidChannel(): Promise<void> {
 
   await Notifications.setNotificationChannelAsync('freeze-reminders', {
     name: 'Freeze reminders',
-    importance: AndroidImportance.DEFAULT,
+    importance: Notifications.AndroidImportance.DEFAULT,
   });
 }
 
@@ -27,9 +26,10 @@ async function requestPermission(): Promise<'granted' | 'denied'> {
 }
 
 async function scheduleFreezeNotification(itemId: string, freezeUntil: string): Promise<void> {
-  const { status } = await Notifications.getPermissionsAsync();
+  const status = await getPermissionStatus();
   if (status !== 'granted') return;
 
+  await ensureAndroidChannel();
   await Notifications.scheduleNotificationAsync({
     identifier: itemId,
     content: {
@@ -37,7 +37,7 @@ async function scheduleFreezeNotification(itemId: string, freezeUntil: string): 
       body: 'A frozen item is ready for your decision.',
     },
     trigger: {
-      type: SchedulableTriggerInputTypes.DATE,
+      type: Notifications.SchedulableTriggerInputTypes.DATE,
       date: new Date(freezeUntil),
       channelId: 'freeze-reminders',
     },

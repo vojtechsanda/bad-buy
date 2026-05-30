@@ -16,14 +16,18 @@ type AuditSuggestionListViewProps = {
   currency: CurrencyCode;
   suggestions: SuggestionItem[];
   isLoading?: boolean;
+  error?: Error | null;
   onRefresh?: () => void;
+  onRetry?: () => void;
 };
 
 export function AuditSuggestionListView({
   currency,
   suggestions,
   isLoading = false,
+  error,
   onRefresh,
+  onRetry,
 }: AuditSuggestionListViewProps) {
   const { convertAndFormatFromUsd } = useConvertFromUsd();
 
@@ -51,6 +55,17 @@ export function AuditSuggestionListView({
 
       {isLoading ? (
         <SkeletonRowList />
+      ) : error ? (
+        <View className="items-center gap-3 py-4">
+          <Text className="font-nunito text-body text-typography-400">
+            Couldn&apos;t load suggestions.
+          </Text>
+          {onRetry && (
+            <Button variant="outline" action="neutral" size="sm" onPress={onRetry}>
+              <Text className="font-nunito-semibold text-body text-typography-900">Try again</Text>
+            </Button>
+          )}
+        </View>
       ) : (
         <View>
           {suggestions.map((suggestion, index) => (

@@ -19,7 +19,7 @@ export function useCreateAccountFn({ hobbyData, identityData, moneyData }: UseCr
     const accountMethod = account ? accountService.update : accountService.create;
 
     try {
-      await accountMethod({
+      const updatedAccount = await accountMethod({
         name: identityData.name,
         birthdate: identityData.birthdate.toISOString(),
         country: identityData.countryIso2,
@@ -31,11 +31,12 @@ export function useCreateAccountFn({ hobbyData, identityData, moneyData }: UseCr
 
       // TODO(#177): uncomment once the service is adjusted
       // await hobbyService.addMany(hobbyData.selectedIds)
+
+      await invalidateAccount(updatedAccount, { revalidate: false });
     } catch (e) {
       console.error(JSON.stringify(e));
 
       Alert.alert('Error', "Couldn't create user account, please try again later.");
-    } finally {
       invalidateAccount();
     }
   };

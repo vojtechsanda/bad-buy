@@ -1,4 +1,4 @@
-import type { GeminiSuggestion } from './gemini.ts';
+import type { GeminiSuggestion } from './schemas.ts';
 import type { AccountHobbyRef, SuggestionInsertRow } from './types.ts';
 
 export function toSuggestionRows(

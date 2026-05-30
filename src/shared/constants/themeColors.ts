@@ -10,4 +10,5 @@ export const themeColor = {
   typography900: rgb(v['--color-typography-900']),
   outline100: rgb(v['--color-outline-100']),
   error500: rgb(v['--color-error-500']),
+  secondary0: rgb(v['--color-secondary-0']),
 } as const;

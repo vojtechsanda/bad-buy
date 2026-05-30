@@ -4,6 +4,7 @@ export * from './illustration-svg-frame';
 export * from './premium-lock-gate';
 export * from './statistics-card';
 export * from './step-progress-bar';
+export * from './swipe-to-confirm';
 export * from './date-picker';
 export * from './back-button';
 export * from './error-message';

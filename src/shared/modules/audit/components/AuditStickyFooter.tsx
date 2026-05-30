@@ -1,8 +1,8 @@
-import { BottomSheet, Button, ButtonText } from '@shared/components';
+import { BottomSheet, Button, ButtonText, SwipeToConfirm } from '@shared/components';
 import { themeColor } from '@shared/constants';
-import { Check, ShoppingBag, Snowflake } from 'lucide-react-native';
+import { ShoppingBag, Snowflake } from 'lucide-react-native';
 import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 type AuditStickyFooterProps = {
   freezeLabel?: string;
@@ -42,17 +42,7 @@ export function AuditStickyFooter({
         </Button>
       </View>
 
-      <Pressable
-        onPress={onSkip}
-        className="h-14 flex-row items-center overflow-hidden rounded-2xl bg-primary-100 px-2"
-      >
-        <View className="h-10 w-10 items-center justify-center rounded-full bg-primary-500">
-          <Check size={18} strokeWidth={2.5} color="#FEFEFE" />
-        </View>
-        <Text className="flex-1 text-center font-nunito-semibold text-body text-primary-700">
-          Tap to skip (PLACEHOLDER) →
-        </Text>
-      </Pressable>
+      <SwipeToConfirm label="Swipe to skip" onConfirm={onSkip} />
 
       <BottomSheet isOpen={freezeSheetOpen} onClose={() => setFreezeSheetOpen(false)}>
         <Text className="font-nunito-bold text-heading text-typography-900">

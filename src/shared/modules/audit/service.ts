@@ -33,8 +33,12 @@ export async function fetchSuggestions(
 }
 
 /**
- * Delete all cached suggestions for the current user's hobbies + country so that
- * the next audit screen load generates fresh ones and shows a skeleton while loading.
+ * Delete all cached suggestions for the current user's hobbies so that the next
+ * audit screen load generates fresh ones and shows a skeleton while loading.
+ *
+ * Intentionally does NOT filter by country: when the user changes their country,
+ * the account row is updated before this runs, so reading country from the DB
+ * would return the new value while old rows are keyed to the old one.
  */
 export async function invalidateSuggestionsCache(): Promise<void> {
   const {
@@ -42,19 +46,15 @@ export async function invalidateSuggestionsCache(): Promise<void> {
   } = await supabase.auth.getUser();
   if (!user) return;
 
-  const [{ data: account }, { data: hobbies }] = await Promise.all([
-    supabase.from('account').select('country').eq('id', user.id).single(),
-    supabase.from('account_hobby').select('id').eq('account_id', user.id),
-  ]);
+  const { data: hobbies } = await supabase
+    .from('account_hobby')
+    .select('id')
+    .eq('account_id', user.id);
 
-  if (!account || !hobbies?.length) return;
+  if (!hobbies?.length) return;
 
   const hobbyIds = hobbies.map((h) => h.id);
-  const { error } = await supabase
-    .from('account_suggestion')
-    .delete()
-    .in('hobby_id', hobbyIds)
-    .eq('country', account.country);
+  const { error } = await supabase.from('account_suggestion').delete().in('hobby_id', hobbyIds);
 
   if (error) {
     console.warn('[invalidateSuggestionsCache] failed to clear cache', error);

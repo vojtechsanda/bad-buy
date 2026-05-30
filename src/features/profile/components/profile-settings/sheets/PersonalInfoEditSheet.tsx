@@ -12,14 +12,10 @@ import {
 import { StepperField } from '@shared/components/form/stepper-field';
 import { defaultFormValidationLogic } from '@shared/constants';
 import { accountService, useAccountSWR } from '@shared/modules/account';
+import { triggerBackgroundSuggestionsRefresh } from '@shared/modules/audit/service';
 import { useCountriesSWR } from '@shared/modules/country';
-import {
-  getRateFromExchangeRates,
-  useConvertFromUsd,
-  useConvertToUsd,
-  useExchangeRates,
-} from '@shared/modules/currency';
-import { PersonalInfoEditData, personalInfoEditSchema } from '@shared/schemas/personalInfo';
+import { useConvertFromUsd, useConvertToUsd } from '@shared/modules/currency';
+import { personalInfoEditSchema } from '@shared/schemas/personalInfo';
 import { Account } from '@shared/types';
 import { useForm, useStore } from '@tanstack/react-form';
 import { Alert, ScrollView, View } from 'react-native';
@@ -31,32 +27,8 @@ type PersonalInfoEditSheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'> &
 export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfoEditSheetProps) {
   const { countries, isLoading: isCountriesLoading } = useCountriesSWR();
   const { invalidateAccount } = useAccountSWR();
-
   const { convertFromUsd } = useConvertFromUsd();
   const { convertToUsd } = useConvertToUsd();
-  const { rates } = useExchangeRates();
-
-  const handleSubmit = async (data: PersonalInfoEditData) => {
-    try {
-      const wageRateSnapshot = getRateFromExchangeRates(rates, data.wageCurrency);
-
-      await accountService.update({
-        country: data.countryIso2,
-        display_currency: data.displayCurrency,
-        hourly_wage_usd: convertToUsd(data.hourlyWage, data.wageCurrency, wageRateSnapshot),
-        wage_currency: data.wageCurrency,
-        wage_rate_snapshot: wageRateSnapshot,
-        work_hours_per_day: data.workHoursPerDay,
-      });
-
-      invalidateAccount();
-      onClose();
-    } catch (e) {
-      console.error(JSON.stringify(e));
-
-      Alert.alert('Error', "Couldn't edit personal info, please try again later.");
-    }
-  };
 
   const form = useForm({
     defaultValues: {
@@ -72,7 +44,29 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
     },
     validationLogic: defaultFormValidationLogic,
     validators: { onDynamic: personalInfoEditSchema },
-    onSubmit: async ({ value }) => handleSubmit(value),
+    onSubmit: async ({ value }) => {
+      try {
+        const countryChanged = value.countryIso2 !== account.country;
+
+        const updated = await accountService.update({
+          country: value.countryIso2,
+          display_currency: value.displayCurrency,
+          hourly_wage_usd: convertToUsd(value.hourlyWage, value.wageCurrency),
+          wage_currency: value.wageCurrency,
+          work_hours_per_day: value.workHoursPerDay,
+        });
+
+        await invalidateAccount(updated, { revalidate: false });
+
+        if (countryChanged) {
+          void triggerBackgroundSuggestionsRefresh();
+        }
+
+        onClose();
+      } catch {
+        Alert.alert('Error', "Couldn't save your info, please try again.");
+      }
+    },
   });
 
   const handleClose = () => {

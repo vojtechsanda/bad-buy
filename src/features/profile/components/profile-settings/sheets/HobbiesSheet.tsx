@@ -6,19 +6,38 @@ import {
   SheetActions,
   SheetHeader,
 } from '@shared/components';
+import { hobbyService } from '@shared/modules/account';
+import { triggerBackgroundSuggestionsRefresh } from '@shared/modules/audit/service';
 import { PredefinedHobbyGrid } from '@shared/modules/hobby';
-import { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { AccountHobby } from '@shared/types';
+import { useEffect, useState } from 'react';
+import { Alert, ScrollView, Text, View } from 'react-native';
 
 import { AddCustomHobbyForm } from './AddCustomHobbyForm';
 
 type HobbiesSheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'> & {
-  hobbyIds: string[];
+  initialHobbies: AccountHobby[];
 };
 
-export function HobbiesSheet({ isOpen, onClose, hobbyIds }: HobbiesSheetProps) {
-  const [selectedIds, setSelectedIds] = useState<string[]>(hobbyIds);
-  const [customHobbies, setCustomHobbies] = useState<string[]>([]);
+export function HobbiesSheet({ isOpen, onClose, initialHobbies }: HobbiesSheetProps) {
+  const toPredefinedIds = (hobbies: AccountHobby[]) =>
+    hobbies.filter((h) => h.predefined_hobby_id !== null).map((h) => h.predefined_hobby_id!);
+
+  const toCustomNames = (hobbies: AccountHobby[]) =>
+    hobbies.filter((h) => h.predefined_hobby_id === null).map((h) => h.hobby_name);
+
+  const [selectedIds, setSelectedIds] = useState<string[]>(() => toPredefinedIds(initialHobbies));
+  const [customHobbies, setCustomHobbies] = useState<string[]>(() => toCustomNames(initialHobbies));
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Reset local selection to the latest SWR data each time the sheet opens.
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedIds(toPredefinedIds(initialHobbies));
+      setCustomHobbies(toCustomNames(initialHobbies));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   function toggleHobby(id: string) {
     setSelectedIds((previousIds) =>
@@ -38,10 +57,48 @@ export function HobbiesSheet({ isOpen, onClose, hobbyIds }: HobbiesSheetProps) {
     setCustomHobbies((previousHobbies) => previousHobbies.filter((hobby) => hobby !== name));
   }
 
-  const handleSave = () => {
-    // TODO: wire save to Supabase (#121)
-    onClose();
-  };
+  async function handleSave() {
+    const currentPredefinedIds = toPredefinedIds(initialHobbies);
+    const currentCustomNames = toCustomNames(initialHobbies);
+
+    const addedPredefinedIds = selectedIds.filter((id) => !currentPredefinedIds.includes(id));
+    const removedPredefined = initialHobbies.filter(
+      (h) => h.predefined_hobby_id !== null && !selectedIds.includes(h.predefined_hobby_id!),
+    );
+    const addedCustomNames = customHobbies.filter((n) => !currentCustomNames.includes(n));
+    const removedCustom = initialHobbies.filter(
+      (h) => h.predefined_hobby_id === null && !customHobbies.includes(h.hobby_name),
+    );
+
+    const hasChanges =
+      addedPredefinedIds.length > 0 ||
+      removedPredefined.length > 0 ||
+      addedCustomNames.length > 0 ||
+      removedCustom.length > 0;
+
+    if (!hasChanges) {
+      onClose();
+
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await Promise.all([
+        addedPredefinedIds.length ? hobbyService.addMany(addedPredefinedIds) : Promise.resolve([]),
+        ...removedPredefined.map((h) => hobbyService.remove(h.id)),
+        ...addedCustomNames.map((n) => hobbyService.addCustom(n)),
+        ...removedCustom.map((h) => hobbyService.remove(h.id)),
+      ]);
+
+      void triggerBackgroundSuggestionsRefresh();
+      onClose();
+    } catch {
+      Alert.alert('Error', "Couldn't save your hobbies, please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  }
 
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose}>
@@ -82,7 +139,12 @@ export function HobbiesSheet({ isOpen, onClose, hobbyIds }: HobbiesSheetProps) {
         </View>
       </ScrollView>
 
-      <SheetActions confirmLabel="Save" onConfirm={handleSave} onCancel={onClose} />
+      <SheetActions
+        confirmLabel={isSaving ? 'Saving…' : 'Save'}
+        onConfirm={handleSave}
+        onCancel={onClose}
+        isConfirmDisabled={isSaving}
+      />
     </BottomSheet>
   );
 }

@@ -8,11 +8,21 @@ import {
   useFonts,
 } from '@expo-google-fonts/nunito';
 import { AppProviders } from '@providers/AppProviders';
+import * as Notifications from 'expo-notifications';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
 SplashScreen.preventAutoHideAsync();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowBanner: true,
+    shouldShowList: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({

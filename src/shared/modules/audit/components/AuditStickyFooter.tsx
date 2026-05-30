@@ -7,13 +7,14 @@ import { Text, View } from 'react-native';
 type AuditStickyFooterProps = {
   freezeLabel?: string;
   onSkip: () => void;
-  onFreeze: () => void;
+  onFreeze: (name: string, durationMs: number) => void;
   onBuy: () => void;
 };
 
 export function AuditStickyFooter({
   onSkip,
   onBuy,
+  onFreeze,
   freezeLabel = 'Freeze',
 }: AuditStickyFooterProps) {
   const [freezeSheetOpen, setFreezeSheetOpen] = useState(false);
@@ -44,24 +45,11 @@ export function AuditStickyFooter({
 
       <SwipeToConfirm label="Swipe to skip" onConfirm={onSkip} />
 
-      <BottomSheet isOpen={freezeSheetOpen} onClose={() => setFreezeSheetOpen(false)}>
-        <Text className="font-nunito-bold text-heading text-typography-900">
-          Freeze sheet — coming soon
-        </Text>
-        <Text className="mt-2 font-nunito text-body text-typography-600">
-          Freeze functionality will be added in a later issue.
-        </Text>
-        <View className="mt-6">
-          <Button
-            variant="outline"
-            action="primary"
-            size="md"
-            onPress={() => setFreezeSheetOpen(false)}
-          >
-            <ButtonText>Close</ButtonText>
-          </Button>
-        </View>
-      </BottomSheet>
+      <FreezeSheet
+        isOpen={freezeSheetOpen}
+        onClose={() => setFreezeSheetOpen(false)}
+        onFreeze={onFreeze}
+      />
     </View>
   );
 }

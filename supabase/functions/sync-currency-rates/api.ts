@@ -1,13 +1,5 @@
-import { z } from 'https://esm.sh/zod@3';
-
 import { NAMES_URL, RATES_URL } from './constants.ts';
-
-const RatesResponseSchema = z.object({
-  date: z.string(),
-  usd: z.record(z.string(), z.number()),
-});
-
-const NamesResponseSchema = z.record(z.string(), z.string());
+import { NamesResponseSchema, RatesResponseSchema } from './schemas.ts';
 
 export type FetchedRate = { code: string; rate: number };
 

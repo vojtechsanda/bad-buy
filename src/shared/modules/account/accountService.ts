@@ -7,7 +7,7 @@ import {
   supabase,
 } from '@shared/services';
 import { Account, type TablesInsert } from '@shared/types';
-import { assertNoError, unwrapRow } from '@shared/utils';
+import { SupabaseError, assertNoError, unwrapRow } from '@shared/utils';
 
 export type CreateAccountPayload = Required<
   Pick<
@@ -38,12 +38,14 @@ function hasDefinedValues(patch: object): boolean {
 /**
  * Returns the account for the currently authenticated user.
  */
-async function get(): Promise<Account> {
+async function get(): Promise<Account | null> {
   const userId = await authService.getCurrentUserId();
 
-  const { data, error } = await supabase.from('account').select('*').eq('id', userId).single();
+  const { data, error } = await supabase.from('account').select('*').eq('id', userId).maybeSingle();
 
-  return unwrapRow(data, error, 'accountService.get');
+  if (error) throw new SupabaseError(error);
+
+  return data;
 }
 
 /**
@@ -54,16 +56,27 @@ async function create(payload: CreateAccountPayload): Promise<Account> {
 
   const row: TablesInsert<'account'> = { id, ...payload };
 
-  const { data, error } = await supabase.from('account').insert(row).select().single();
+  const { error } = await supabase.from('account').insert(row);
 
-  return unwrapRow(data, error, 'accountService.create');
+  assertNoError(error);
+
+  const account = await get();
+
+  if (!account) throw new Error('accountService.create: account row missing after insert');
+
+  return account;
 }
 
 /**
  * Updates account fields for the authenticated user's account.
  */
 async function update(patch: AccountUpdatePatch): Promise<Account> {
-  if (!hasDefinedValues(patch)) return get();
+  if (!hasDefinedValues(patch)) {
+    const existing = await get();
+    if (!existing) throw new Error('accountService.update: no account row found');
+
+    return existing;
+  }
 
   const userId = await authService.getCurrentUserId();
 

@@ -506,6 +506,13 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      read_suggestion_rate_limit: {
+        Args: { p_window_keys: string[] };
+        Returns: {
+          out_count: number;
+          out_window_key: string;
+        }[];
+      };
       increment_suggestion_rate_limit:
         | {
             Args: { p_user_id: string; p_window_keys: string[] };

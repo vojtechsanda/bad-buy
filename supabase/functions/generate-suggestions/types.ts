@@ -20,3 +20,18 @@ export type SuggestionInsertRow = Required<
 >;
 
 export type { AccountSuggestion };
+
+/**
+ * Discriminated union for pipeline steps that may short-circuit with a Response.
+ * Use `stepOk` / `stepFail` to construct values without object-literal noise at
+ * every call site.
+ */
+export type StepResult<T> = { ok: true; value: T } | { ok: false; response: Response };
+
+export function stepOk<T>(value: T): StepResult<T> {
+  return { ok: true, value };
+}
+
+export function stepFail(response: Response): StepResult<never> {
+  return { ok: false, response };
+}

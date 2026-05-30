@@ -1,75 +1,13 @@
-import { z } from 'https://esm.sh/zod@3';
+import { GEMINI_BASE_URL, GEMINI_MODEL, GEMINI_TIMEOUT_MS, SUGGESTION_COUNT } from './constants.ts';
+import {
+  GEMINI_RESPONSE_SCHEMA,
+  GeminiEnvelopeSchema,
+  GeminiResponseSchema,
+  type GeminiSuggestion,
+} from './schemas.ts';
 
-/** Stable Flash-Lite model — see https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-lite */
-const GEMINI_MODEL = 'gemini-3.1-flash-lite';
-const GEMINI_BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
-const GEMINI_TIMEOUT_MS = 30_000;
-const SUGGESTION_COUNT = 5;
+export type { GeminiSuggestion };
 
-/**
- * OpenAPI-style schema sent to Gemini for structured JSON output.
- *
- * Notes:
- * - minItems/maxItems are advisory for Gemini — it does not enforce them as a JSON
- *   Schema validator would. The real length guard is GeminiResponseSchema (.length(5)).
- * - propertyOrdering is a Gemini-specific extension (non-standard JSON Schema). It
- *   nudges the model to emit fields in a consistent order; do not remove it assuming
- *   it is dead code.
- */
-const GEMINI_RESPONSE_SCHEMA = {
-  type: 'array',
-  minItems: SUGGESTION_COUNT,
-  maxItems: SUGGESTION_COUNT,
-  description: `Exactly ${SUGGESTION_COUNT} alternative purchase suggestions.`,
-  items: {
-    type: 'object',
-    required: ['hobby_name', 'name', 'item_emoji', 'price_usd'],
-    propertyOrdering: ['hobby_name', 'name', 'item_emoji', 'price_usd'],
-    properties: {
-      hobby_name: {
-        type: 'string',
-        description: 'One of the hobbies from the prompt, spelled exactly.',
-      },
-      name: { type: 'string', description: 'Product name, 2–5 words.' },
-      item_emoji: { type: 'string', description: 'A single emoji for the item.' },
-      price_usd: {
-        type: 'number',
-        minimum: 0.01,
-        description: 'USD equivalent of a typical local-market price (positive number).',
-      },
-    },
-  },
-};
-
-const GeminiSuggestionSchema = z.object({
-  hobby_name: z.string().min(1),
-  name: z.string().min(1),
-  // Emojis can be multi-codepoint sequences (e.g. family emoji = 11 code units).
-  // .max(10) rejects obvious non-emoji strings while allowing all standard emoji.
-  item_emoji: z.string().min(1).max(10),
-  price_usd: z.number().positive(),
-});
-
-const GeminiResponseSchema = z.array(GeminiSuggestionSchema).length(SUGGESTION_COUNT);
-
-const GeminiEnvelopeSchema = z.object({
-  candidates: z
-    .array(
-      z.object({
-        content: z.object({
-          parts: z.array(z.object({ text: z.string().min(1) })).min(1),
-        }),
-      }),
-    )
-    .min(1),
-});
-
-export type GeminiSuggestion = z.infer<typeof GeminiSuggestionSchema>;
-
-/**
- * Strip newlines and truncate to `maxLen` characters.
- * Prevents prompt injection from DB-sourced strings (country, hobby names).
- */
 function sanitisePromptValue(value: string, maxLen: number): string {
   return value
     .replace(/[\r\n]+/g, ' ')
@@ -86,7 +24,7 @@ function buildPrompt(country: string, hobbyNames: string[], budgetUsd?: number):
 
   const budgetLine =
     budgetUsd != null && budgetUsd > 0
-      ? `The user is about to spend roughly $${budgetUsd.toFixed(2)} USD. Aim for suggestions around that price range (within ~50% above or below).`
+      ? `The user is about to spend roughly $${budgetUsd.toFixed(2)} USD. Aim for suggestions around that price range (within ~15% above or below).`
       : 'Aim for a realistic everyday price range for each suggestion.';
 
   return `You are helping a user of a personal finance app who lives in ${safeCountry}.
@@ -96,6 +34,7 @@ Generate exactly ${SUGGESTION_COUNT} alternative purchase suggestions they could
 
 Requirements:
 - Each suggestion must fit ${safeCountry}: realistic local products, availability, and prices (not generic US-only). Use hobby_name from the list above, spelled exactly.
+- Suggestions must be appropriate for all ages: no weapons, alcohol, tobacco, gambling, or adult content.
 - price_usd must be the USD equivalent of the typical local price (a positive number).
 - ${budgetLine}
 

@@ -1,7 +1,4 @@
 -- Atomically replaces cached suggestions for a set of hobbies/country.
--- Both the delete and insert run inside the same implicit plpgsql transaction,
--- so a failed insert rolls back the delete and the old cache is preserved.
--- Runs as SECURITY INVOKER so the caller's RLS policies still apply.
 
 CREATE OR REPLACE FUNCTION replace_suggestions(
   p_hobby_ids  uuid[],

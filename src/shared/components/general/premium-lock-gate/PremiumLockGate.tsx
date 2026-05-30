@@ -1,5 +1,5 @@
-import { useAccount } from '@features/account/hooks';
 import { PremiumUpsellSheet, PromoRedemptionSheet } from '@shared/components/sheets';
+import { useAccountSWR } from '@shared/modules/account';
 import { ReactNode, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
@@ -14,7 +14,7 @@ export function PremiumLockGate({
   noBadgeOverflowX = false,
   noBadgeOverflowY = false,
 }: PremiumLockGateProps) {
-  const { account } = useAccount();
+  const { account } = useAccountSWR();
 
   const [upsellOpen, setUpsellOpen] = useState(false);
   const [promoOpen, setPromoOpen] = useState(false);

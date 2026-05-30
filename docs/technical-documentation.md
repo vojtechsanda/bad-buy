@@ -937,11 +937,12 @@ Only **one type**: `freeze_thawed` — a frozen item's countdown has reached zer
 
 ### 9.2 Push Notifications
 
-- Implemented via `expo-notifications`.
-- Sent only if the user has `notifications_enabled = true` AND has granted OS-level push permission.
-- Triggered by the `process-thawed-items` cron (every 5 minutes).
+- Implemented via `expo-notifications` using **local scheduled notifications** (not server-side push). The notification is scheduled on-device at freeze time to fire at `freeze_until`.
+- Scheduled only if the user has `notifications_enabled = true` (DB preference) AND has granted OS-level push permission. Both must be true.
+- OS permission is requested contextually: the first time a user freezes an item, or when they enable the toggle in Profile settings. Never on app launch or during onboarding.
+- `notifications_enabled` in the DB stores the user's in-app opt-in preference. The OS permission is the effective gate — if the user revokes it in device settings, no notifications fire regardless of the DB value.
 - Generic copy in v1: title `"Decision time"`, body `"A frozen item is ready for your decision."` (No item-specific copy in v1 — the item details are inside the app.)
-- Tapping the push notification opens the app and routes to `/vault/[id]` (the audit view for that specific item). If the app was cold-started, the route is the deep link target.
+- Tapping the push notification opens the app and routes to `/vault/[id]` (the audit view for that specific item). If the app was cold-started, the route is the deep link target. (Deep link wiring is implemented in #112.)
 
 ### 9.3 In-App Notification Feed
 

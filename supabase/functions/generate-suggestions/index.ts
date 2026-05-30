@@ -17,10 +17,6 @@ import {
   secondsUntilNextWindow,
 } from './rate-limit.ts';
 
-// =============================================================================
-// Environment
-// =============================================================================
-
 function requireEnv(name: string): string {
   const value = Deno.env.get(name);
   if (!value) throw new Error(`Missing required environment variable: ${name}`);
@@ -30,10 +26,6 @@ function requireEnv(name: string): string {
 const GEMINI_API_KEY = requireEnv('GEMINI_API_KEY');
 const SUPABASE_URL = requireEnv('SUPABASE_URL');
 const SUPABASE_ANON_KEY = requireEnv('SUPABASE_ANON_KEY');
-
-// =============================================================================
-// HTTP helpers
-// =============================================================================
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -51,20 +43,12 @@ function jsonResponse(
   });
 }
 
-// =============================================================================
-// Validation
-// =============================================================================
-
 const RequestBodySchema = z.object({
   /** USD amount the user is about to spend — used to steer suggestion price range. */
   price_usd: z.number().positive().optional(),
   /** When true, skip the cache and always call the AI provider. Premium-only action on the client. */
   force_refresh: z.boolean().optional(),
 });
-
-// =============================================================================
-// Request handler
-// =============================================================================
 
 async function handleRequest(req: Request): Promise<Response> {
   const authHeader = req.headers.get('Authorization');
@@ -95,6 +79,11 @@ async function handleRequest(req: Request): Promise<Response> {
   const isPremium =
     account.premium_expires_at != null && new Date(account.premium_expires_at) > new Date();
   const { country } = account;
+
+  // force_refresh is a premium-only capability — reject at the server level.
+  if (forceRefresh && !isPremium) {
+    return jsonResponse({ error: 'force_refresh requires a premium account' }, 403);
+  }
 
   const { data: hobbies, error: hobbiesError } = await fetchHobbies(supabase, user.id);
   if (hobbiesError) throw hobbiesError;
@@ -149,10 +138,6 @@ async function handleRequest(req: Request): Promise<Response> {
 
   return jsonResponse({ suggestions: inserted });
 }
-
-// =============================================================================
-// Entry point
-// =============================================================================
 
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });

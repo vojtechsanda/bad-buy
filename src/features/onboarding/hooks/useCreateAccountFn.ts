@@ -1,4 +1,5 @@
-import { accountService, useAccountSWR } from '@shared/modules/account';
+import { accountService, hobbyService, useAccountSWR } from '@shared/modules/account';
+import { triggerBackgroundSuggestionsRefresh } from '@shared/modules/audit/service';
 import {
   getRateFromExchangeRates,
   useConvertToUsd,
@@ -42,10 +43,11 @@ export function useCreateAccountFn({ hobbyData, identityData, moneyData }: UseCr
         work_hours_per_day: moneyData.workHoursPerDay,
       });
 
-      // TODO(#177): uncomment once the service is adjusted
-      // await hobbyService.addMany(hobbyData.selectedIds)
+      await hobbyService.addMany(hobbyData.selectedIds);
 
       await invalidateAccount(updatedAccount, { revalidate: false });
+
+      void triggerBackgroundSuggestionsRefresh();
     } catch (e) {
       console.error(JSON.stringify(e));
 

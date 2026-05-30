@@ -1,6 +1,6 @@
 import { PremiumUpsellSheet, PromoRedemptionSheet } from '@shared/components';
 import { Switch } from '@shared/components/ui';
-import { mockAccountHobbies } from '@shared/modules/account';
+import { useHobbiesSWR } from '@shared/swr';
 import { Account } from '@shared/types';
 import { useState } from 'react';
 import { View } from 'react-native';
@@ -13,6 +13,8 @@ type ProfileSettingsProps = {
 };
 
 export function ProfileSettings({ account }: ProfileSettingsProps) {
+  const { hobbies, invalidateHobbies } = useHobbiesSWR();
+
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
   const [isHobbiesOpen, setIsHobbiesOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
@@ -24,7 +26,6 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
   return (
     <View className="divide-y divide-outline-200 rounded-md bg-background-0 shadow shadow-black/10">
       <SettingsRow label="Personal info" onPress={() => setIsPersonalInfoOpen(true)} />
-      {/* TODO: call triggerBackgroundSuggestionsRefresh() (from @shared/modules/audit) on hobby save */}
       <SettingsRow label="Hobbies" onPress={() => setIsHobbiesOpen(true)} />
       <SettingsRow label="Redeem code" onPress={() => setIsPromoOpen(true)} />
       <SettingsRow
@@ -42,7 +43,6 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
         isLastRow
       />
 
-      {/* TODO: call triggerBackgroundSuggestionsRefresh() (from @shared/modules/audit) on country save */}
       <PersonalInfoEditSheet
         isOpen={isPersonalInfoOpen}
         onClose={() => setIsPersonalInfoOpen(false)}
@@ -50,8 +50,11 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
       />
       <HobbiesSheet
         isOpen={isHobbiesOpen}
-        onClose={() => setIsHobbiesOpen(false)}
-        hobbyIds={mockAccountHobbies}
+        onClose={() => {
+          setIsHobbiesOpen(false);
+          void invalidateHobbies();
+        }}
+        initialHobbies={hobbies}
       />
       <LogoutSheet isOpen={isLogoutOpen} onClose={() => setIsLogoutOpen(false)} />
       <DeleteAccountSheet

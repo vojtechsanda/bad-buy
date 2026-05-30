@@ -18,7 +18,7 @@ export default function AuditScreen() {
   const { convertToUsd } = useConvertToUsd();
   const { account, isLoading: isAccountLoading } = useAccountSWR();
   const priceUsd = price && currency ? convertToUsd(price, currency) : undefined;
-  const { suggestions, isLoading, refresh } = useSuggestions(priceUsd);
+  const { suggestions, isLoading, error: suggestionsError, refresh } = useSuggestions(priceUsd);
 
   const { handleBuy, handleFreeze, handleSkip } = useAuditInitialActions();
 
@@ -55,7 +55,9 @@ export default function AuditScreen() {
           currency={currency}
           suggestions={suggestions}
           isLoading={isLoading}
+          error={suggestionsError}
           onRefresh={refresh}
+          onRetry={refresh}
         />
       </View>
     </ScreenContainer>

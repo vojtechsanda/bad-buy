@@ -506,16 +506,43 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      increment_suggestion_rate_limit: {
-        Args: { p_user_id: string; p_window_keys: string[] };
-        Returns: {
-          out_count: number;
-          out_window_key: string;
-        }[];
-      };
+      increment_suggestion_rate_limit:
+        | {
+            Args: { p_user_id: string; p_window_keys: string[] };
+            Returns: {
+              out_count: number;
+              out_window_key: string;
+            }[];
+          }
+        | {
+            Args: { p_window_keys: string[] };
+            Returns: {
+              out_count: number;
+              out_window_key: string;
+            }[];
+          };
       redeem_code: {
         Args: { p_code: string; p_user_id: string };
         Returns: string;
+      };
+      replace_suggestions: {
+        Args: { p_country: string; p_hobby_ids: string[]; p_rows: Json };
+        Returns: {
+          country: string;
+          generated_at: string;
+          generation_budget_usd: number | null;
+          hobby_id: string;
+          id: string;
+          item_emoji: string | null;
+          name: string;
+          price_usd: number;
+        }[];
+        SetofOptions: {
+          from: '*';
+          to: 'account_suggestion';
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
       };
     };
     Enums: {

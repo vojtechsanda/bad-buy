@@ -34,11 +34,9 @@ export async function fetchHobbies(supabase: SupabaseClient, userId: string) {
 
 export async function incrementRateLimit(
   supabase: SupabaseClient,
-  userId: string,
   windowKeys: string[],
 ): Promise<Map<string, number>> {
   const { data, error } = await supabase.rpc('increment_suggestion_rate_limit', {
-    p_user_id: userId,
     p_window_keys: windowKeys,
   });
   if (error) throw error;
@@ -67,14 +65,11 @@ export async function replaceSuggestions(
   country: string,
   rows: SuggestionRow[],
 ) {
-  const { error: deleteError } = await supabase
-    .from('account_suggestion')
-    .delete()
-    .in('hobby_id', hobbyIds)
-    .eq('country', country);
-  if (deleteError) throw deleteError;
-
-  return supabase.from('account_suggestion').insert(rows).select();
+  return supabase.rpc('replace_suggestions', {
+    p_hobby_ids: hobbyIds,
+    p_country: country,
+    p_rows: rows,
+  });
 }
 
 export function toSuggestionRows(

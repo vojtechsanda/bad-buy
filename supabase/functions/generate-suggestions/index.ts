@@ -64,9 +64,14 @@ async function handleRequest(req: Request): Promise<Response> {
   } = await supabase.auth.getUser();
   if (authError || !user) return jsonResponse({ error: 'Unauthorized' }, 401);
 
-  const rawBody = req.headers.get('content-type')?.includes('application/json')
-    ? await req.json()
-    : {};
+  let rawBody: unknown = {};
+  if (req.headers.get('content-type')?.includes('application/json')) {
+    try {
+      rawBody = await req.json();
+    } catch {
+      return jsonResponse({ error: 'Invalid JSON in request body' }, 400);
+    }
+  }
   const bodyResult = RequestBodySchema.safeParse(rawBody);
   if (!bodyResult.success) {
     return jsonResponse({ error: 'Invalid request body', detail: bodyResult.error.flatten() }, 400);
@@ -102,7 +107,7 @@ async function handleRequest(req: Request): Promise<Response> {
   const windows = getWindowKeys(now);
   const allWindowKeys = [windows.min, windows.hour, windows.day, windows.month];
 
-  const countMap = await incrementRateLimit(supabase, user.id, allWindowKeys);
+  const countMap = await incrementRateLimit(supabase, allWindowKeys);
 
   if (isPremium) {
     if (isOverPremiumCap(countMap, windows)) {

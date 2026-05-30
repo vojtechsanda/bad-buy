@@ -8,7 +8,6 @@ CREATE TABLE suggestion_rate_limit (
 ALTER TABLE suggestion_rate_limit ENABLE ROW LEVEL SECURITY;
 
 CREATE OR REPLACE FUNCTION increment_suggestion_rate_limit(
-  p_user_id    uuid,
   p_window_keys text[]
 )
 RETURNS TABLE (out_window_key text, out_count integer)
@@ -16,9 +15,15 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
 AS $$
+DECLARE
+  v_user_id uuid := auth.uid();
 BEGIN
+  IF v_user_id IS NULL THEN
+    RAISE EXCEPTION 'Not authenticated';
+  END IF;
+
   INSERT INTO suggestion_rate_limit (user_id, window_key, count)
-  SELECT p_user_id, k, 1
+  SELECT v_user_id, k, 1
   FROM unnest(p_window_keys) AS k
   ON CONFLICT (user_id, window_key)
   DO UPDATE SET count = suggestion_rate_limit.count + 1;
@@ -26,7 +31,7 @@ BEGIN
   RETURN QUERY
   SELECT r.window_key, r.count
   FROM suggestion_rate_limit r
-  WHERE r.user_id = p_user_id
+  WHERE r.user_id = v_user_id
     AND r.window_key = ANY(p_window_keys);
 END;
 $$;

@@ -69,7 +69,9 @@ export async function invalidateSuggestionsCache(): Promise<void> {
 export async function triggerBackgroundSuggestionsRefresh(): Promise<void> {
   try {
     await invalidateSuggestionsCache();
-    void fetchSuggestions();
+    void fetchSuggestions().catch((err) => {
+      console.warn('[triggerBackgroundSuggestionsRefresh] background fetch failed', err);
+    });
   } catch (err) {
     console.warn('[triggerBackgroundSuggestionsRefresh] failed', err);
   }

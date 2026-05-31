@@ -39,10 +39,6 @@ function jsonResponse(
   });
 }
 
-// ---------------------------------------------------------------------------
-// Pipeline steps
-// ---------------------------------------------------------------------------
-
 async function resolveAuth(
   req: Request,
 ): Promise<StepResult<{ supabase: Supabase; userId: string }>> {
@@ -81,7 +77,10 @@ async function parseBody(
   const result = RequestBodySchema.safeParse(rawBody);
   if (!result.success) {
     return stepFail(
-      jsonResponse({ error: 'Invalid request body', detail: result.error.flatten() }, 400),
+      jsonResponse(
+        { error: 'Invalid request body', detail: result.error.format((issue) => issue.message) },
+        400,
+      ),
     );
   }
 
@@ -101,7 +100,6 @@ async function loadContext(
   userId: string,
   forceRefresh: boolean,
 ): Promise<StepResult<RequestContext>> {
-  // fetchAccount failure → user not found (expected 4xx), short-circuit with ok:false.
   let account;
   try {
     account = await fetchAccount(supabase, userId);
@@ -113,21 +111,20 @@ async function loadContext(
     account.premium_expires_at != null && new Date(account.premium_expires_at) > new Date();
   const country = account.country || 'Unknown';
 
-  // Reject free users requesting a forced refresh before paying the hobbies query cost.
   if (forceRefresh && !isPremium) {
     return stepFail(jsonResponse({ error: 'force_refresh requires a premium account' }, 403));
   }
 
-  // fetchHobbies failure is an unexpected DB error (not a known 4xx), so we throw
-  // and let the top-level catch convert it to a 500 rather than returning ok:false.
   let hobbies;
   try {
     hobbies = await fetchHobbies(supabase, userId);
   } catch (e) {
     console.error('[generate-suggestions] fetchHobbies error', e);
+    // Unexpected DB error — bubble up to the top-level 500 handler
     throw new Error('Database error fetching hobbies');
   }
 
+  // No hobbies = nothing to generate
   if (!hobbies.length) {
     return stepFail(jsonResponse({ suggestions: [] }));
   }
@@ -142,10 +139,6 @@ type RateLimitResult =
 
 /**
  * Determine whether the request may proceed to the Gemini call.
- * Does NOT fetch or serve cached suggestions — that belongs to the caller.
- *
- * Note: the read-then-increment is not atomic; under burst traffic a window
- * may be slightly over-counted. Acceptable at current traffic levels.
  */
 async function checkRateLimit(
   supabase: Supabase,
@@ -198,8 +191,6 @@ async function generateAndPersist(
     throw new Error('Database error persisting suggestions');
   }
 
-  // Non-fatal: a persistent failure here silently disables rate limiting.
-  // TODO: pipe to an alerting channel (e.g. Sentry) so silent failures are visible.
   try {
     await incrementRateLimit(supabase, allWindowKeys);
   } catch (e) {
@@ -208,10 +199,6 @@ async function generateAndPersist(
 
   return inserted;
 }
-
-// ---------------------------------------------------------------------------
-// Orchestrator
-// ---------------------------------------------------------------------------
 
 async function handleRequest(req: Request): Promise<Response> {
   const authResult = await resolveAuth(req);
@@ -226,6 +213,7 @@ async function handleRequest(req: Request): Promise<Response> {
   if (!contextResult.ok) return contextResult.response;
   const { isPremium, country, hobbies, hobbyIds } = contextResult.value;
 
+  // Serve from cache unless the caller explicitly requested a fresh generation
   if (!forceRefresh) {
     const cached = await fetchCachedSuggestions(supabase, hobbyIds, country);
     if (cached.length) return jsonResponse({ suggestions: cached });
@@ -233,6 +221,7 @@ async function handleRequest(req: Request): Promise<Response> {
 
   const rateLimit = await checkRateLimit(supabase, isPremium, new Date());
 
+  // Premium soft cap: serve stale cache instead of erroring
   if (rateLimit.outcome === 'over_cap') {
     const cached = await fetchCachedSuggestions(supabase, hobbyIds, country);
     return jsonResponse({ suggestions: cached });

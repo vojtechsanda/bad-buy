@@ -42,13 +42,7 @@ Output must follow the response JSON schema only (no markdown, no extra text).`;
 }
 
 /**
- * Retries only on 5xx responses. Each attempt gets its own AbortController so
- * that a near-timeout on the first attempt doesn't immediately abort subsequent
- * retries. The retry delay grows exponentially with ±25 % jitter to avoid
- * thundering-herd behaviour under Gemini overload.
- *
- * Abort/network errors (not HTTP errors) propagate immediately — we don't retry
- * after our own deadline fires.
+ * Retries only on 5xx responses.
  */
 async function fetchWithRetry(
   url: string,
@@ -68,8 +62,9 @@ async function fetchWithRetry(
     clearTimeout(timeout);
   }
 
+  // retry with jitter and exponential backoff
   if (!res.ok && res.status >= 500 && retries > 0) {
-    const jitter = 1 + (Math.random() - 0.5) * 0.5; // ±25 %
+    const jitter = 1 + (Math.random() - 0.5) * 0.5; // ±25 % jitter
     const delay = baseDelayMs * Math.pow(2, attempt) * jitter;
     await new Promise((resolve) => setTimeout(resolve, delay));
     return fetchWithRetry(url, options, timeoutMs, retries - 1, baseDelayMs, attempt + 1);
@@ -84,8 +79,6 @@ export async function callGemini(
   hobbyNames: string[],
   budgetUsd?: number,
 ): Promise<GeminiSuggestion[]> {
-  // API key is passed as a query parameter rather than a header so it is
-  // typically scrubbed from structured log payloads by most logging pipelines.
   const url = `${GEMINI_BASE_URL}?key=${encodeURIComponent(apiKey)}`;
 
   const res = await fetchWithRetry(
@@ -104,10 +97,7 @@ export async function callGemini(
     GEMINI_TIMEOUT_MS,
   );
 
-  // Response body is consumed exactly once below — keep error and success paths mutually exclusive.
   if (!res.ok) {
-    // Limit and sanitise the detail: strip newlines and cap at 100 chars to
-    // avoid leaking quota identifiers or project metadata into Supabase logs.
     const rawDetail = await res.text().catch(() => '');
     const detail = rawDetail.split('\n')[0].trim().slice(0, 100);
     throw new Error(`Gemini ${res.status} (${GEMINI_MODEL}): ${detail}`);
@@ -115,13 +105,21 @@ export async function callGemini(
 
   const envelope = GeminiEnvelopeSchema.safeParse(await res.json());
   if (!envelope.success) {
-    console.error('[generate-suggestions] Unexpected Gemini envelope', envelope.error.flatten());
+    console.error(
+      '[generate-suggestions] Unexpected Gemini envelope',
+      envelope.error.format((issue) => issue.message),
+    );
     throw new Error(
       `Gemini envelope validation failed: ${envelope.error.issues[0]?.message ?? 'unknown error'}`,
     );
   }
 
-  const rawText = envelope.data.candidates[0].content.parts[0].text;
+  const candidate = envelope.data.candidates[0];
+  if (candidate.finishReason && candidate.finishReason !== 'STOP') {
+    throw new Error(`Gemini did not finish normally (finishReason: ${candidate.finishReason})`);
+  }
+
+  const rawText = candidate.content.parts[0].text;
   let rawJson: unknown;
   try {
     rawJson = JSON.parse(rawText);
@@ -133,7 +131,7 @@ export async function callGemini(
   if (!parsed.success) {
     console.error(
       '[generate-suggestions] Gemini response failed validation',
-      parsed.error.flatten(),
+      parsed.error.format((issue) => issue.message),
     );
     throw new Error(
       `Gemini response validation failed: ${parsed.error.issues[0]?.message ?? 'unknown error'}`,

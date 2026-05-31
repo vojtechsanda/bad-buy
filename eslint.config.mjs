@@ -10,7 +10,7 @@ export default defineConfig([
   expoConfig,
   prettierConfig,
   {
-    ignores: ['dist/*', 'supabase/functions/**'],
+    ignores: ['dist/*'],
   },
   {
     rules: {

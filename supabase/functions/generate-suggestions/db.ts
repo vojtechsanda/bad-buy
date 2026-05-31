@@ -1,6 +1,7 @@
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.105.1';
 
 import type { Database } from '../../../src/shared/types/database.ts';
+import { SUGGESTION_COUNT } from './constants.ts';
 import type {
   AccountContext,
   AccountHobbyRef,
@@ -44,11 +45,6 @@ export async function fetchHobbies(supabase: Supabase, userId: string): Promise<
   );
 }
 
-/**
- * Read current rate-limit counts without modifying them.
- * Keys absent from the table (no requests yet in that window) simply won't
- * appear in the returned Map — callers should treat missing keys as 0.
- */
 export async function fetchRateLimitCounts(
   supabase: Supabase,
   windowKeys: string[],
@@ -76,12 +72,17 @@ export async function fetchCachedSuggestions(
   hobbyIds: string[],
   country: string,
 ): Promise<AccountSuggestion[]> {
+  if (!hobbyIds.length) return [];
+
   return unwrapList(
     await supabase
       .from('account_suggestion')
       .select('*')
       .in('hobby_id', hobbyIds)
-      .eq('country', country),
+      .eq('country', country)
+      .order('generated_at', { ascending: false })
+      .order('id', { ascending: true })
+      .limit(SUGGESTION_COUNT),
   );
 }
 

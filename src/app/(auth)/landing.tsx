@@ -1,11 +1,10 @@
+import LandingHeroSvg from '@assets/illustrations/landing-hero.svg';
 import { AuthStickyFooter } from '@features/auth';
-import { IllustrationFrame, ScreenContainer } from '@shared/components';
+import { IllustrationSvgFrame, ScreenContainer } from '@shared/components';
 import { router } from 'expo-router';
-import { Text, View, useWindowDimensions } from 'react-native';
+import { Text, View } from 'react-native';
 
 export default function Landing() {
-  const { height } = useWindowDimensions();
-
   return (
     <ScreenContainer
       withSafeAreaTop={true}
@@ -18,11 +17,7 @@ export default function Landing() {
         />
       }
     >
-      <IllustrationFrame
-        source={require('@assets/images/landing.jpeg')}
-        style={{ height: height * 0.5 }}
-        alt="cat"
-      />
+      <IllustrationSvgFrame Svg={LandingHeroSvg} />
 
       <View className="mt-6 items-center gap-3">
         <Text className="text-center font-nunito-bold text-display-lg text-typography-900">

@@ -19,7 +19,7 @@ export function SwipeToConfirm({ label, onConfirm }: SwipeToConfirmProps) {
   const { gesturePan, translation } = useSwipeGesture({ trackWidth, onConfirm });
 
   const knobAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translation }],
+    transform: [{ translateX: translation.value }],
   }));
 
   return (

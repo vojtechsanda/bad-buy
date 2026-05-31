@@ -2,6 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.105.1';
 
 import type { Database } from '../../../src/shared/types/database.ts';
 import { GEMINI_API_KEY, SUPABASE_ANON_KEY, SUPABASE_URL } from '../_shared/env.ts';
+import { SUGGESTION_COUNT } from './constants.ts';
 import {
   fetchAccount,
   fetchCachedSuggestions,
@@ -213,10 +214,16 @@ async function handleRequest(req: Request): Promise<Response> {
   if (!contextResult.ok) return contextResult.response;
   const { isPremium, country, hobbies, hobbyIds } = contextResult.value;
 
-  // Serve from cache unless the caller explicitly requested a fresh generation
+  // Serve from cache unless the caller explicitly requested a fresh generation.
+  // Require a full set AND every current hobby covered — if any hobby has 0 cached
+  // suggestions (e.g. a newly added hobby), treat as a miss and regenerate.
   if (!forceRefresh) {
     const cached = await fetchCachedSuggestions(supabase, hobbyIds, country);
-    if (cached.length) return jsonResponse({ suggestions: cached });
+    const coveredHobbyIds = new Set(cached.map((s) => s.hobby_id));
+    const allHobbiesCovered = hobbyIds.every((id) => coveredHobbyIds.has(id));
+    if (cached.length >= SUGGESTION_COUNT && allHobbiesCovered) {
+      return jsonResponse({ suggestions: cached });
+    }
   }
 
   const rateLimit = await checkRateLimit(supabase, isPremium, new Date());

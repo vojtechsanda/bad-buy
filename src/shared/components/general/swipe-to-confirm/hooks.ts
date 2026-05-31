@@ -74,6 +74,6 @@ export function useSwipeGesture({ trackWidth, onConfirm }: UseSwipeGesturePanPar
 
   return {
     gesturePan,
-    translation: translation.value,
+    translation,
   };
 }

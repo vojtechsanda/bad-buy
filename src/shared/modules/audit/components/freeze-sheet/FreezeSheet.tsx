@@ -13,9 +13,9 @@ import { useState } from 'react';
 import { View } from 'react-native';
 
 import { CustomDurationInput } from './CustomDurationInput';
-import { DurationUnit, predefinedDurations, unitToMilliseconds } from './constants';
-import { FreezeSchema } from './schemas';
-import { resetCustomDuration } from './utils';
+import { DurationUnit, predefinedDurations } from './constants';
+import { freezeSchema } from './schemas';
+import { parseCustomDurationMs } from './utils';
 
 type FreezeSheetProps = {
   isOpen: boolean;
@@ -33,16 +33,20 @@ export function FreezeSheet({
   const [customDurationExpanded, setCustomDurationExpanded] = useState(false);
   const [customDurationValue, setCustomDurationValue] = useState('');
   const [selectedCustomUnit, setSelectedCustomUnit] = useState<DurationUnit>('hours');
+  const resetCustomDuration = () => {
+    setCustomDurationValue('');
+    setSelectedCustomUnit('hours');
+  };
 
   const form = useForm({
     defaultValues: { name: '', durationMs: 0 },
     validationLogic: defaultFormValidationLogic,
-    validators: { onDynamic: FreezeSchema },
+    validators: { onDynamic: freezeSchema },
     onSubmit: ({ value }) => {
       onFreeze(value.name, value.durationMs);
       form.reset();
       setCustomDurationExpanded(false);
-      resetCustomDuration(setCustomDurationValue, setSelectedCustomUnit);
+      resetCustomDuration();
       onClose();
     },
   });
@@ -50,12 +54,12 @@ export function FreezeSheet({
   const handlePredefinedSelect = (predefinedDurationMs: number) => {
     form.setFieldValue('durationMs', predefinedDurationMs);
     setCustomDurationExpanded(false);
-    resetCustomDuration(setCustomDurationValue, setSelectedCustomUnit);
+    resetCustomDuration();
   };
 
   const handleCustomToggle = () => {
     if (customDurationExpanded) {
-      resetCustomDuration(setCustomDurationValue, setSelectedCustomUnit);
+      resetCustomDuration();
     }
     setCustomDurationExpanded((previousExpanded) => !previousExpanded);
     form.setFieldValue('durationMs', 0);
@@ -63,17 +67,12 @@ export function FreezeSheet({
 
   const handleCustomValueChange = (value: string) => {
     setCustomDurationValue(value);
-    const parsed = parseInt(value, 10);
-    form.setFieldValue(
-      'durationMs',
-      isNaN(parsed) ? 0 : parsed * unitToMilliseconds[selectedCustomUnit],
-    );
+    form.setFieldValue('durationMs', parseCustomDurationMs(value, selectedCustomUnit));
   };
 
   const handleCustomUnitChange = (durationUnit: DurationUnit) => {
     setSelectedCustomUnit(durationUnit);
-    const parsed = parseInt(customDurationValue, 10);
-    form.setFieldValue('durationMs', isNaN(parsed) ? 0 : parsed * unitToMilliseconds[durationUnit]);
+    form.setFieldValue('durationMs', parseCustomDurationMs(customDurationValue, durationUnit));
   };
 
   return (
@@ -104,7 +103,7 @@ export function FreezeSheet({
           )}
         </form.Field>
 
-        <PremiumLockGate noBadgeOverflowX>
+        <PremiumLockGate>
           <CustomDurationInput
             value={customDurationValue}
             selectedUnit={selectedCustomUnit}

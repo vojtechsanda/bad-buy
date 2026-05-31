@@ -44,12 +44,7 @@ export default function AuditScreen() {
       <View className="gap-8">
         <AuditPriceView price={price} currency={currency} />
 
-        <AuditTimePriceView
-          price={price}
-          currency={currency}
-          account={account}
-          isLoading={isAccountLoading}
-        />
+        <AuditTimePriceView price={price} currency={currency} account={account} />
 
         <AuditSuggestionListView
           currency={currency}

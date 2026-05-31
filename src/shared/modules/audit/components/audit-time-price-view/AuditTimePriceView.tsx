@@ -29,7 +29,9 @@ export function AuditTimePriceView({
     );
   }
 
+
   const priceUsd = convertToUsd(price, currency);
+
   const workHours = priceUsd / account.hourly_wage_usd;
 
   return (

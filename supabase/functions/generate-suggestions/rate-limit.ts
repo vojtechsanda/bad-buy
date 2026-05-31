@@ -10,13 +10,13 @@
  */
 
 /** Hard caps for free users (all four windows must stay under their respective limits). */
-export const FREE_LIMITS = { min: 10, hour: 30, day: 60, month: 100 } as const;
+export const FREE_LIMITS = { min: 5, hour: 6, day: 10, month: 30 } as const;
 
 /**
  * Soft caps for premium users.
  * `min` acts as a burst guard so a single actor cannot exhaust the hour quota instantly.
  */
-export const PREMIUM_LIMITS = { min: 5, hour: 30 } as const;
+export const PREMIUM_LIMITS = { min: 60, hour: 1000, day: 5000, month: 50000 } as const;
 
 export type WindowName = 'min' | 'hour' | 'day' | 'month';
 
@@ -47,8 +47,6 @@ export function getWindowKeys(now: Date): WindowKeys {
 
 /**
  * Returns the number of seconds until the start of the next window boundary.
- * All boundaries are derived from explicit UTC date component arithmetic rather
- * than epoch-modulo division, so they stay correct regardless of epoch offsets.
  */
 export function secondsUntilNextWindow(now: Date, window: WindowName): number {
   const y = now.getUTCFullYear();
@@ -71,11 +69,6 @@ export function secondsUntilNextWindow(now: Date, window: WindowName): number {
   return Math.ceil((next.getTime() - now.getTime()) / 1000);
 }
 
-/**
- * Soft cap check for premium users.
- * Returns true if the per-minute burst guard or per-hour cap has been reached.
- * Callers should serve cached suggestions rather than returning 429.
- */
 export function isOverPremiumCap(countMap: Map<string, number>, windows: WindowKeys): boolean {
   return (
     (countMap.get(windows.min) ?? 0) >= PREMIUM_LIMITS.min ||
@@ -83,11 +76,6 @@ export function isOverPremiumCap(countMap: Map<string, number>, windows: WindowK
   );
 }
 
-/**
- * Hard cap check for free users.
- * Returns the first exceeded window (checked tightest-to-loosest), or null if all are under limit.
- * Callers should return 429 with a Retry-After header derived from secondsUntilNextWindow.
- */
 export function findExceededFreeWindow(
   countMap: Map<string, number>,
   windows: WindowKeys,

@@ -1,19 +1,21 @@
 import { fetchSuggestions } from '@shared/modules/audit/service';
 import type { AccountSuggestion } from '@shared/types';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useSuggestions(priceUsd?: number) {
   const [suggestions, setSuggestions] = useState<AccountSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const hasSuggestionsRef = useRef(false);
 
   const load = useCallback(
     async (forceRefresh = false) => {
-      setIsLoading(true);
+      if (!forceRefresh || !hasSuggestionsRef.current) setIsLoading(true);
       setError(null);
       try {
         const data = await fetchSuggestions(priceUsd, forceRefresh);
         setSuggestions(data);
+        hasSuggestionsRef.current = data.length > 0;
       } catch (err) {
         if (forceRefresh) {
           // TODO(frontend): show a toast "Couldn't refresh. Try again." once a Toast component is available.

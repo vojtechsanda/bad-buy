@@ -50,10 +50,8 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
       />
       <HobbiesSheet
         isOpen={isHobbiesOpen}
-        onClose={() => {
-          setIsHobbiesOpen(false);
-          void invalidateHobbies();
-        }}
+        onClose={() => setIsHobbiesOpen(false)}
+        onSaved={invalidateHobbies}
         initialHobbies={hobbies}
       />
       <LogoutSheet isOpen={isLogoutOpen} onClose={() => setIsLogoutOpen(false)} />

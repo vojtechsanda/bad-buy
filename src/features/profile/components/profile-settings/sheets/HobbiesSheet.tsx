@@ -15,29 +15,30 @@ import { Alert, ScrollView, Text, View } from 'react-native';
 
 import { AddCustomHobbyForm } from './AddCustomHobbyForm';
 
+function toPredefinedIds(hobbies: AccountHobby[]) {
+  return hobbies.filter((h) => h.predefined_hobby_id !== null).map((h) => h.predefined_hobby_id!);
+}
+
+function toCustomNames(hobbies: AccountHobby[]) {
+  return hobbies.filter((h) => h.predefined_hobby_id === null).map((h) => h.hobby_name);
+}
+
 type HobbiesSheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'> & {
   initialHobbies: AccountHobby[];
+  onSaved?: () => void;
 };
 
-export function HobbiesSheet({ isOpen, onClose, initialHobbies }: HobbiesSheetProps) {
-  const toPredefinedIds = (hobbies: AccountHobby[]) =>
-    hobbies.filter((h) => h.predefined_hobby_id !== null).map((h) => h.predefined_hobby_id!);
-
-  const toCustomNames = (hobbies: AccountHobby[]) =>
-    hobbies.filter((h) => h.predefined_hobby_id === null).map((h) => h.hobby_name);
-
+export function HobbiesSheet({ isOpen, onClose, initialHobbies, onSaved }: HobbiesSheetProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>(() => toPredefinedIds(initialHobbies));
   const [customHobbies, setCustomHobbies] = useState<string[]>(() => toCustomNames(initialHobbies));
   const [isSaving, setIsSaving] = useState(false);
 
-  // Reset local selection to the latest SWR data each time the sheet opens.
   useEffect(() => {
     if (isOpen) {
       setSelectedIds(toPredefinedIds(initialHobbies));
       setCustomHobbies(toCustomNames(initialHobbies));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
+  }, [isOpen, initialHobbies]);
 
   function toggleHobby(id: string) {
     setSelectedIds((previousIds) =>
@@ -96,6 +97,7 @@ export function HobbiesSheet({ isOpen, onClose, initialHobbies }: HobbiesSheetPr
     } catch {
       Alert.alert('Error', "Couldn't save your hobbies, please try again.");
     } finally {
+      onSaved?.();
       setIsSaving(false);
     }
   }
@@ -116,21 +118,19 @@ export function HobbiesSheet({ isOpen, onClose, initialHobbies }: HobbiesSheetPr
           </PremiumLockGate>
 
           {customHobbies.length > 0 && (
-            <View className="flex-row flex-wrap gap-2">
-              <View className="gap-3">
-                <Text className="font-nunito-bold text-body text-typography-900">
-                  My custom hobbies
-                </Text>
-                <View className="flex-row flex-wrap gap-2">
-                  {customHobbies.map((name) => (
-                    <SelectableChip
-                      key={name}
-                      label={name}
-                      selected={true}
-                      onRemove={() => removeCustomHobby(name)}
-                    />
-                  ))}
-                </View>
+            <View className="gap-3">
+              <Text className="font-nunito-bold text-body text-typography-900">
+                My custom hobbies
+              </Text>
+              <View className="flex-row flex-wrap gap-2">
+                {customHobbies.map((name) => (
+                  <SelectableChip
+                    key={name}
+                    label={name}
+                    selected={true}
+                    onRemove={() => removeCustomHobby(name)}
+                  />
+                ))}
               </View>
             </View>
           )}

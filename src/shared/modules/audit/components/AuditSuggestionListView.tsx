@@ -4,7 +4,6 @@ import { CurrencyCode, useConvertFromUsd } from '@shared/modules/currency';
 import { RefreshCw } from 'lucide-react-native';
 import { Text, View } from 'react-native';
 
-/** Minimal shape shared by both AccountSuggestion and TrackedItemSuggestion. */
 type SuggestionItem = {
   id: string;
   name: string;

@@ -92,8 +92,8 @@ export function HobbiesSheet({ isOpen, onClose, initialHobbies, onSaved }: Hobbi
         ...removedCustom.map((h) => hobbyService.remove(h.id)),
       ]);
 
-      void triggerBackgroundSuggestionsRefresh();
       onClose();
+      triggerBackgroundSuggestionsRefresh();
     } catch {
       Alert.alert('Error', "Couldn't save your hobbies, please try again.");
     } finally {

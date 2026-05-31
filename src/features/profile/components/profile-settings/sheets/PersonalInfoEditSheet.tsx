@@ -58,11 +58,11 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
 
         await invalidateAccount(updated, { revalidate: false });
 
-        if (countryChanged) {
-          void triggerBackgroundSuggestionsRefresh();
-        }
-
         onClose();
+
+        if (countryChanged) {
+          triggerBackgroundSuggestionsRefresh();
+        }
       } catch {
         Alert.alert('Error', "Couldn't save your info, please try again.");
       }

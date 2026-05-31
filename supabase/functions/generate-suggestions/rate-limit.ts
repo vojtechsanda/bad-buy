@@ -1,9 +1,6 @@
 /**
- * Rate-limit configuration and helpers for generate-suggestions.
- *
- * Semantics:
- *   Free users  — HARD caps: exceeded → 429 with Retry-After, no content returned.
- *   Premium users — SOFT caps: exceeded → serve stale cache, never 429.
+ * Free users  — HARD caps: exceeded → 429 with Retry-After, no content returned.
+ * Premium users — SOFT caps: exceeded → serve stale cache, never 429.
  *
  * Counters are incremented only after a successful Gemini call, so the check
  * "count >= limit" correctly blocks the request that would push the count over.
@@ -14,7 +11,6 @@ export const FREE_LIMITS = { min: 5, hour: 6, day: 10, month: 30 } as const;
 
 /**
  * Soft caps for premium users.
- * `min` acts as a burst guard so a single actor cannot exhaust the hour quota instantly.
  */
 export const PREMIUM_LIMITS = { min: 60, hour: 1000, day: 5000, month: 50000 } as const;
 
@@ -84,5 +80,6 @@ export function findExceededFreeWindow(
   if ((countMap.get(windows.hour) ?? 0) >= FREE_LIMITS.hour) return 'hour';
   if ((countMap.get(windows.day) ?? 0) >= FREE_LIMITS.day) return 'day';
   if ((countMap.get(windows.month) ?? 0) >= FREE_LIMITS.month) return 'month';
+
   return null;
 }

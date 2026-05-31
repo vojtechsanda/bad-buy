@@ -1,6 +1,6 @@
+import { usePredefinedHobbiesSWR } from '@shared/swr';
 import { View } from 'react-native';
 
-import { hobbyCategories, mockHobbies } from '../store';
 import { HobbyCategoryGroup } from './HobbyCategoryGroup';
 
 type PredefinedHobbyGridProps = {
@@ -9,13 +9,15 @@ type PredefinedHobbyGridProps = {
 };
 
 export function PredefinedHobbyGrid({ selectedIds, onToggle }: PredefinedHobbyGridProps) {
+  const { hobbiesByCategory } = usePredefinedHobbiesSWR();
+
   return (
     <View className="gap-6">
-      {hobbyCategories.map((category) => (
+      {Object.entries(hobbiesByCategory).map(([category, hobbies]) => (
         <HobbyCategoryGroup
           key={category}
           category={category}
-          hobbies={mockHobbies.filter((h) => h.category === category)}
+          hobbies={hobbies}
           selectedIds={selectedIds}
           onToggle={onToggle}
         />

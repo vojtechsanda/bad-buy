@@ -7,7 +7,12 @@ import {
   AuditTimePriceView,
   mockSuggestions,
 } from '@shared/modules/audit';
-import { CurrencyCode, convertToUsd, mockExchangeRates } from '@shared/modules/currency';
+import {
+  CurrencyCode,
+  convertToUsd,
+  currencyService,
+  mockExchangeRates,
+} from '@shared/modules/currency';
 import { NewDecisionInput, trackedItemService } from '@shared/services';
 import { useFrozenItemsSWR, useTrackedItemsSWR } from '@shared/swr';
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
@@ -78,9 +83,28 @@ export default function AuditScreen() {
               Alert.alert('Error', "Couldn't apply the buy choice, please try again later.");
             }
           }}
-          onFreeze={() => {
-            // TODO: Open freeze sheet and based on that freeze
-            invalidateSWR();
+          onFreeze={async (name, durationMs) => {
+            try {
+              const rate = await currencyService.getRate(currency);
+              const freezeUntil = new Date(Date.now() + durationMs).toISOString();
+
+              await trackedItemService.freeze({
+                conversion_rate_snapshot: rate,
+                freeze_until: freezeUntil,
+                name,
+                price_currency: currency,
+                price_usd: convertToUsd(price, currency, rate),
+                suggestions,
+              });
+
+              invalidateSWR();
+
+              router.push('/(app)/vault');
+            } catch (e) {
+              console.error(JSON.stringify(e));
+
+              Alert.alert('Error', "Couldn't freeze the decision, please try again later.");
+            }
           }}
         />
       }

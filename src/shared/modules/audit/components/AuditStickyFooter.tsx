@@ -1,8 +1,10 @@
-import { BottomSheet, Button, ButtonText, SwipeToConfirm } from '@shared/components';
+import { Button, ButtonText, SwipeToConfirm } from '@shared/components';
 import { themeColor } from '@shared/constants';
 import { ShoppingBag, Snowflake } from 'lucide-react-native';
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+
+import { FreezeSheet } from './freeze-sheet/FreezeSheet';
 
 type AuditStickyFooterProps = {
   freezeLabel?: string;

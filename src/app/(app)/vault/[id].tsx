@@ -1,33 +1,32 @@
-import { mockFreezedItems } from '@features/vault';
-import { CountdownPill, ScreenContainer } from '@shared/components';
-import { mockAccount } from '@shared/modules/account';
+import { useVaultItemSWR } from '@features/vault';
+import { CountdownPill, FullSizeError, FullSizeSpinner, ScreenContainer } from '@shared/components';
+import { useAccountSWR } from '@shared/modules/account';
 import {
   AuditPriceView,
   AuditStickyFooter,
   AuditSuggestionListView,
   AuditTimePriceView,
-  mockSuggestions,
 } from '@shared/modules/audit';
 import { convertFromUsd } from '@shared/modules/currency';
-import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { View } from 'react-native';
 
 export default function VaultItemDetail() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const suggestions = mockSuggestions;
-  const item = mockFreezedItems.find((item) => item.id === id);
-  const account = mockAccount;
+  const { vaultItem, isLoading: isVaultItemLoading } = useVaultItemSWR(id);
+  const { account, isLoading: isAccountLoading } = useAccountSWR();
 
-  if (!item) {
-    return <Redirect href="/(app)/vault" />;
+  if (isVaultItemLoading || isAccountLoading) return <FullSizeSpinner />;
+  if (!vaultItem || !account) {
+    return <FullSizeError message="Unable to load vault detail, please try again later" />;
   }
 
   const displayedPrice = convertFromUsd(
-    item.price_usd,
-    item.price_currency,
-    item.conversion_rate_snapshot,
+    vaultItem.price_usd,
+    vaultItem.price_currency,
+    vaultItem.conversion_rate_snapshot,
   );
 
   return (
@@ -37,7 +36,7 @@ export default function VaultItemDetail() {
           onSkip={() =>
             router.push({
               pathname: '/(app)/skip',
-              params: { price: displayedPrice, currency: item.price_currency },
+              params: { price: displayedPrice, currency: vaultItem.price_currency },
             })
           }
           onBuy={() => router.push('/(app)/buy')}
@@ -48,12 +47,12 @@ export default function VaultItemDetail() {
     >
       <View className="gap-8">
         <View className="gap-2">
-          <AuditPriceView price={displayedPrice} currency={item.price_currency} />
+          <AuditPriceView price={displayedPrice} currency={vaultItem.price_currency} />
 
           <View className="flex-row">
-            {item.freeze_until && (
+            {vaultItem.freeze_until && (
               <CountdownPill
-                expiresAt={item.freeze_until}
+                expiresAt={vaultItem.freeze_until}
                 expiredLabel="Decision time"
                 className="text-heading"
                 formatExpireAtLabel={(label) => `Thaws in ${label}`}
@@ -64,13 +63,13 @@ export default function VaultItemDetail() {
 
         <AuditTimePriceView
           price={displayedPrice}
-          currency={item.price_currency}
+          currency={vaultItem.price_currency}
           account={account}
         />
 
         <AuditSuggestionListView
-          currency={item.price_currency}
-          suggestions={suggestions}
+          currency={vaultItem.price_currency}
+          suggestions={vaultItem.suggestions}
           showRefresh={false}
         />
       </View>

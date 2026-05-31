@@ -2,434 +2,157 @@
 
 > Master your money by turning impulsive buys into conscious choices.
 
-BadBuy is a React Native (Expo) mobile app that helps users curb impulse spending by reframing prices as **work hours**. Before you commit, you see the true cost — and discover mindful alternatives tailored to your hobbies and location.
+BadBuy is a React Native mobile app that reframes prices as **work hours** — so before you buy, you see what that purchase actually costs you in time. It's calm, non-judgmental, and built around one idea: a mindful pause can change a decision.
 
 ---
 
 ## Table of Contents
 
-- [How It Works](#how-it-works)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Screens](#screens)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Development](#development)
-  - [Available Scripts](#available-scripts)
-  - [Project Structure](#project-structure)
-  - [Commit Conventions](#commit-conventions)
-- [Database](#database)
-- [Architecture](#architecture)
+- [🖼️ Screenshots](#️-screenshots)
+- [🚀 Features](#-features)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [🎯 How It Works](#-how-it-works)
+- [📦 Installation](#-installation)
+- [🔧 Development](#-development)
+- [📐 Architecture](#-architecture)
 
 ---
 
-## How It Works
+## 🖼️ Screenshots
 
-### The Audit Flow — the core loop
+<div align="center">
 
+|                                 Home                                  |                                  Audit                                  |                             Skip Celebration                             |
+| :-------------------------------------------------------------------: | :---------------------------------------------------------------------: | :----------------------------------------------------------------------: |
+| <img width="350" src="docs/screenshots/home-screen.png" alt="Home" /> | <img width="350" src="docs/screenshots/audit-screen.png" alt="Audit" /> | <img width="350" src="docs/screenshots/victory-screen.png" alt="Skip" /> |
+
+|                                  Vault                                  |                                  Freeze                                  |                             Referral & Premium                              |
+| :---------------------------------------------------------------------: | :----------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
+| <img width="350" src="docs/screenshots/vault-screen.png" alt="Vault" /> | <img width="350" src="docs/screenshots/freeze-sheet.png" alt="Freeze" /> | <img width="350" src="docs/screenshots/premium-unlock.png" alt="Premium" /> |
+
+</div>
+
+---
+
+## 🎯 How It Works
+
+### The core loop
+
+Enter a price on **Home** → tap **"See the cost"** → the **Audit** screen shows how many work hours that purchase represents, plus 5 hobby-tailored alternatives at the same price.
+
+From there, three choices:
+
+| Action     | How                 | Result                                         |
+| ---------- | ------------------- | ---------------------------------------------- |
+| **Skip**   | Swipe-to-confirm    | Confetti celebration, savings counter updated  |
+| **Buy**    | Tap                 | Calm send-off, decision recorded               |
+| **Freeze** | Tap → pick duration | Item lands in the Vault with a countdown timer |
+
+### The Vault
+
+Frozen items sit in the **Vault** tab with a live countdown pill. When the timer hits zero, a push notification fires and the item shows a **"Decision time"** badge. Tapping it reopens the full Audit view — skip, buy, or re-freeze.
+
+### Onboarding
+
+A four-step setup collects your name and country, hourly wage and display currency, and at least 3 hobbies. These three inputs power every work-hours calculation and every AI-generated suggestion in the app.
+
+---
+
+## 🚀 Features
+
+| Feature                       | Description                                                                                                      |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Work-Hours Reframing**      | Converts any price into hours of your personal work time, with a caption that puts it in workday context         |
+| **AI-Generated Alternatives** | 5 hobby-tailored alternatives per audit — things you actually care about at the same price                       |
+| **Freeze & Revisit**          | Not ready to decide? Freeze the item and get a push notification when the timer runs out                         |
+| **Savings Tracker**           | Running total of money saved through skips, shown in your display currency                                       |
+| **Mindful Leveling**          | 20 levels across 4 tiers (Aware → Mindful → Intentional → Zen) driven by your decision count                     |
+| **Premium via Referral**      | Unlock custom hobbies, custom freeze durations and suggestion refresh by sharing or redeeming a 6-character code |
+| **Multi-Currency**            | ~150+ currencies; wage currency and display currency configured independently                                    |
+
+---
+
+## 🛠️ Tech Stack
+
+| Category               | Choice                                                   |
+| ---------------------- | -------------------------------------------------------- |
+| **Framework**          | React Native + Expo (managed workflow)                   |
+| **Backend**            | Supabase — PostgreSQL, Auth, Edge Functions, pg_cron     |
+| **Styling**            | NativeWind (Tailwind for React Native) + Gluestack UI v3 |
+| **State & Data**       | Zustand + SWR                                            |
+| **Forms & Validation** | TanStack Form + Zod                                      |
+| **Animations**         | React Native Reanimated + Lottie                         |
+
+---
+
+## 📦 Installation
+
+**Prerequisites:** Node.js ≥ 20.20.1, pnpm 10
+
+```bash
+git clone git@github.com:vojtechsanda/bad-buy.git
+cd bad-buy
+pnpm install
+cp .env.example .env      # fill in your Supabase URL and anon key
+pnpm prepare              # installs Husky git hooks
+pnpm start                # pick Android / iOS / web from the Expo CLI or just run like that
 ```
-Home  →  enter a price  →  Audit  →  Skip / Buy / Freeze
-```
-
-1. On the **Home** screen the user types any price and taps **"See the cost"**.
-2. The **Audit** screen immediately shows:
-   - The price converted into **work hours** (e.g. "4.5 hours of your time").
-   - A human caption that contextualises it against their workday (e.g. "More than half your workday").
-   - **5 hobby-tailored alternatives** — things they actually care about that cost the same (e.g. "4 climbing-gym sessions", "2 months of your music streaming").
-3. From there, three choices:
-
-| Action | How | What happens |
-|---|---|---|
-| **Skip** | Swipe-to-confirm gesture | Skip celebration screen → savings counter updated → back to Home |
-| **Buy** | Tap button | Calm send-off screen → back to Home |
-| **Freeze** | Tap button → pick duration | Item added to Vault with a countdown timer |
-
-Every skip and buy increments the **decision counter**, which drives the leveling system.
 
 ---
 
-### The Vault Flow — freeze now, decide later
-
-```
-Audit  →  Freeze  →  Vault (countdown)  →  Push notification  →  Vault detail  →  Skip or Buy
-```
-
-When a user isn't ready to decide, they freeze the item with a duration (30 min / 6 hr / 1 day / 1 week, or custom with Premium). The item appears in the **Vault** tab with a live countdown pill.
-
-When the timer expires:
-
-- A push notification fires: *"A frozen item is ready for your decision."*
-- An in-app notification dot appears on the bell icon.
-- The item in the Vault shows a **"Decision time"** badge.
-
-Tapping the notification (or the item in the Vault) opens the same Audit view for that item, where the user finally chooses skip or buy — or re-freezes for another round.
-
----
-
-### The Onboarding Flow — personalise before the first audit
-
-```
-Register  →  Identity  →  Money  →  Hobbies  →  (optional) Promo code  →  Home
-```
-
-Onboarding collects what the app needs to make the work-hours calculation and suggestions meaningful:
-
-| Step | Collects |
-|---|---|
-| Identity | Name, birthdate, country |
-| Money | Display currency, hourly wage + wage currency, work hours per day |
-| Hobbies | 3+ interests from a predefined list (used to generate alternatives) |
-| Promo *(optional)* | A referral or seed code — grants 3 months of Premium |
-
-Once complete, the user lands on Home and the full app shell is available.
-
----
-
-### The Profile Flow — settings and progress
-
-The **Profile** tab surfaces everything personal:
-
-- **Level badge + progress bar** — current level (1–20) across four tiers: Aware → Mindful → Intentional → Zen.
-- **Savings stats** — total amount saved, decision count.
-- **Referral code** — a 6-character code the user can share. When someone redeems it, both users get 3 months of Premium.
-- **Settings** — display currency, wage, country, hobbies, notification toggle, personal info, account deletion.
-
-Premium is unlocked exclusively by redeeming a code (no payment flow in v1). It enables: custom freeze durations, custom hobbies, and refreshing the AI-generated alternatives on the Audit screen.
-
----
-
-## Features
-
-| Feature | Description |
-|---|---|
-| Work-hours reframing | Converts any price into hours of your personal work time |
-| AI-generated alternatives | 5 hobby-relevant suggestions per audit, generated by a Supabase Edge Function |
-| Freeze & revisit | Vault of frozen items with countdown timers and push notifications |
-| Savings tracker | 30-day total saved in your display currency, updated on every skip |
-| Leveling system | 20 levels across 4 tiers (Aware → Mindful → Intentional → Zen) |
-| Premium via referral | Unlock custom hobbies, custom freeze durations, and suggestion refresh by sharing or redeeming a code |
-| Multi-currency | ~150+ currencies; wage and display currency configured independently |
-| Notification feed | In-app bell with unread-dot badge; reads sync to Supabase |
-
----
-
-## Tech Stack
-
-| Category | Choice |
-|---|---|
-| Mobile framework | React Native 0.83 + Expo 55 (managed workflow) |
-| Routing | Expo Router (file-based) |
-| Backend | Supabase (PostgreSQL + Auth + Edge Functions + pg_cron) |
-| Styling | NativeWind 4 (Tailwind for React Native) |
-| Component library | Gluestack UI v3 |
-| State management | Zustand |
-| Server state / cache | SWR |
-| Forms | TanStack Form + Zod |
-| Animations | React Native Reanimated + Lottie + Legend Motion |
-| Icons | Lucide React Native |
-| Haptics | expo-haptics |
-| Push notifications | expo-notifications |
-| Language | TypeScript 5.9 |
-| Package manager | pnpm 10 |
-
----
-
-## Screens
-
-### Landing
-
-<p align="center">
-  <img width="280" alt="Landing" src="https://github.com/user-attachments/assets/80f5948d-6fb3-4834-a9ff-308c03d6c502" />
-</p>
-
-The first screen for unauthenticated users. A calm hero illustration with a single headline — *"Pause before you buy."* Two CTAs: **Create account** (primary) and **I already have an account**.
-
----
-
-### Register & Login
-
-<p align="center">
-  <img width="280" alt="Login" src="https://github.com/user-attachments/assets/6c4caa64-84b2-4de9-b7be-193775b82ece" />
-  &nbsp;&nbsp;
-  <img width="280" alt="Register" src="https://github.com/user-attachments/assets/cde497dd-5178-4b41-b5c7-0887964f327d" />
-</p>
-
-Standard email + password forms. Register validates format, minimum password length, and matching confirmation. Login shows a generic error on failure to avoid leaking whether an email exists.
-
----
-
-### Onboarding — Identity
-
-<p align="center">
-  <img width="280" alt="Onboarding Identity" src="https://github.com/user-attachments/assets/8f7d7aba-a6bd-47b7-b979-251b3a46e878" />
-</p>
-
-**Step 1 of 3.** Collects name, birthdate, and country via a searchable bottom sheet. Country selection pre-fills both currency fields in the next step.
-
----
-
-### Onboarding — Money
-
-<p align="center">
-  <img width="280" alt="Onboarding Money" src="https://github.com/user-attachments/assets/9e940c53-cced-4dc4-a716-c4a89ea518af" />
-</p>
-
-**Step 2 of 3.** Sets the display currency (what prices show in), the hourly wage with its own currency selector, and average work hours per day. These three values power every work-hours calculation in the app.
-
----
-
-### Onboarding — Hobbies
-
-<p align="center">
-  <img width="280" alt="Onboarding Hobbies" src="https://github.com/user-attachments/assets/c6fe8d32-96fc-47a5-9fd1-34f81d6dca58" />
-  &nbsp;&nbsp;
-  <img width="280" alt="Onboarding Promo" src="https://github.com/user-attachments/assets/bc2fb8c2-ff3f-498d-a3fb-8d03ce668e80" />
-</p>
-
-**Step 3 of 3.** Pick at least 3 interests from a categorised grid of predefined hobby chips. These feed directly into the AI-generated alternatives shown on every audit. A *"I have a promo code"* link at the bottom adds an optional fourth step where a referral or seed code can be redeemed for 3 months of Premium.
-
----
-
-### Home
-
-<p align="center">
-  <img width="280" alt="Home" src="https://github.com/user-attachments/assets/d69dedf6-130d-473d-b110-7eba041122bb" />
-</p>
-
-The main tab after login. A time-aware greeting, a **30-day savings card** showing the total skipped in the user's display currency, and a large price input with an inline currency selector. Tapping **"See the cost"** opens the Audit screen.
-
----
-
-### Audit
-
-<p align="center">
-  <img width="280" alt="Audit"  src="https://github.com/user-attachments/assets/6e75c710-66ff-48ef-b800-390bf25104e2"/>
-</p>
-
-
-The core screen. The entered price is shown as **work hours** with a contextual caption (e.g. "More than half your workday"). Below that, 5 hobby-tailored alternatives at the same price. Three actions at the bottom: **Skip** (swipe-to-confirm), **Buy** (tap), **Freeze** (tap → duration picker).
-
----
-
-### Skip Celebration
-
-<p align="center">
-  <img width="280" alt="Skip Celebration" src="https://github.com/user-attachments/assets/a84f4e24-43e5-4250-992a-84908572eef4" />
-</p>
-
-Full-screen confetti burst with the saved amount front and centre. Shows a level-progress update — or a highlighted level-up card when a new level is reached. The only deliberately bold, joyful moment in the app. Tapping **Continue** returns to Home.
-
----
-
-### Buy Send-off
-
-<p align="center">
-  <img width="280" alt="Buy Send-off" src="https://github.com/user-attachments/assets/b9767801-1af5-4aff-9a7c-d0f068fd67c8" />
-</p>
-
-Calm, non-judgmental screen acknowledging the decision. No confetti. Quietly records the decision and increments the decision counter. Tapping **Continue** returns to Home.
-
----
-
-### Vault
-
-<p align="center">
-  <img width="280" alt="Vault Detail" src="https://github.com/user-attachments/assets/93932a90-eff5-4fe3-9a8a-57f995a12adf" />
-</p>
-
-Lists every frozen item with a live **countdown pill** showing time remaining. Items whose timer has expired show a **"Decision time"** badge instead. Tapping any item opens its Vault detail.
-
----
-
-### Vault Detail
-
-<p align="center">
-  <img width="280" alt="Audit" src="https://github.com/user-attachments/assets/c781d675-3da0-4c9c-93c7-b39bc6893f68" />
-</p>
-
-Re-uses the full Audit UI for a specific frozen item. The user can finally **skip**, **buy**, or **re-freeze** the item for another round. The conversion rate is shown from the original freeze time.
-
----
-
-### Profile
-
-<p align="center">
-  <img width="280" alt="Profile" src="https://github.com/user-attachments/assets/5b6be01f-91e7-49b7-b6bc-5fc1e3b9c250" />
-</p>
-
-Shows the **level badge**, progress bar toward the next level, total savings, and the personal **referral code** (tap to copy). Below that, all account settings: display currency, wage, country, hobbies, notification toggle, personal info edit, and account management (logout, delete).
-
----
-
-### Freeze Duration Picker
-
-<p align="center">
-  <img width="280" alt="Freeze Duration Picker" src="https://github.com/user-attachments/assets/9d34b4f1-5808-47c6-a577-f90645ac3eca" />
-</p>
-
-A bottom sheet that appears when the user taps **Freeze** on the Audit screen. Four predefined chips (30 min / 6 hr / 1 day / 1 week) plus a **Custom** option for Premium users. Confirms with a primary button.
-
-
----
-
-## Getting Started
-
-### Prerequisites
-
-| Tool | Version |
-|---|---|
-| Node.js | ≥ 20.20.1 (see `.nvmrc`) |
-| pnpm | 10.33.0 |
-| Expo CLI | bundled with the `expo` package |
-
-### Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone <repo-url>
-   cd bad-buy
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   pnpm install
-   ```
-
-3. **Set up environment variables**
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   Open `.env` and fill in your Supabase project URL and anon key.
-
-4. **Install Git hooks**
-
-   ```bash
-   pnpm prepare
-   ```
-
-   This wires up Husky. The `pre-commit` hook runs Prettier + ESLint on staged files; `commit-msg` enforces Conventional Commits.
-
-5. **Start the dev server**
-
-   ```bash
-   pnpm start
-   ```
-
-   Then pick a target from the Expo CLI: Android emulator, iOS simulator, Expo Go, or web.
-
----
-
-## Development
+## 🔧 Development
 
 ### Available Scripts
 
-| Script | Description |
-|---|---|
-| `pnpm start` | Start Expo dev server |
-| `pnpm android` | Open on Android emulator |
-| `pnpm ios` | Open on iOS simulator |
-| `pnpm web` | Open in browser |
-| `pnpm lint` | ESLint with zero-warnings policy |
-| `pnpm prettier --check .` | Check formatting (runs in CI) |
-| `pnpm build:web` | Export for web |
-| `pnpm build:android` | Export for Android |
-| `pnpm build:ios` | Export for iOS |
-| `pnpm gen:types` | Regenerate Supabase TypeScript types |
-| `pnpm gluestack-add <component>` | Add a Gluestack v3 component |
+| Script                                           | Description                          |
+| ------------------------------------------------ | ------------------------------------ |
+| `pnpm start`                                     | Expo dev server                      |
+| `pnpm android` / `pnpm ios` / `pnpm web`         | Platform-specific start              |
+| `pnpm lint`                                      | ESLint — zero warnings policy        |
+| `pnpm prettier --check .`                        | Formatting check (runs in CI)        |
+| `pnpm gen:types`                                 | Regenerate Supabase TypeScript types |
+| `pnpm build:android` / `build:ios` / `build:web` | Production export                    |
 
 ### Project Structure
 
 ```
 src/
-├── app/              # Expo Router routes ONLY — no logic here
-│   ├── (auth)/       # Public routes: landing, login, register, onboarding
-│   └── (app)/        # Gated routes: home, audit, vault, profile, skip, buy
-├── features/         # Vertical slices — one folder per domain
+├── app/               # Expo Router routes
+│   ├── (auth)/        # landing, login, register
+│   ├── (onboarding)/  # multi-step onboarding flow
+│   └── (app)/         # home, audit, buy, skip, profile, vault
+├── features/          # vertical slices — one folder per domain
 │   ├── auth/
-│   ├── audit/
-│   ├── vault/
+│   ├── home/
+│   ├── onboarding/
 │   ├── profile/
-│   ├── decision/
-│   ├── notifications/
-│   ├── premium/
-│   └── referral/
-├── providers/        # App-wide React context providers
-└── shared/           # Promoted here only when 2+ features share it
-    ├── components/
-    │   ├── ui/       # Gluestack v3 primitives (via pnpm gluestack-add)
-    │   └── general/  # Custom shared components
+│   └── vault/
+└── shared/            # promoted here when 2+ features need it
+    ├── components/    # UI primitives, form fields, sheets, layout
+    ├── modules/       # cross-cutting domain logic (audit, currency, gamification, hobby)
     ├── hooks/
-    ├── services/
-    ├── types/
+    ├── services/      # Supabase client and API wrappers
     └── utils/
-
-supabase/
-├── migrations/       # SQL migrations (includes pg_cron wiring)
-└── functions/        # Edge Functions: generate-suggestions, sync-currency-rates, …
-
-docs/
-├── technical-documentation.md   # Full product + architecture spec
-├── decisions/                   # ADR-001 … ADR-005 (locked-in tech choices)
-└── ui-designs/                  # HTML mockups per screen
 ```
 
-**Import rule:** features may import freely from `shared/` and may read another feature's `types.ts`, but must never import another feature's components, hooks, or store. When two features need the same thing, move it to `shared/`.
+## 📐 Architecture
 
-### Commit Conventions
+Full product spec, screen behaviour and database schema → [`docs/technical-documentation.md`](docs/technical-documentation.md)
 
-Commits must follow **Conventional Commits** and start with a lowercase letter (enforced by commitlint):
+Locked-in tech decisions as ADRs → [`docs/decisions/`](docs/decisions/)
 
-```
-feat: add freeze duration picker
-fix: correct work-hours rounding for sub-minute values
-chore: update pnpm lockfile
-```
-
-The `commit-msg` hook rejects messages that don't match this pattern.
-
----
-
-## Database
-
-BadBuy uses **Supabase** (PostgreSQL + Auth + Edge Functions).
-
-### Generating TypeScript types
-
-After any schema migration, regenerate the types file:
-
-```bash
-pnpm exec supabase login   # once per machine
-pnpm gen:types             # writes src/shared/types/database.ts
-```
-
-### Edge Functions
-
-| Function | Trigger | Purpose |
-|---|---|---|
-| `generate-suggestions` | App call (audit page load) | AI-generated hobby-relevant alternatives |
-| `sync-currency-rates` | pg_cron, daily 04:00 UTC | Fetch ~150+ rates from fawazahmed0/exchange-api |
-| `moderate-custom-hobby` | App call (premium user adds hobby) | Async content moderation |
-| `redeem-code` | App call (code submission) | Validate + grant 3 months Premium to redeemer and referrer |
-| `process-thawed-items` | pg_cron, every 5 minutes | Create notification rows + send push for thawed vault items |
-
----
-
-## Architecture
-
-The full product spec, screen-by-screen behaviour, and database schema live in [`docs/technical-documentation.md`](docs/technical-documentation.md).
-
-Locked-in technology decisions are documented as ADRs in [`docs/decisions/`](docs/decisions/):
-
-| ADR | Decision |
-|---|---|
-| [ADR-001](docs/decisions/ADR-001.md) | Supabase as the backend |
-| [ADR-002](docs/decisions/ADR-002.md) | React Native + Expo (managed workflow) |
-| [ADR-003](docs/decisions/ADR-003.md) | Hybrid vertical folder structure |
+| ADR                                  | Decision                                  |
+| ------------------------------------ | ----------------------------------------- |
+| [ADR-001](docs/decisions/ADR-001.md) | Supabase as the backend                   |
+| [ADR-002](docs/decisions/ADR-002.md) | React Native + Expo                       |
+| [ADR-003](docs/decisions/ADR-003.md) | Hybrid vertical folder structure          |
 | [ADR-004](docs/decisions/ADR-004.md) | Denormalized schema, USD as base currency |
-| [ADR-005](docs/decisions/ADR-005.md) | NativeWind + Gluestack UI v3 for styling |
+| [ADR-005](docs/decisions/ADR-005.md) | NativeWind + Gluestack UI v3              |
 
+---
+
+## 🙏 Acknowledgments
+
+- This app was created as a team project during an **Erasmus+ exchange program**.
+- Developed for the **Native Mobile Development** course at **ISEN Méditerranée, France**.
+- Made with ❤️ by [Mihaila Nicolae-Octavian](https://github.com/minotavi11), [Ema Jasekova](https://github.com/EmaJasekova) and [Vojtech Sanda](https://vojtechsanda.cz)

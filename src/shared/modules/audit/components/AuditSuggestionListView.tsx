@@ -1,12 +1,18 @@
 import { Button, PremiumLockGate } from '@shared/components';
 import { CurrencyCode, convertAndFormatFromUsd } from '@shared/modules/currency';
-import { AccountSuggestion } from '@shared/types';
 import { RefreshCw } from 'lucide-react-native';
 import { Text, View } from 'react-native';
 
+type SuggestionItem = {
+  id: string;
+  name: string;
+  item_emoji: string | null;
+  price_usd: number;
+};
+
 type AuditSuggestionListViewProps = {
   currency: CurrencyCode;
-  suggestions: AccountSuggestion[];
+  suggestions: SuggestionItem[];
   showRefresh?: boolean;
 };
 

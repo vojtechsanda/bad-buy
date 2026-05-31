@@ -1,9 +1,7 @@
-import { DurationUnit } from './constants';
+import { DurationUnit, unitToMilliseconds } from './constants';
 
-export const resetCustomDuration = (
-  setCustomDurationValue: (value: string) => void,
-  setSelectedCustomUnit: (unit: DurationUnit) => void,
-) => {
-  setCustomDurationValue('');
-  setSelectedCustomUnit('hours');
+export const parseCustomDurationMs = (value: string, unit: DurationUnit): number => {
+  const parsed = parseInt(value, 10);
+
+  return isNaN(parsed) ? 0 : parsed * unitToMilliseconds[unit];
 };

@@ -1,6 +1,6 @@
 import { Input, InputField, SelectableChip } from '@shared/components';
 import { themeColor } from '@shared/constants';
-import { Plus } from 'lucide-react-native';
+import { Minus, Plus } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
 
 import { DurationUnit, durationUnits } from './constants';
@@ -25,7 +25,11 @@ export function CustomDurationInput({
   return (
     <View className="gap-3 rounded-md bg-background-50 p-4">
       <Pressable onPress={onToggle} className="flex-row items-center gap-3">
-        <Plus size={20} color={themeColor.primary500} />
+        {expanded ? (
+          <Minus size={20} color={themeColor.primary500} />
+        ) : (
+          <Plus size={20} color={themeColor.primary500} />
+        )}
         <Text className="flex-1 font-nunito-semibold text-body-lg text-typography-900">
           Custom duration
         </Text>

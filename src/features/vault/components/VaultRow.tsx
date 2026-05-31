@@ -45,7 +45,11 @@ export function VaultRow({ item }: VaultRowProps) {
       </View>
 
       <Text className="font-nunito text-body text-typography-600">
-        {convertAndFormatFromUsd(item.price_usd, item.price_currency)}
+        {convertAndFormatFromUsd(
+          item.price_usd,
+          item.price_currency,
+          item.conversion_rate_snapshot,
+        )}
       </Text>
 
       <ChevronRight size={20} strokeWidth={1.75} color={themeColor.typography400} />

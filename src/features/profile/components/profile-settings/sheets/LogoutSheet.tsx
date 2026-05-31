@@ -1,12 +1,17 @@
 import { authService } from '@features/auth';
 import { BottomSheet, BottomSheetProps, SheetActions, SheetHeader } from '@shared/components';
 import { Alert } from 'react-native';
+import { useSWRConfig } from 'swr';
 
 type LogoutSheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'>;
 
 export function LogoutSheet({ isOpen, onClose }: LogoutSheetProps) {
+  const { mutate } = useSWRConfig();
+
   const handleLogout = async () => {
     try {
+      mutate(() => true, undefined, { revalidate: false });
+
       await authService.signOut();
 
       onClose();

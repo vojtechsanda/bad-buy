@@ -1,5 +1,5 @@
 import { Button, PremiumLockGate } from '@shared/components';
-import { CurrencyCode, convertAndFormatFromUsd } from '@shared/modules/currency';
+import { CurrencyCode, useConvertFromUsd } from '@shared/modules/currency';
 import { RefreshCw } from 'lucide-react-native';
 import { Text, View } from 'react-native';
 
@@ -21,6 +21,8 @@ export function AuditSuggestionListView({
   suggestions,
   showRefresh = true,
 }: AuditSuggestionListViewProps) {
+  const { convertAndFormatFromUsd } = useConvertFromUsd();
+
   return (
     <View className="gap-4">
       <View className="flex-row items-center justify-between">

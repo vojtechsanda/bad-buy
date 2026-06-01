@@ -3,7 +3,7 @@ import { CurrencyCode } from '@shared/modules/currency';
 import { TrackedItem } from '@shared/types';
 import { formatPrice } from '@shared/utils';
 
-import { computeTotalItemsPrice } from '../utils';
+import { useComputeTotalItemsPrice } from '../hooks';
 
 type TotalSavedCardProps = {
   history: TrackedItem[];
@@ -13,7 +13,7 @@ type TotalSavedCardProps = {
 
 export function TotalSavedCard({ history, currency, label }: TotalSavedCardProps) {
   const skippedItems = history.filter((item) => item.status === 'skipped');
-  const total = computeTotalItemsPrice(skippedItems, currency);
+  const total = useComputeTotalItemsPrice(skippedItems, currency);
 
   return <StatisticsCard caption={label} value={formatPrice(total, currency)} />;
 }

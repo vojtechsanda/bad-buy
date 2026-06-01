@@ -1,4 +1,4 @@
-import { CurrencyCode, convertToUsd } from '@shared/modules/currency';
+import { CurrencyCode, useConvertToUsd } from '@shared/modules/currency';
 import { Account } from '@shared/types';
 import { Text, View } from 'react-native';
 
@@ -11,6 +11,7 @@ type AuditTimePriceViewProps = {
 };
 
 export function AuditTimePriceView({ price, currency, account }: AuditTimePriceViewProps) {
+  const { convertToUsd } = useConvertToUsd();
   const priceUsd = convertToUsd(price, currency);
 
   const workHours = priceUsd / account.hourly_wage_usd;

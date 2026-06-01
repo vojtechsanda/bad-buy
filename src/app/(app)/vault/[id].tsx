@@ -8,12 +8,14 @@ import {
   AuditTimePriceView,
   useAuditActions,
 } from '@shared/modules/audit';
-import { convertFromUsd } from '@shared/modules/currency';
+import { useConvertFromUsd } from '@shared/modules/currency';
 import { useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
 export default function VaultItemDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
+
+  const { convertFromUsd } = useConvertFromUsd();
 
   const { vaultItem, isLoading: isVaultItemLoading, invalidateVaultItem } = useVaultItemSWR(id);
   const { account, isLoading: isAccountLoading } = useAccountSWR();

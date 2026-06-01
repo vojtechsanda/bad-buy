@@ -1,5 +1,5 @@
 import { accountService, useAccountSWR } from '@shared/modules/account';
-import { convertToUsd } from '@shared/modules/currency';
+import { useConvertToUsd } from '@shared/modules/currency';
 import { Alert } from 'react-native';
 
 import { HobbyFormData, IdentityFormData, moneyFormData } from '../schemas';
@@ -12,6 +12,7 @@ type UseCreateAccountParams = {
 
 export function useCreateAccountFn({ hobbyData, identityData, moneyData }: UseCreateAccountParams) {
   const { account, invalidateAccount } = useAccountSWR();
+  const { convertToUsd } = useConvertToUsd();
 
   return async function createAccount() {
     if (!identityData || !moneyData || !hobbyData) return;

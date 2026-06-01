@@ -1,5 +1,5 @@
 import { useAccountSWR } from '@shared/modules/account';
-import { convertToUsd, currencyService } from '@shared/modules/currency';
+import { currencyService, useConvertToUsd } from '@shared/modules/currency';
 import { trackedItemService } from '@shared/services';
 import { useFrozenItemsSWR, useTrackedItemsSWR } from '@shared/swr';
 import { useRouter } from 'expo-router';
@@ -13,6 +13,8 @@ type UseAuditActionsParams = {
 
 export function useAuditActions({ onInvalidation }: UseAuditActionsParams = {}) {
   const router = useRouter();
+
+  const { convertToUsd } = useConvertToUsd();
 
   const { invalidateAccount } = useAccountSWR();
   const { invalidateTrackedItems } = useTrackedItemsSWR();

@@ -1,4 +1,4 @@
-import { convertFromUsd } from '@shared/modules/currency';
+import { useConvertFromUsd } from '@shared/modules/currency';
 import { TrackedItem } from '@shared/types';
 
 /**
@@ -6,10 +6,12 @@ import { TrackedItem } from '@shared/types';
  *
  * It prevent double conversions by separating items that are already in the compute currency from those that are not and converting only the latter group.
  */
-export function computeTotalItemsPrice(
+export function useComputeTotalItemsPrice(
   trackedItems: TrackedItem[],
   computeCurrency: string,
 ): number {
+  const { convertFromUsd } = useConvertFromUsd();
+
   const skippedInComputeCurrency = [];
   const skippedInOtherCurrency = [];
 

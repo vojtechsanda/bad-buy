@@ -15,7 +15,7 @@ BadBuy is a React Native mobile app that reframes prices as **work hours** — s
 - [📦 Installation](#-installation)
 - [🔧 Development](#-development)
 - [📐 Architecture](#-architecture)
-- [🙏 Aknowledgements](#-aknowledgements)
+- [🙏 Aknowledgements](#-acknowledgements)
 
 ---
 

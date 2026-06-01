@@ -1,12 +1,20 @@
 import BuySendoffSvg from '@assets/illustrations/buy-sendoff.svg';
-import { Button, ButtonText, IllustrationSvgFrame, ScreenContainer } from '@shared/components';
-import { mockAccountHistory } from '@shared/modules/account';
+import {
+  Button,
+  ButtonText,
+  FullSizeSpinner,
+  IllustrationSvgFrame,
+  ScreenContainer,
+} from '@shared/components';
 import { PostDecisionFeedback } from '@shared/modules/gamification';
+import { useTrackedItemsSWR } from '@shared/swr';
 import { router } from 'expo-router';
 import { Text, View } from 'react-native';
 
 export default function BuyScreen() {
-  const accountHistory = mockAccountHistory;
+  const { trackedItems, isLoading } = useTrackedItemsSWR();
+
+  if (isLoading) return <FullSizeSpinner />;
 
   return (
     <ScreenContainer
@@ -27,9 +35,11 @@ export default function BuyScreen() {
         </Text>
       </View>
 
-      <View className="mt-6">
-        <PostDecisionFeedback allDecisions={accountHistory} />
-      </View>
+      {trackedItems && (
+        <View className="mt-6">
+          <PostDecisionFeedback allDecisions={trackedItems} />
+        </View>
+      )}
 
       <View className="flex-1" />
     </ScreenContainer>

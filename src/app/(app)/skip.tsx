@@ -3,12 +3,13 @@ import {
   Button,
   ButtonText,
   ConfettiBlast,
+  FullSizeSpinner,
   IllustrationSvgFrame,
   ScreenContainer,
 } from '@shared/components';
-import { mockAccountHistory } from '@shared/modules/account';
 import { CurrencyCode } from '@shared/modules/currency';
 import { PostDecisionFeedback } from '@shared/modules/gamification';
+import { useTrackedItemsSWR } from '@shared/swr';
 import { formatPrice, playCelebrationHaptics } from '@shared/utils';
 import { Redirect, router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback } from 'react';
@@ -23,11 +24,13 @@ export default function SkipScreen() {
     }, []),
   );
 
-  const accountHistory = mockAccountHistory;
+  const { trackedItems, isLoading } = useTrackedItemsSWR();
 
   if (!price || !currency) {
     return <Redirect href="/(app)/home" />;
   }
+
+  if (isLoading) return <FullSizeSpinner />;
 
   return (
     <View style={{ flex: 1 }}>
@@ -51,7 +54,7 @@ export default function SkipScreen() {
               </Text>
             </View>
 
-            <PostDecisionFeedback allDecisions={accountHistory} />
+            {trackedItems && <PostDecisionFeedback allDecisions={trackedItems} />}
           </View>
         </View>
       </ScreenContainer>

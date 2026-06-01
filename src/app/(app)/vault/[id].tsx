@@ -6,17 +6,21 @@ import {
   AuditStickyFooter,
   AuditSuggestionListView,
   AuditTimePriceView,
+  useAuditActions,
 } from '@shared/modules/audit';
 import { convertFromUsd } from '@shared/modules/currency';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
 export default function VaultItemDetail() {
-  const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { vaultItem, isLoading: isVaultItemLoading } = useVaultItemSWR(id);
+  const { vaultItem, isLoading: isVaultItemLoading, invalidateVaultItem } = useVaultItemSWR(id);
   const { account, isLoading: isAccountLoading } = useAccountSWR();
+
+  const { handleBuy, handleReFreeze, handleSkip } = useAuditActions({
+    onInvalidation: () => invalidateVaultItem(),
+  });
 
   if (isVaultItemLoading || isAccountLoading) return <FullSizeSpinner />;
   if (!vaultItem || !account) {
@@ -34,13 +38,20 @@ export default function VaultItemDetail() {
       stickyBottom={
         <AuditStickyFooter
           onSkip={() =>
-            router.push({
-              pathname: '/(app)/skip',
-              params: { price: displayedPrice, currency: vaultItem.price_currency },
+            handleSkip({
+              price: displayedPrice,
+              currency: vaultItem.price_currency,
+              suggestions: vaultItem.suggestions,
             })
           }
-          onBuy={() => router.push('/(app)/buy')}
-          onFreeze={() => {}}
+          onBuy={() =>
+            handleBuy({
+              price: displayedPrice,
+              currency: vaultItem.price_currency,
+              suggestions: vaultItem.suggestions,
+            })
+          }
+          onFreeze={(_, durationMs) => handleReFreeze({ trackedItemId: vaultItem.id, durationMs })}
           freezeLabel="Re-freeze"
         />
       }

@@ -6,34 +6,18 @@ import {
   AuditSuggestionListView,
   AuditTimePriceView,
   mockSuggestions,
+  useAuditActions,
 } from '@shared/modules/audit';
-import {
-  CurrencyCode,
-  convertToUsd,
-  currencyService,
-  mockExchangeRates,
-} from '@shared/modules/currency';
-import { NewDecisionInput, trackedItemService } from '@shared/services';
-import { useFrozenItemsSWR, useTrackedItemsSWR } from '@shared/swr';
-import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
-import { Alert, View } from 'react-native';
+import { CurrencyCode } from '@shared/modules/currency';
+import { Redirect, useLocalSearchParams } from 'expo-router';
+import { View } from 'react-native';
 
 export default function AuditScreen() {
-  const router = useRouter();
-
   const { price, currency } = useLocalSearchParams<{ price: string; currency: CurrencyCode }>();
 
   const { account, isLoading } = useAccountSWR();
 
-  const { invalidateTrackedItems } = useTrackedItemsSWR();
-  const { invalidateFrozenItems } = useFrozenItemsSWR();
-  const { invalidateAccount } = useAccountSWR();
-
-  const invalidateSWR = () => {
-    invalidateTrackedItems();
-    invalidateFrozenItems();
-    invalidateAccount();
-  };
+  const { handleBuy, handleFreeze, handleSkip } = useAuditActions();
 
   if (isLoading) return <FullSizeSpinner />;
   if (!account) return <FullSizeError message="Unable to load profile, please try again later" />;
@@ -44,68 +28,15 @@ export default function AuditScreen() {
     return <Redirect href="/(app)/home" />;
   }
 
-  const decisionPayload: NewDecisionInput = {
-    conversion_rate_snapshot: mockExchangeRates[currency],
-    price_currency: currency,
-    price_usd: convertToUsd(price, currency),
-    suggestions,
-  };
-
   return (
     <ScreenContainer
       stickyBottom={
         <AuditStickyFooter
-          onSkip={async () => {
-            try {
-              await trackedItemService.recordDecision(decisionPayload, 'skipped');
-
-              invalidateSWR();
-
-              router.push({
-                pathname: '/(app)/skip',
-                params: { price, currency },
-              });
-            } catch (e) {
-              console.error(JSON.stringify(e));
-
-              Alert.alert('Error', "Couldn't apply the skip choice, please try again later.");
-            }
-          }}
-          onBuy={async () => {
-            try {
-              await trackedItemService.recordDecision(decisionPayload, 'bought');
-
-              invalidateSWR();
-
-              router.push('/(app)/buy');
-            } catch (e) {
-              console.error(JSON.stringify(e));
-              Alert.alert('Error', "Couldn't apply the buy choice, please try again later.");
-            }
-          }}
-          onFreeze={async (name, durationMs) => {
-            try {
-              const rate = await currencyService.getRate(currency);
-              const freezeUntil = new Date(Date.now() + durationMs).toISOString();
-
-              await trackedItemService.freeze({
-                conversion_rate_snapshot: rate,
-                freeze_until: freezeUntil,
-                name,
-                price_currency: currency,
-                price_usd: convertToUsd(price, currency, rate),
-                suggestions,
-              });
-
-              invalidateSWR();
-
-              router.push('/(app)/vault');
-            } catch (e) {
-              console.error(JSON.stringify(e));
-
-              Alert.alert('Error', "Couldn't freeze the decision, please try again later.");
-            }
-          }}
+          onSkip={async () => handleSkip({ price, currency, suggestions })}
+          onBuy={async () => handleBuy({ price, currency, suggestions })}
+          onFreeze={async (name, durationMs) =>
+            handleFreeze({ price, currency, name, durationMs, suggestions })
+          }
         />
       }
     >

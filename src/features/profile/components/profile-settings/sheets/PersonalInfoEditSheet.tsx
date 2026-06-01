@@ -13,7 +13,7 @@ import { StepperField } from '@shared/components/form/stepper-field';
 import { defaultFormValidationLogic } from '@shared/constants';
 import { accountService, useAccountSWR } from '@shared/modules/account';
 import { useCountriesSWR } from '@shared/modules/country';
-import { convertFromUsd, convertToUsd } from '@shared/modules/currency';
+import { useConvertFromUsd, useConvertToUsd } from '@shared/modules/currency';
 import { PersonalInfoEditData, personalInfoEditSchema } from '@shared/schemas/personalInfo';
 import { Account } from '@shared/types';
 import { useForm, useStore } from '@tanstack/react-form';
@@ -26,6 +26,9 @@ type PersonalInfoEditSheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'> &
 export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfoEditSheetProps) {
   const { countries, isLoading: isCountriesLoading } = useCountriesSWR();
   const { invalidateAccount } = useAccountSWR();
+
+  const { convertFromUsd } = useConvertFromUsd();
+  const { convertToUsd } = useConvertToUsd();
 
   const handleSubmit = async (data: PersonalInfoEditData) => {
     try {

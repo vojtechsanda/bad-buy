@@ -1,3 +1,2 @@
-export * from './convertFromUsd';
-export * from './convertToUsd';
 export * from './getCurrencyForCountry';
+export * from './getRateFromExchangeRates';

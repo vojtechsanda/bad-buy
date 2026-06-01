@@ -1,14 +1,23 @@
-import { CurrencyCode } from './types';
+import type { CurrencyRate } from '@shared/types';
+import { create } from 'zustand';
 
-export const mockExchangeRates: Record<CurrencyCode, number> = {
-  USD: 1,
-  EUR: 0.926,
-  GBP: 0.787,
-  CZK: 22.73,
-  PLN: 4.0,
-  CHF: 0.885,
-  HUF: 357.14,
-  JPY: 151.52,
-  CAD: 1.351,
-  AUD: 1.538,
+type ExchangeRatesState = {
+  rates: CurrencyRate[];
+  isLoading: boolean;
+  setRates: (rates: CurrencyRate[]) => void;
+  setLoading: (isLoading: boolean) => void;
 };
+
+export const useExchangeRatesStore = create<ExchangeRatesState>((set) => ({
+  rates: [],
+  isLoading: true,
+  setRates: (rates) => set({ rates }),
+  setLoading: (isLoading) => set({ isLoading }),
+}));
+
+export function useExchangeRates() {
+  const rates = useExchangeRatesStore((s) => s.rates);
+  const isLoading = useExchangeRatesStore((s) => s.isLoading);
+
+  return { rates, isLoading };
+}

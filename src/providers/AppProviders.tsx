@@ -1,5 +1,6 @@
 import { AuthProvider } from '@features/auth';
 import { GluestackUIProvider } from '@providers/gluestack-ui-provider';
+import { ExchangeRatesProvider } from '@shared/modules/currency';
 import React, { ReactNode } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -13,7 +14,9 @@ export function AppProviders({ children }: AppProvidersProps) {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GluestackUIProvider mode="light">
         <SafeAreaProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <ExchangeRatesProvider>{children}</ExchangeRatesProvider>
+          </AuthProvider>
         </SafeAreaProvider>
       </GluestackUIProvider>
     </GestureHandlerRootView>

@@ -1,6 +1,6 @@
 import { CountdownPill } from '@shared/components';
 import { themeColor } from '@shared/constants';
-import { convertAndFormatFromUsd } from '@shared/modules/currency';
+import { useConvertFromUsd } from '@shared/modules/currency';
 import { TrackedItem } from '@shared/types';
 import { useRouter } from 'expo-router';
 import { ChevronRight, Clock, Snowflake } from 'lucide-react-native';
@@ -13,6 +13,8 @@ type VaultRowProps = {
 export function VaultRow({ item }: VaultRowProps) {
   const router = useRouter();
   const thawed = item.freeze_until !== null && new Date(item.freeze_until) <= new Date();
+
+  const { convertAndFormatFromUsd } = useConvertFromUsd();
 
   return (
     <Pressable

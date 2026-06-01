@@ -1,4 +1,6 @@
 import { BottomSheet, BottomSheetProps, ErrorMessage, Input, InputField } from '@shared/components';
+import { redeemCodeService, useAccountSWR } from '@shared/modules/account';
+import { differenceInMonths } from 'date-fns';
 import { useState } from 'react';
 import { Text, View } from 'react-native';
 
@@ -11,8 +13,9 @@ export function PromoRedemptionSheet({ isOpen, onClose }: PromoRedemptionSheetPr
   const [sheetState, setSheetState] = useState<'input' | 'success'>('input');
   const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [redeemedMonths, setRedeemedMonths] = useState<number | null>(null);
 
-  const mockMothsGranted: number = 3;
+  const { invalidateAccount } = useAccountSWR();
 
   const handleClose = () => {
     onClose();
@@ -24,13 +27,33 @@ export function PromoRedemptionSheet({ isOpen, onClose }: PromoRedemptionSheetPr
     }, 300);
   };
 
+  const handleRedemption = async (code: string) => {
+    try {
+      setError(null);
+
+      const now = new Date();
+
+      const response = await redeemCodeService.redeemCode({ code });
+      const expireDate = new Date(response.premium_expires_at);
+
+      setRedeemedMonths(differenceInMonths(expireDate, now));
+
+      invalidateAccount();
+
+      setSheetState('success');
+    } catch (e) {
+      console.error(e);
+      setError("Couldn't redeem promo code, please try again later.");
+    }
+  };
+
   return (
     <BottomSheet isOpen={isOpen} onClose={handleClose}>
       {sheetState === 'success' && (
         <>
           <SheetHeader
             title="Premium unlocked!"
-            subtitle={`${mockMothsGranted} month${mockMothsGranted === 1 ? '' : 's'} of Premium added to your account.`}
+            subtitle={`${redeemedMonths} month${redeemedMonths === 1 ? '' : 's'} of Premium added to your account.`}
             icon={<Text className="font-nunito text-display-xl">🎉</Text>}
           />
           <SheetActions confirmLabel="Done" onConfirm={handleClose} />
@@ -61,10 +84,7 @@ export function PromoRedemptionSheet({ isOpen, onClose }: PromoRedemptionSheetPr
 
           <SheetActions
             confirmLabel="Redeem"
-            onConfirm={() => {
-              // TODO: wire to redeem-code Edge Function (#119)
-              setSheetState('success');
-            }}
+            onConfirm={() => handleRedemption(code)}
             isConfirmDisabled={code.length === 0}
             onCancel={handleClose}
           />

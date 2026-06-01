@@ -27,7 +27,8 @@ export function PromoView({ onComplete, onSkip, screenHeader }: PromoViewProps) 
       invalidateAccount();
 
       onComplete();
-    } catch {
+    } catch (e) {
+      console.error(e);
       setError("Couldn't redeem promo code, please try again later.");
     }
   };

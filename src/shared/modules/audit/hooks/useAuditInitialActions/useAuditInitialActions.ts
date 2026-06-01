@@ -1,33 +1,23 @@
-import { useAccountSWR } from '@shared/modules/account';
 import { currencyService, useConvertToUsd } from '@shared/modules/currency';
 import { trackedItemService } from '@shared/services';
-import { useFrozenItemsSWR, useTrackedItemsSWR } from '@shared/swr';
 import { useRouter } from 'expo-router';
 import { Alert } from 'react-native';
 
-import { AuditDecisionPayload, AuditFreezePayload, AuditReFreezePayload } from './types';
+import { useAuditActionsInvalidateSWR } from '../useAuditActionsInvalidateSWR';
+import { AuditFreezePayload, AuditInitialDecisionPayload } from './types';
 
-type UseAuditActionsParams = {
+type useAuditInitialActionsParams = {
   onInvalidation?: () => void;
 };
 
-export function useAuditActions({ onInvalidation }: UseAuditActionsParams = {}) {
+export function useAuditInitialActions({ onInvalidation }: useAuditInitialActionsParams = {}) {
   const router = useRouter();
 
   const { convertToUsd } = useConvertToUsd();
 
-  const { invalidateAccount } = useAccountSWR();
-  const { invalidateTrackedItems } = useTrackedItemsSWR();
-  const { invalidateFrozenItems } = useFrozenItemsSWR();
+  const invalidateSWR = useAuditActionsInvalidateSWR(onInvalidation);
 
-  const invalidateSWR = () => {
-    invalidateTrackedItems(undefined, { revalidate: true });
-    invalidateFrozenItems(undefined, { revalidate: true });
-    invalidateAccount(undefined, { revalidate: true });
-    onInvalidation?.();
-  };
-
-  const handleSkip = async ({ price, currency, suggestions }: AuditDecisionPayload) => {
+  const handleSkip = async ({ price, currency, suggestions }: AuditInitialDecisionPayload) => {
     try {
       const rate = await currencyService.getRate(currency);
 
@@ -54,7 +44,7 @@ export function useAuditActions({ onInvalidation }: UseAuditActionsParams = {}) 
     }
   };
 
-  const handleBuy = async ({ price, currency, suggestions }: AuditDecisionPayload) => {
+  const handleBuy = async ({ price, currency, suggestions }: AuditInitialDecisionPayload) => {
     try {
       const rate = await currencyService.getRate(currency);
 
@@ -107,26 +97,9 @@ export function useAuditActions({ onInvalidation }: UseAuditActionsParams = {}) 
     }
   };
 
-  const handleReFreeze = async ({ trackedItemId, durationMs }: AuditReFreezePayload) => {
-    try {
-      const freezeUntil = new Date(Date.now() + durationMs).toISOString();
-
-      await trackedItemService.refreeze(trackedItemId, { freeze_until: freezeUntil });
-
-      await invalidateSWR();
-
-      router.push('/(app)/vault');
-    } catch (e) {
-      console.error(JSON.stringify(e));
-
-      Alert.alert('Error', "Couldn't re-freeze the decision, please try again later.");
-    }
-  };
-
   return {
     handleBuy,
     handleFreeze,
-    handleReFreeze,
     handleSkip,
   };
 }

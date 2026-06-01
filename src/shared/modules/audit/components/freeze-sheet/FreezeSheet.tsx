@@ -9,7 +9,8 @@ import {
 } from '@shared/components';
 import { defaultFormValidationLogic } from '@shared/constants';
 import { useForm } from '@tanstack/react-form';
-import { useState } from 'react';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { View } from 'react-native';
 
 import { CustomDurationInput } from './CustomDurationInput';
@@ -17,17 +18,21 @@ import { DurationUnit, predefinedDurations } from './constants';
 import { freezeSchema } from './schemas';
 import { parseCustomDurationMs } from './utils';
 
-type FreezeSheetProps = {
+export type FreezeSheetProps = {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   onFreeze: (name: string, durationMs: number) => void;
+  initialName?: string;
+  actionLabel?: string;
 };
 
 export function FreezeSheet({
   isOpen,
   onClose,
   title = 'Freeze this decision',
+  actionLabel = 'Freeze it',
+  initialName = '',
   onFreeze,
 }: FreezeSheetProps) {
   const [customDurationExpanded, setCustomDurationExpanded] = useState(false);
@@ -39,7 +44,7 @@ export function FreezeSheet({
   };
 
   const form = useForm({
-    defaultValues: { name: '', durationMs: 0 },
+    defaultValues: { name: initialName, durationMs: 0 },
     validationLogic: defaultFormValidationLogic,
     validators: { onDynamic: freezeSchema },
     onSubmit: ({ value }) => {
@@ -74,6 +79,16 @@ export function FreezeSheet({
     setSelectedCustomUnit(durationUnit);
     form.setFieldValue('durationMs', parseCustomDurationMs(customDurationValue, durationUnit));
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!isOpen) {
+        form.reset();
+        setCustomDurationExpanded(false);
+        resetCustomDuration();
+      }
+    }, [form, isOpen]),
+  );
 
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose} heightMode={0.7}>
@@ -114,7 +129,7 @@ export function FreezeSheet({
           />
         </PremiumLockGate>
       </View>
-      <SheetActions confirmLabel="Freeze it" onConfirm={form.handleSubmit} />
+      <SheetActions confirmLabel={actionLabel} onConfirm={form.handleSubmit} />
     </BottomSheet>
   );
 }

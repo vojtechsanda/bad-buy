@@ -13,7 +13,12 @@ import { StepperField } from '@shared/components/form/stepper-field';
 import { defaultFormValidationLogic } from '@shared/constants';
 import { accountService, useAccountSWR } from '@shared/modules/account';
 import { useCountriesSWR } from '@shared/modules/country';
-import { useConvertFromUsd, useConvertToUsd } from '@shared/modules/currency';
+import {
+  getRateFromExchangeRates,
+  useConvertFromUsd,
+  useConvertToUsd,
+  useExchangeRates,
+} from '@shared/modules/currency';
 import { PersonalInfoEditData, personalInfoEditSchema } from '@shared/schemas/personalInfo';
 import { Account } from '@shared/types';
 import { useForm, useStore } from '@tanstack/react-form';
@@ -29,14 +34,18 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
 
   const { convertFromUsd } = useConvertFromUsd();
   const { convertToUsd } = useConvertToUsd();
+  const { rates } = useExchangeRates();
 
   const handleSubmit = async (data: PersonalInfoEditData) => {
     try {
+      const wageRateSnapshot = getRateFromExchangeRates(rates, data.wageCurrency);
+
       await accountService.update({
         country: data.countryIso2,
         display_currency: data.displayCurrency,
-        hourly_wage_usd: convertToUsd(data.hourlyWage, data.wageCurrency),
+        hourly_wage_usd: convertToUsd(data.hourlyWage, data.wageCurrency, wageRateSnapshot),
         wage_currency: data.wageCurrency,
+        wage_rate_snapshot: wageRateSnapshot,
         work_hours_per_day: data.workHoursPerDay,
       });
 
@@ -53,7 +62,11 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
     defaultValues: {
       countryIso2: account.country,
       displayCurrency: account.display_currency,
-      hourlyWage: convertFromUsd(account.hourly_wage_usd, account.wage_currency),
+      hourlyWage: convertFromUsd(
+        account.hourly_wage_usd,
+        account.wage_currency,
+        account.wage_rate_snapshot,
+      ),
       wageCurrency: account.wage_currency,
       workHoursPerDay: account.work_hours_per_day,
     },

@@ -1,17 +1,16 @@
-import { BottomSheet, Input, InputField } from '@shared/components';
+import { BottomSheet, Input, InputField, Spinner } from '@shared/components';
 import { themeColor } from '@shared/constants';
-import { currencyService } from '@shared/modules/currency/currencyService';
-import { type Currency } from '@shared/types';
 import { Check } from 'lucide-react-native';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
+
+import { useCurrenciesSWR } from '../useCurrenciesSWR';
 
 type CurrencySheetProps = {
   isOpen: boolean;
   onClose: () => void;
   selectedCurrency: string;
   onSelect: (code: string) => void;
-  currencies?: Currency[];
   pinnedCurrency?: string;
 };
 
@@ -20,19 +19,11 @@ export function CurrencySheet({
   onClose,
   selectedCurrency,
   onSelect,
-  currencies,
   pinnedCurrency,
 }: CurrencySheetProps) {
   const [search, setSearch] = useState('');
-  const [fetchedCurrencies, setFetchedCurrencies] = useState<Currency[]>([]);
 
-  useEffect(() => {
-    if (!currencies) {
-      currencyService.listCurrencies().then(setFetchedCurrencies);
-    }
-  }, [currencies]);
-
-  const resolvedCurrencies = currencies ?? fetchedCurrencies;
+  const { currencies, isLoading: isCurrenciesLoading } = useCurrenciesSWR();
 
   const handleClose = () => {
     setSearch('');
@@ -40,13 +31,14 @@ export function CurrencySheet({
   };
 
   const data = useMemo(() => {
-    const filtered = search
-      ? resolvedCurrencies.filter(
-          (c) =>
-            c.code.toLowerCase().includes(search.toLowerCase()) ||
-            c.name.toLowerCase().includes(search.toLowerCase()),
-        )
-      : resolvedCurrencies;
+    const filtered =
+      (search
+        ? currencies?.filter(
+            (c) =>
+              c.code.toLowerCase().includes(search.toLowerCase()) ||
+              c.name.toLowerCase().includes(search.toLowerCase()),
+          )
+        : currencies) ?? [];
 
     if (!pinnedCurrency) return filtered;
 
@@ -54,7 +46,7 @@ export function CurrencySheet({
       ...filtered.filter((c) => c.code === pinnedCurrency),
       ...filtered.filter((c) => c.code !== pinnedCurrency),
     ];
-  }, [search, pinnedCurrency, resolvedCurrencies]);
+  }, [search, pinnedCurrency, currencies]);
 
   return (
     <BottomSheet isOpen={isOpen} onClose={handleClose} heightMode={0.6}>
@@ -71,32 +63,36 @@ export function CurrencySheet({
           className="text-xl"
         />
       </Input>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.code}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item, index }) => (
-          <Pressable
-            key={item.code}
-            onPress={() => {
-              onSelect(item.code);
-              handleClose();
-            }}
-            className={`flex-row items-center justify-between py-3.5 ${index > 0 ? 'border-t border-outline-100' : ''}`}
-          >
-            <View>
-              <Text className="font-nunito-semibold text-body text-typography-900">
-                {item.code}
-              </Text>
-              <Text className="font-nunito text-body-sm text-typography-400">{item.name}</Text>
-            </View>
-            {selectedCurrency === item.code && (
-              <Check size={18} strokeWidth={2} color={themeColor.primary500} />
-            )}
-          </Pressable>
-        )}
-      />
+      {isCurrenciesLoading ? (
+        <Spinner size="large" />
+      ) : (
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.code}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item, index }) => (
+            <Pressable
+              key={item.code}
+              onPress={() => {
+                onSelect(item.code);
+                handleClose();
+              }}
+              className={`flex-row items-center justify-between py-3.5 ${index > 0 ? 'border-t border-outline-100' : ''}`}
+            >
+              <View>
+                <Text className="font-nunito-semibold text-body text-typography-900">
+                  {item.code}
+                </Text>
+                <Text className="font-nunito text-body-sm text-typography-400">{item.name}</Text>
+              </View>
+              {selectedCurrency === item.code && (
+                <Check size={18} strokeWidth={2} color={themeColor.primary500} />
+              )}
+            </Pressable>
+          )}
+        />
+      )}
     </BottomSheet>
   );
 }

@@ -4,7 +4,7 @@ import { accountService, useAccountSWR } from '@shared/modules/account';
 import { useHobbiesSWR } from '@shared/modules/hobby';
 import { pushNotificationService } from '@shared/services';
 import { Account, AccountHobby } from '@shared/types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Alert, Linking, View } from 'react-native';
 
 import { SettingsRow } from './SettingsRow';
@@ -25,56 +25,45 @@ export function ProfileSettings({ account, accountHobbies }: ProfileSettingsProp
   const [isDeleteAccountOpen, setIsDeleteAccountOpen] = useState(false);
   const [isPromoOpen, setIsPromoOpen] = useState(false);
   const [isUpsellOpen, setIsUpsellOpen] = useState(false);
-  const [osGranted, setOsGranted] = useState(false);
 
-  useEffect(() => {
-    pushNotificationService.getPermissionStatus().then((status) => {
-      setOsGranted(status === 'granted');
-    });
-  }, []);
-
-  const notificationsEnabled = account.notifications_enabled && osGranted;
+  const notificationsEnabled = account.notifications_enabled;
 
   async function handleNotificationsToggle(newValue: boolean) {
     if (newValue === notificationsEnabled) return;
 
-    if (!newValue) {
-      await accountService.update({ notifications_enabled: false });
-      await invalidateAccount();
+    try {
+      if (!newValue) {
+        await accountService.update({ notifications_enabled: false });
+        await invalidateAccount();
 
-      return;
-    }
+        return;
+      }
 
-    const status = await pushNotificationService.getPermissionStatus();
+      const { status, canAskAgain } = await pushNotificationService.getPermissionStatus();
 
-    if (status === 'denied') {
-      Alert.alert(
-        'Notifications off',
-        'Enable notifications in your device settings to get reminded when a frozen decision is ready.',
-        [
-          { text: 'Not now', style: 'cancel' },
-          { text: 'Open Settings', onPress: () => Linking.openSettings() },
-        ],
-      );
-
-      return;
-    }
-
-    if (status === 'undetermined') {
-      const result = await pushNotificationService.requestPermission();
-      if (result !== 'granted') {
+      if (status === 'denied' && !canAskAgain) {
         Alert.alert(
           'Notifications off',
-          'You declined the notification permission. You can enable it anytime from here.',
+          'Enable notifications in your device settings to get reminded when a frozen decision is ready.',
+          [
+            { text: 'Not now', style: 'cancel' },
+            { text: 'Open Settings', onPress: () => Linking.openSettings() },
+          ],
         );
 
         return;
       }
-    }
 
-    setOsGranted(true);
-    await accountService.update({ notifications_enabled: true });
-    await invalidateAccount();
+      if (status === 'undetermined' || (status === 'denied' && canAskAgain)) {
+        const result = await pushNotificationService.requestPermission();
+        if (result !== 'granted') return;
+      }
+
+      await accountService.update({ notifications_enabled: true });
+      await invalidateAccount();
+    } catch {
+      Alert.alert('Error', "Couldn't update notification settings, please try again later.");
+    }
   }
 
   return (

@@ -20,7 +20,7 @@ export default function AppLayout() {
     const response = Notifications.getLastNotificationResponse();
     if (!response) return;
     const tappedAt = response.notification.date;
-    const isRecent = Date.now() / 1000 - tappedAt < COLD_START_NOTIFICATION_MAX_AGE_S;
+    const isRecent = Date.now() - tappedAt < COLD_START_NOTIFICATION_MAX_AGE_S * 1000;
     if (!isRecent) return;
     const vaultId = response.notification.request.content.data?.vaultId as string | undefined;
     if (vaultId) router.push({ pathname: '/(app)/vault/[id]', params: { id: vaultId } });

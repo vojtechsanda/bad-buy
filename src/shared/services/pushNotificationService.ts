@@ -1,8 +1,13 @@
-import { PermissionStatus } from 'expo-notifications';
 import * as Notifications from 'expo-notifications';
+import { PermissionStatus } from 'expo-notifications';
 import { Platform } from 'react-native';
 
 import { FREEZE_REMINDER_CHANNEL_ID } from './pushNotificationConstants';
+
+export type NotificationPermissions = {
+  status: PermissionStatus;
+  canAskAgain: boolean;
+};
 
 async function ensureAndroidChannel(): Promise<void> {
   if (Platform.OS !== 'android') return;
@@ -13,10 +18,10 @@ async function ensureAndroidChannel(): Promise<void> {
   });
 }
 
-async function getPermissionStatus(): Promise<PermissionStatus> {
-  const { status } = await Notifications.getPermissionsAsync();
+async function getPermissionStatus(): Promise<NotificationPermissions> {
+  const { status, canAskAgain } = await Notifications.getPermissionsAsync();
 
-  return status;
+  return { status, canAskAgain };
 }
 
 async function requestPermission(): Promise<PermissionStatus> {
@@ -26,30 +31,36 @@ async function requestPermission(): Promise<PermissionStatus> {
 }
 
 async function scheduleFreezeNotification(itemId: string, freezeUntil: string): Promise<void> {
-  const date = new Date(freezeUntil);
-  if (date <= new Date()) return;
+  try {
+    const date = new Date(freezeUntil);
+    if (date <= new Date()) return;
 
-  await ensureAndroidChannel();
+    await ensureAndroidChannel();
 
-  let status = await getPermissionStatus();
-  if (status === 'undetermined') {
-    status = await requestPermission();
+    const { status, canAskAgain } = await getPermissionStatus();
+    let resolvedStatus = status;
+
+    if (resolvedStatus === 'undetermined' || (resolvedStatus === 'denied' && canAskAgain)) {
+      resolvedStatus = await requestPermission();
+    }
+    if (resolvedStatus !== 'granted') return;
+
+    await Notifications.scheduleNotificationAsync({
+      identifier: itemId,
+      content: {
+        title: 'Decision time',
+        body: 'A frozen item is ready for your decision.',
+        data: { vaultId: itemId },
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: new Date(freezeUntil),
+        channelId: FREEZE_REMINDER_CHANNEL_ID,
+      },
+    });
+  } catch {
+    // Notification scheduling is best-effort — never block the core freeze action
   }
-  if (status !== 'granted') return;
-
-  await Notifications.scheduleNotificationAsync({
-    identifier: itemId,
-    content: {
-      title: 'Decision time',
-      body: 'A frozen item is ready for your decision.',
-      data: { vaultId: itemId },
-    },
-    trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DATE,
-      date: new Date(freezeUntil),
-      channelId: FREEZE_REMINDER_CHANNEL_ID,
-    },
-  });
 }
 
 async function cancelFreezeNotification(itemId: string): Promise<void> {

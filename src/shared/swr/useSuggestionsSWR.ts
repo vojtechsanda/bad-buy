@@ -1,4 +1,4 @@
-import { fetchSuggestions } from '@shared/modules/audit/service';
+import { auditService } from '@shared/modules/audit';
 import { useCallback, useState } from 'react';
 import useSWR from 'swr';
 
@@ -11,15 +11,19 @@ export function useSuggestionsSWR(priceUsd?: number | null) {
 
   const { data, error, isLoading, mutate } = useSWR(
     priceUsd != null ? suggestionsSWRKey(priceUsd) : null,
-    () => fetchSuggestions(priceUsd!, false),
+    () => auditService.fetchSuggestions(priceUsd!, false),
   );
 
+  /** Normal re-fetch (no AI bypass) — used for error recovery. Works for all users. */
+  const retry = useCallback(() => mutate(), [mutate]);
+
+  /** Premium-only forced refresh — bypasses cache and triggers a new Gemini call. */
   const refresh = useCallback(async () => {
     if (priceUsd == null) return;
 
     setIsRefreshing(true);
     try {
-      const fresh = await fetchSuggestions(priceUsd, true);
+      const fresh = await auditService.fetchSuggestions(priceUsd, true);
       await mutate(fresh, { revalidate: false });
     } catch (err) {
       console.warn('[useSuggestionsSWR] refresh failed — previous suggestions retained', err);
@@ -32,6 +36,7 @@ export function useSuggestionsSWR(priceUsd?: number | null) {
     suggestions: data ?? [],
     isLoading: isLoading || isRefreshing,
     error,
+    retry,
     refresh,
   };
 }

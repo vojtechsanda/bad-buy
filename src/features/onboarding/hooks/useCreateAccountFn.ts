@@ -1,5 +1,5 @@
 import { accountService, hobbyService, useAccountSWR } from '@shared/modules/account';
-import { triggerBackgroundSuggestionsRefresh } from '@shared/modules/audit/service';
+import { auditService } from '@shared/modules/audit';
 import {
   getRateFromExchangeRates,
   useConvertToUsd,
@@ -47,7 +47,7 @@ export function useCreateAccountFn({ hobbyData, identityData, moneyData }: UseCr
 
       await invalidateAccount(updatedAccount, { revalidate: false });
 
-      void triggerBackgroundSuggestionsRefresh();
+      void auditService.triggerBackgroundSuggestionsRefresh();
     } catch (e) {
       console.error(JSON.stringify(e));
 

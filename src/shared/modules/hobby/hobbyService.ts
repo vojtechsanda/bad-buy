@@ -135,6 +135,49 @@ async function subscribe(
   );
 }
 
+/**
+ * Syncs the user's predefined hobbies to match `newIds`.
+ * Adds entries that are new, removes entries that were deselected.
+ */
+async function updatePredefinedSelection(
+  currentHobbies: AccountHobby[],
+  newIds: string[],
+): Promise<void> {
+  const currentIds = currentHobbies
+    .filter((h) => h.predefined_hobby_id !== null)
+    .map((h) => h.predefined_hobby_id!);
+
+  const addedIds = newIds.filter((id) => !currentIds.includes(id));
+  const removed = currentHobbies.filter(
+    (h) => h.predefined_hobby_id !== null && !newIds.includes(h.predefined_hobby_id!),
+  );
+
+  await Promise.all([
+    addedIds.length ? addMany(addedIds) : Promise.resolve(),
+    ...removed.map((h) => remove(h.id)),
+  ]);
+}
+
+/**
+ * Syncs the user's custom hobbies to match `newNames`.
+ * Adds entries that are new, removes entries that were deselected.
+ */
+async function updateCustomSelection(
+  currentHobbies: AccountHobby[],
+  newNames: string[],
+): Promise<void> {
+  const currentNames = currentHobbies
+    .filter((h) => h.predefined_hobby_id === null)
+    .map((h) => h.hobby_name);
+
+  const addedNames = newNames.filter((n) => !currentNames.includes(n));
+  const removed = currentHobbies.filter(
+    (h) => h.predefined_hobby_id === null && !newNames.includes(h.hobby_name),
+  );
+
+  await Promise.all([...addedNames.map((n) => addCustom(n)), ...removed.map((h) => remove(h.id))]);
+}
+
 export const hobbyService = {
   list,
   add,
@@ -142,4 +185,6 @@ export const hobbyService = {
   remove,
   addCustom,
   subscribe,
+  updatePredefinedSelection,
+  updateCustomSelection,
 };

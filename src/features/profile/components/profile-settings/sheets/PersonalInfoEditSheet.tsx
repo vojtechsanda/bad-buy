@@ -12,7 +12,7 @@ import {
 import { StepperField } from '@shared/components/form/stepper-field';
 import { defaultFormValidationLogic } from '@shared/constants';
 import { accountService, useAccountSWR } from '@shared/modules/account';
-import { triggerBackgroundSuggestionsRefresh } from '@shared/modules/audit/service';
+import { auditService } from '@shared/modules/audit';
 import { useCountriesSWR } from '@shared/modules/country';
 import { useConvertFromUsd, useConvertToUsd } from '@shared/modules/currency';
 import { personalInfoEditSchema } from '@shared/schemas/personalInfo';
@@ -59,7 +59,7 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
         await invalidateAccount(updated, { revalidate: false });
 
         if (countryChanged) {
-          triggerBackgroundSuggestionsRefresh();
+          auditService.triggerBackgroundSuggestionsRefresh();
         }
 
         onClose();

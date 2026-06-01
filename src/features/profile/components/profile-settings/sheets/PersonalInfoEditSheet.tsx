@@ -3,13 +3,16 @@ import {
   BottomSheetProps,
   CountryFormField,
   CurrencyFormField,
+  FullSizeError,
+  FullSizeSpinner,
   SheetActions,
   SheetHeader,
   WageFormField,
 } from '@shared/components';
 import { StepperField } from '@shared/components/form/stepper-field';
-import { defaultFormValidationLogic, mockCountries } from '@shared/constants';
+import { defaultFormValidationLogic } from '@shared/constants';
 import { accountService, useAccountSWR } from '@shared/modules/account';
+import { useCountriesSWR } from '@shared/modules/country';
 import { convertFromUsd, convertToUsd } from '@shared/modules/currency';
 import { PersonalInfoEditData, personalInfoEditSchema } from '@shared/schemas/personalInfo';
 import { Account } from '@shared/types';
@@ -21,6 +24,7 @@ type PersonalInfoEditSheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'> &
 };
 
 export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfoEditSheetProps) {
+  const { countries, isLoading: isCountriesLoading } = useCountriesSWR();
   const { invalidateAccount } = useAccountSWR();
 
   const handleSubmit = async (data: PersonalInfoEditData) => {
@@ -69,48 +73,54 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="gap-6 pb-4">
-          <form.Field name="countryIso2">
-            {(field) => <CountryFormField field={field} countries={mockCountries} />}
-          </form.Field>
+        {isCountriesLoading && <FullSizeSpinner />}
+        {!isCountriesLoading && !countries && (
+          <FullSizeError message="Couldn't load countries, please try again later." />
+        )}
+        {!isCountriesLoading && countries && (
+          <View className="gap-6 pb-4">
+            <form.Field name="countryIso2">
+              {(field) => <CountryFormField field={field} countries={countries} />}
+            </form.Field>
 
-          <form.Field name="displayCurrency">
-            {(field) => (
-              <CurrencyFormField
-                field={field}
-                label="Show prices in"
-                infoMessage="The currency you'll see prices displayed in throughout the app."
-                pinnedCurrency={account.display_currency}
-              />
-            )}
-          </form.Field>
+            <form.Field name="displayCurrency">
+              {(field) => (
+                <CurrencyFormField
+                  field={field}
+                  label="Show prices in"
+                  infoMessage="The currency you'll see prices displayed in throughout the app."
+                  pinnedCurrency={account.display_currency}
+                />
+              )}
+            </form.Field>
 
-          <form.Field name="hourlyWage">
-            {(wageField) => (
-              <form.Field name="wageCurrency">
-                {(currencyField) => (
-                  <WageFormField
-                    wageField={wageField}
-                    currencyField={currencyField}
-                    pinnedCurrency={displayCurrency}
-                  />
-                )}
-              </form.Field>
-            )}
-          </form.Field>
+            <form.Field name="hourlyWage">
+              {(wageField) => (
+                <form.Field name="wageCurrency">
+                  {(currencyField) => (
+                    <WageFormField
+                      wageField={wageField}
+                      currencyField={currencyField}
+                      pinnedCurrency={displayCurrency}
+                    />
+                  )}
+                </form.Field>
+              )}
+            </form.Field>
 
-          <form.Field name="workHoursPerDay">
-            {(field) => (
-              <StepperField
-                field={field}
-                label="Average work hours per day"
-                infoMessage="Helps us put prices in the context of your workday."
-                min={1}
-                max={16}
-              />
-            )}
-          </form.Field>
-        </View>
+            <form.Field name="workHoursPerDay">
+              {(field) => (
+                <StepperField
+                  field={field}
+                  label="Average work hours per day"
+                  infoMessage="Helps us put prices in the context of your workday."
+                  min={1}
+                  max={16}
+                />
+              )}
+            </form.Field>
+          </View>
+        )}
       </ScrollView>
 
       <SheetActions confirmLabel="Save" onConfirm={form.handleSubmit} onCancel={handleClose} />

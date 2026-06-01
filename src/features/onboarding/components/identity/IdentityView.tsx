@@ -1,10 +1,17 @@
-import { CountryFormField, InputFormField, ScreenContainer } from '@shared/components';
+import {
+  CountryFormField,
+  FullSizeError,
+  FullSizeSpinner,
+  InputFormField,
+  ScreenContainer,
+} from '@shared/components';
 import { defaultFormValidationLogic } from '@shared/constants';
+import { useCountriesSWR } from '@shared/modules/country';
+import { USD_CODE } from '@shared/modules/currency';
 import { useForm } from '@tanstack/react-form';
 import { ReactNode } from 'react';
 import { View } from 'react-native';
 
-import { useCountries } from '../../hooks';
 import { IdentityFormData, identityFormSchema } from '../../schemas';
 import { OnboardingStickyFooter } from '../OnboardingStickyFooter';
 import { OnboardingTitle } from '../OnboardingTitle';
@@ -17,7 +24,7 @@ type IdentityViewProps = {
 };
 
 export function IdentityView({ onComplete, screenHeader, defaultValues }: IdentityViewProps) {
-  const { countries, resolveCurrency } = useCountries();
+  const { countries, isLoading: isCountriesLoading } = useCountriesSWR();
 
   const form = useForm({
     defaultValues: {
@@ -28,11 +35,18 @@ export function IdentityView({ onComplete, screenHeader, defaultValues }: Identi
     validationLogic: defaultFormValidationLogic,
     validators: { onDynamic: identityFormSchema },
     onSubmit: async ({ value }) => {
-      console.log('identity', value);
-      const data = value as IdentityFormData;
-      onComplete(data, resolveCurrency(data.countryIso2));
+      if (isCountriesLoading) return;
+
+      const countryDetail = countries?.find((country) => country.iso2 === value.countryIso2);
+
+      onComplete(value, countryDetail?.currency ?? USD_CODE);
     },
   });
+
+  if (isCountriesLoading) return <FullSizeSpinner />;
+  if (!countries) {
+    return <FullSizeError message="Failed to load countries. Please try again later." />;
+  }
 
   return (
     <ScreenContainer

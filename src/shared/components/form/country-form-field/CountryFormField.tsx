@@ -1,4 +1,5 @@
-import { type Country, CountrySheet, FormField, SelectFormField } from '@shared/components';
+import { FormField, SelectFormField } from '@shared/components';
+import { Country, CountrySheet } from '@shared/modules/country';
 import { AnyFieldApi } from '@tanstack/react-form';
 import { useState } from 'react';
 

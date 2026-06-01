@@ -32,9 +32,9 @@ export default function AuditScreen() {
     <ScreenContainer
       stickyBottom={
         <AuditStickyFooter
-          onSkip={async () => handleSkip({ price, currency, suggestions })}
-          onBuy={async () => handleBuy({ price, currency, suggestions })}
-          onFreeze={async (name, durationMs) =>
+          onSkip={() => handleSkip({ price, currency, suggestions })}
+          onBuy={() => handleBuy({ price, currency, suggestions })}
+          onFreeze={(name, durationMs) =>
             handleFreeze({ price, currency, name, durationMs, suggestions })
           }
         />

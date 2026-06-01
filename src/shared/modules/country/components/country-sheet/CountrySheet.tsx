@@ -1,8 +1,6 @@
+import { BottomSheet, Input, InputField } from '@shared/components';
 import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Pressable, Text } from 'react-native';
-
-import { BottomSheet } from '../../layout/bottom-sheet';
-import { Input, InputField } from '../../ui/input';
 
 export type Country = { iso2: string; name: string; flag: string };
 

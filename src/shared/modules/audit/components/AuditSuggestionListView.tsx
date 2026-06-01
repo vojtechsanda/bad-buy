@@ -27,6 +27,7 @@ export function AuditSuggestionListView({
     suggestions: fetchedSuggestions,
     isLoading,
     error,
+    retry,
     refresh,
   } = useSuggestionsSWR(priceUsd ?? null);
   const { convertAndFormatFromUsd } = useConvertFromUsd();
@@ -56,18 +57,24 @@ export function AuditSuggestionListView({
         )}
       </View>
 
-      {isLiveMode && isLoading ? (
-        <SkeletonRowList />
-      ) : isLiveMode && error ? (
+      {isLiveMode && isLoading && <SkeletonRowList />}
+
+      {isLiveMode && error && (
         <View className="items-center gap-3 py-4">
           <Text className="font-nunito text-body text-typography-400">
             Couldn&apos;t load suggestions.
           </Text>
-          <Button variant="outline" action="neutral" size="sm" onPress={refresh}>
+          <Button variant="outline" action="neutral" size="sm" onPress={retry}>
             <Text className="font-nunito-semibold text-body text-typography-900">Try again</Text>
           </Button>
         </View>
-      ) : (
+      )}
+
+      {!isLoading && !error && suggestions.length === 0 && (
+        <Text className="font-nunito text-body text-typography-400">No suggestions available.</Text>
+      )}
+
+      {!isLoading && !error && suggestions.length > 0 && (
         <View>
           {suggestions.map((suggestion, index) => (
             <View

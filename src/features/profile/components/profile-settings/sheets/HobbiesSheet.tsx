@@ -7,7 +7,7 @@ import {
   SheetHeader,
 } from '@shared/components';
 import { hobbyService } from '@shared/modules/account';
-import { triggerBackgroundSuggestionsRefresh } from '@shared/modules/audit/service';
+import { auditService } from '@shared/modules/audit';
 import { PredefinedHobbyGrid } from '@shared/modules/hobby';
 import { AccountHobby } from '@shared/types';
 import { useEffect, useState } from 'react';
@@ -59,23 +59,14 @@ export function HobbiesSheet({ isOpen, onClose, initialHobbies, onSaved }: Hobbi
   }
 
   async function handleSave() {
-    const currentPredefinedIds = toPredefinedIds(initialHobbies);
-    const currentCustomNames = toCustomNames(initialHobbies);
-
-    const addedPredefinedIds = selectedIds.filter((id) => !currentPredefinedIds.includes(id));
-    const removedPredefined = initialHobbies.filter(
-      (h) => h.predefined_hobby_id !== null && !selectedIds.includes(h.predefined_hobby_id!),
-    );
-    const addedCustomNames = customHobbies.filter((n) => !currentCustomNames.includes(n));
-    const removedCustom = initialHobbies.filter(
-      (h) => h.predefined_hobby_id === null && !customHobbies.includes(h.hobby_name),
-    );
+    const initialPredefinedIds = toPredefinedIds(initialHobbies);
+    const initialCustomNames = toCustomNames(initialHobbies);
 
     const hasChanges =
-      addedPredefinedIds.length > 0 ||
-      removedPredefined.length > 0 ||
-      addedCustomNames.length > 0 ||
-      removedCustom.length > 0;
+      selectedIds.length !== initialPredefinedIds.length ||
+      selectedIds.some((id) => !initialPredefinedIds.includes(id)) ||
+      customHobbies.length !== initialCustomNames.length ||
+      customHobbies.some((n) => !initialCustomNames.includes(n));
 
     if (!hasChanges) {
       onClose();
@@ -86,18 +77,17 @@ export function HobbiesSheet({ isOpen, onClose, initialHobbies, onSaved }: Hobbi
     setIsSaving(true);
     try {
       await Promise.all([
-        addedPredefinedIds.length ? hobbyService.addMany(addedPredefinedIds) : Promise.resolve([]),
-        ...removedPredefined.map((h) => hobbyService.remove(h.id)),
-        ...addedCustomNames.map((n) => hobbyService.addCustom(n)),
-        ...removedCustom.map((h) => hobbyService.remove(h.id)),
+        hobbyService.updatePredefinedSelection(initialHobbies, selectedIds),
+        hobbyService.updateCustomSelection(initialHobbies, customHobbies),
       ]);
 
       onClose();
-      triggerBackgroundSuggestionsRefresh();
-    } catch {
+      onSaved?.();
+      auditService.triggerBackgroundSuggestionsRefresh();
+    } catch (err) {
+      console.error('[HobbiesSheet] failed to save hobbies', err);
       Alert.alert('Error', "Couldn't save your hobbies, please try again.");
     } finally {
-      onSaved?.();
       setIsSaving(false);
     }
   }
@@ -140,7 +130,7 @@ export function HobbiesSheet({ isOpen, onClose, initialHobbies, onSaved }: Hobbi
       </ScrollView>
 
       <SheetActions
-        confirmLabel={isSaving ? 'Saving…' : 'Save'}
+        confirmLabel="Save"
         onConfirm={handleSave}
         onCancel={onClose}
         isConfirmDisabled={isSaving}

@@ -21,7 +21,7 @@ export const geminiResponseJsonSchema = {
         type: 'string',
         description: 'One of the hobbies from the prompt, spelled exactly.',
       },
-      name: { type: 'string', description: 'Product name, 2–5 words.' },
+      name: { type: 'string', description: 'Product name, 1–5 words.' },
       item_emoji: { type: 'string', description: 'A single emoji for the item.' },
       price_usd: {
         type: 'number',
@@ -39,7 +39,7 @@ export const geminiSuggestionSchema = z.object({
   price_usd: z.number().positive().max(100_000),
 });
 
-export const geminiResponseSchema = z.array(geminiSuggestionSchema).min(1).max(SUGGESTION_COUNT);
+export const geminiResponseSchema = z.array(geminiSuggestionSchema).length(SUGGESTION_COUNT);
 
 export const geminiEnvelopeSchema = z.object({
   candidates: z

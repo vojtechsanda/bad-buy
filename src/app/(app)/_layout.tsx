@@ -1,41 +1,21 @@
 import { useAuth } from '@features/auth';
 import { AppTabs, AppTopBar, FullSizeSpinner } from '@shared/components';
+import { useColdStartNotificationDeepLink, useNotificationResponseDeepLink } from '@shared/hooks';
 import { useAccountSWR } from '@shared/modules/account';
 import { useExchangeRates } from '@shared/modules/currency';
-import { COLD_START_NOTIFICATION_MAX_AGE_S } from '@shared/services';
-import * as Notifications from 'expo-notifications';
-import { Redirect, Tabs, router } from 'expo-router';
-import { useEffect, useRef } from 'react';
+import { Redirect, Tabs } from 'expo-router';
 
 export default function AppLayout() {
   const { isLogged, isLoading: isAuthLoading } = useAuth();
   const { isLoading: isAccountLoading, account } = useAccountSWR();
   const { isLoading: isExchangeRatesLoading } = useExchangeRates();
-  const hasHandledColdStart = useRef(false);
 
-  useEffect(() => {
-    if (!isLogged || !account || hasHandledColdStart.current) return;
-    hasHandledColdStart.current = true;
+  useColdStartNotificationDeepLink(isLogged && !!account);
+  useNotificationResponseDeepLink();
 
-    const response = Notifications.getLastNotificationResponse();
-    if (!response) return;
-    const tappedAt = response.notification.date;
-    const isRecent = Date.now() - tappedAt < COLD_START_NOTIFICATION_MAX_AGE_S * 1000;
-    if (!isRecent) return;
-    const vaultId = response.notification.request.content.data?.vaultId as string | undefined;
-    if (vaultId) router.push({ pathname: '/(app)/vault/[id]', params: { id: vaultId } });
-  }, [isLogged, account]);
-
-  useEffect(() => {
-    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
-      const vaultId = response.notification.request.content.data?.vaultId as string | undefined;
-      if (vaultId) router.push({ pathname: '/(app)/vault/[id]', params: { id: vaultId } });
-    });
-
-    return () => subscription.remove();
-  }, []);
-
-  if (isAuthLoading || isAccountLoading || isExchangeRatesLoading) return <FullSizeSpinner />;
+  if (isAuthLoading || isAccountLoading || isExchangeRatesLoading) {
+    return <FullSizeSpinner />;
+  }
 
   if (!isLogged) {
     return <Redirect href="/(auth)/landing" />;

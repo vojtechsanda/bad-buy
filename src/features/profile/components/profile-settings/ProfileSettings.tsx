@@ -4,7 +4,7 @@ import { accountService, useAccountSWR } from '@shared/modules/account';
 import { useHobbiesSWR } from '@shared/modules/hobby';
 import { pushNotificationService } from '@shared/services';
 import { Account, AccountHobby } from '@shared/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Linking, View } from 'react-native';
 
 import { SettingsRow } from './SettingsRow';
@@ -26,7 +26,15 @@ export function ProfileSettings({ account, accountHobbies }: ProfileSettingsProp
   const [isPromoOpen, setIsPromoOpen] = useState(false);
   const [isUpsellOpen, setIsUpsellOpen] = useState(false);
 
-  const notificationsEnabled = account.notifications_enabled;
+  const [osGranted, setOsGranted] = useState(false);
+
+  useEffect(() => {
+    pushNotificationService
+      .getPermissionStatus()
+      .then(({ status }) => setOsGranted(status === 'granted'));
+  }, []);
+
+  const notificationsEnabled = account.notifications_enabled && osGranted;
 
   async function handleNotificationsToggle(newValue: boolean) {
     if (newValue === notificationsEnabled) return;
@@ -61,7 +69,8 @@ export function ProfileSettings({ account, accountHobbies }: ProfileSettingsProp
 
       await accountService.update({ notifications_enabled: true });
       await invalidateAccount();
-    } catch {
+    } catch (error) {
+      console.error('[ProfileSettings] failed to update notification settings:', error);
       Alert.alert('Error', "Couldn't update notification settings, please try again later.");
     }
   }

@@ -1,4 +1,3 @@
-import { useAccountSWR } from '@shared/modules/account';
 import { trackedItemService } from '@shared/services';
 import { useRouter } from 'expo-router';
 import { Alert } from 'react-native';
@@ -13,8 +12,6 @@ type useAuditLateActionsParams = {
 
 export function useAuditLateActions({ trackedItemId, onInvalidation }: useAuditLateActionsParams) {
   const router = useRouter();
-
-  const { account } = useAccountSWR();
 
   const invalidateSWR = useAuditActionsInvalidateSWR(onInvalidation);
 
@@ -48,14 +45,19 @@ export function useAuditLateActions({ trackedItemId, onInvalidation }: useAuditL
     }
   };
 
-  const handleReFreeze = async ({ trackedItemId, name, durationMs }: AuditReFreezePayload) => {
+  const handleReFreeze = async ({
+    account,
+    trackedItemId,
+    name,
+    durationMs,
+  }: AuditReFreezePayload) => {
     try {
       const freezeUntil = new Date(Date.now() + durationMs).toISOString();
 
       await trackedItemService.refreeze(trackedItemId, {
         freeze_until: freezeUntil,
         name,
-        notificationsEnabled: account?.notifications_enabled ?? true,
+        notificationsEnabled: account.notifications_enabled,
       });
 
       await invalidateSWR();

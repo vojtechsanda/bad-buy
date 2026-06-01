@@ -31,14 +31,14 @@ export type FreezeInput = {
   conversion_rate_snapshot: number;
   freeze_until: string;
   suggestions?: SuggestionInput[];
-  notificationsEnabled?: boolean;
+  notificationsEnabled: boolean;
 };
 
 export type RefreezeInput = {
   freeze_until: string;
   name?: string;
   item_emoji?: string | null;
-  notificationsEnabled?: boolean;
+  notificationsEnabled: boolean;
 };
 
 /**
@@ -113,7 +113,7 @@ async function freeze(input: FreezeInput): Promise<TrackedItem> {
   const item = await insertItem(row);
 
   await Promise.all([
-    input.notificationsEnabled !== false
+    input.notificationsEnabled
       ? pushNotificationService.scheduleFreezeNotification(item.id, item.freeze_until!)
       : Promise.resolve(),
     insertSuggestions(item.id, input.suggestions ?? []),
@@ -136,7 +136,7 @@ async function refreeze(id: string, input: RefreezeInput): Promise<TrackedItem> 
   const item = await updateItem(id, patch, 'trackedItemService.refreeze');
 
   await pushNotificationService.cancelFreezeNotification(id);
-  if (input.notificationsEnabled !== false) {
+  if (input.notificationsEnabled) {
     await pushNotificationService.scheduleFreezeNotification(item.id, item.freeze_until!);
   }
 

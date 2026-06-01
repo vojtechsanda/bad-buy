@@ -36,7 +36,7 @@ export default function AuditScreen() {
           onSkip={() => handleSkip({ price, currency, suggestions })}
           onBuy={() => handleBuy({ price, currency, suggestions })}
           onFreeze={(name, durationMs) =>
-            handleFreeze({ price, currency, name, durationMs, suggestions })
+            handleFreeze({ account, price, currency, name, durationMs, suggestions })
           }
         />
       }

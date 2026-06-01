@@ -1,8 +1,7 @@
+import { FREEZE_REMINDER_CHANNEL_ID } from '@shared/constants';
 import * as Notifications from 'expo-notifications';
 import { PermissionStatus } from 'expo-notifications';
 import { Platform } from 'react-native';
-
-import { FREEZE_REMINDER_CHANNEL_ID } from './pushNotificationConstants';
 
 export type NotificationPermissions = {
   status: PermissionStatus;
@@ -66,8 +65,8 @@ async function scheduleFreezeNotification(itemId: string, freezeUntil: string): 
 async function cancelFreezeNotification(itemId: string): Promise<void> {
   try {
     await Notifications.cancelScheduledNotificationAsync(itemId);
-  } catch {
-    // Notification may have already fired — ignore
+  } catch (error) {
+    console.error('[pushNotificationService] failed to cancel freeze notification:', itemId, error);
   }
 }
 

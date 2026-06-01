@@ -48,7 +48,7 @@ export default function VaultItemDetail() {
           }
           onBuy={handleLateBuy}
           onFreeze={(name, durationMs) =>
-            handleReFreeze({ trackedItemId: vaultItem.id, durationMs, name })
+            handleReFreeze({ account, trackedItemId: vaultItem.id, durationMs, name })
           }
           freezeLabel="Re-freeze"
           freezeSheetProps={{

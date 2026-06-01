@@ -70,9 +70,9 @@ export function ProfileSettings({ account, accountHobbies }: ProfileSettingsProp
 
         return;
       }
-      setOsGranted(true);
     }
 
+    setOsGranted(true);
     await accountService.update({ notifications_enabled: true });
     await invalidateAccount();
   }

@@ -19,7 +19,7 @@ import {
   isOverPremiumCap,
   secondsUntilNextWindow,
 } from './rate-limit.ts';
-import { RequestBodySchema } from './schemas.ts';
+import { requestBodySchema } from './schemas.ts';
 import { toSuggestionRows } from './transforms.ts';
 import type { AccountHobbyRef, AccountSuggestion, StepResult } from './types.ts';
 import { stepFail, stepOk } from './types.ts';
@@ -75,7 +75,7 @@ async function parseBody(
     }
   }
 
-  const result = RequestBodySchema.safeParse(rawBody);
+  const result = requestBodySchema.safeParse(rawBody);
   if (!result.success) {
     return stepFail(
       jsonResponse(

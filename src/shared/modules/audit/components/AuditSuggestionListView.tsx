@@ -1,6 +1,7 @@
 import { Button, PremiumLockGate, SkeletonRowList } from '@shared/components';
 import { themeColor } from '@shared/constants';
 import { CurrencyCode, useConvertFromUsd } from '@shared/modules/currency';
+import { useSuggestionsSWR } from '@shared/swr';
 import { RefreshCw } from 'lucide-react-native';
 import { Text, View } from 'react-native';
 
@@ -13,22 +14,25 @@ type SuggestionItem = {
 
 type AuditSuggestionListViewProps = {
   currency: CurrencyCode;
-  suggestions: SuggestionItem[];
-  isLoading?: boolean;
-  error?: Error | null;
-  onRefresh?: () => void;
-  onRetry?: () => void;
+  priceUsd?: number;
+  staticSuggestions?: SuggestionItem[];
 };
 
 export function AuditSuggestionListView({
   currency,
-  suggestions,
-  isLoading = false,
-  error,
-  onRefresh,
-  onRetry,
+  priceUsd,
+  staticSuggestions,
 }: AuditSuggestionListViewProps) {
+  const {
+    suggestions: fetchedSuggestions,
+    isLoading,
+    error,
+    refresh,
+  } = useSuggestionsSWR(priceUsd ?? null);
   const { convertAndFormatFromUsd } = useConvertFromUsd();
+
+  const isLiveMode = staticSuggestions === undefined;
+  const suggestions = staticSuggestions ?? fetchedSuggestions;
 
   return (
     <View className="gap-4">
@@ -36,14 +40,14 @@ export function AuditSuggestionListView({
         <Text className="font-nunito-bold text-heading text-typography-900">
           What else this could buy
         </Text>
-        {onRefresh && (
+        {isLiveMode && (
           <PremiumLockGate>
             <Button
               variant="solid"
               action="neutral"
               size="md"
               className="rounded-full"
-              onPress={onRefresh}
+              onPress={refresh}
               disabled={isLoading}
             >
               <RefreshCw size={18} strokeWidth={1.75} color={themeColor.typography900} />
@@ -52,18 +56,16 @@ export function AuditSuggestionListView({
         )}
       </View>
 
-      {isLoading ? (
+      {isLiveMode && isLoading ? (
         <SkeletonRowList />
-      ) : error ? (
+      ) : isLiveMode && error ? (
         <View className="items-center gap-3 py-4">
           <Text className="font-nunito text-body text-typography-400">
             Couldn&apos;t load suggestions.
           </Text>
-          {onRetry && (
-            <Button variant="outline" action="neutral" size="sm" onPress={onRetry}>
-              <Text className="font-nunito-semibold text-body text-typography-900">Try again</Text>
-            </Button>
-          )}
+          <Button variant="outline" action="neutral" size="sm" onPress={refresh}>
+            <Text className="font-nunito-semibold text-body text-typography-900">Try again</Text>
+          </Button>
         </View>
       ) : (
         <View>

@@ -4,7 +4,7 @@ import useSWR from 'swr';
 export const predefinedHobbiesSWRKey = 'predefined-hobbies';
 
 export function usePredefinedHobbiesSWR() {
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     predefinedHobbiesSWRKey,
     predefinedHobbyService.listGroupedByCategory,
   );
@@ -13,5 +13,6 @@ export function usePredefinedHobbiesSWR() {
     hobbiesByCategory: data ?? {},
     isLoading,
     error,
+    invalidatePredefinedHobbies: mutate,
   };
 }

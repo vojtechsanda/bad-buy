@@ -6,9 +6,9 @@ import {
   AuditSuggestionListView,
   AuditTimePriceView,
   useAuditInitialActions,
-  useSuggestions,
 } from '@shared/modules/audit';
 import { CurrencyCode, useConvertToUsd } from '@shared/modules/currency';
+import { useSuggestionsSWR } from '@shared/swr';
 import { Redirect, useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
@@ -17,8 +17,8 @@ export default function AuditScreen() {
 
   const { convertToUsd } = useConvertToUsd();
   const { account, isLoading: isAccountLoading } = useAccountSWR();
-  const priceUsd = price && currency ? convertToUsd(price, currency) : undefined;
-  const { suggestions, isLoading, error: suggestionsError, refresh } = useSuggestions(priceUsd);
+  const priceUsd = convertToUsd(price, currency);
+  const { suggestions } = useSuggestionsSWR(priceUsd);
 
   const { handleBuy, handleFreeze, handleSkip } = useAuditInitialActions();
 
@@ -46,14 +46,7 @@ export default function AuditScreen() {
 
         <AuditTimePriceView price={price} currency={currency} account={account} />
 
-        <AuditSuggestionListView
-          currency={currency}
-          suggestions={suggestions}
-          isLoading={isLoading}
-          error={suggestionsError}
-          onRefresh={refresh}
-          onRetry={refresh}
-        />
+        <AuditSuggestionListView currency={currency} priceUsd={priceUsd} />
       </View>
     </ScreenContainer>
   );

@@ -10,6 +10,6 @@ export function useHobbiesSWR() {
     hobbies: data ?? [],
     isLoading,
     error,
-    invalidateHobbies: () => mutate(),
+    invalidateHobbies: mutate,
   };
 }

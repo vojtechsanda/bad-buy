@@ -1,5 +1,6 @@
 import { BottomSheet, BottomSheetProps, ErrorMessage, Input, InputField } from '@shared/components';
 import { redeemCodeService, useAccountSWR } from '@shared/modules/account';
+import { playCelebrationHaptics } from '@shared/utils';
 import { differenceInMonths } from 'date-fns';
 import { useState } from 'react';
 import { Text, View } from 'react-native';
@@ -41,6 +42,8 @@ export function PromoRedemptionSheet({ isOpen, onClose }: PromoRedemptionSheetPr
       invalidateAccount();
 
       setSheetState('success');
+
+      playCelebrationHaptics();
     } catch (e) {
       console.error(e);
       setError("Couldn't redeem promo code, please try again later.");

@@ -9,17 +9,39 @@ import {
 } from '@shared/components';
 import { StepperField } from '@shared/components/form/stepper-field';
 import { defaultFormValidationLogic, mockCountries } from '@shared/constants';
-import { convertFromUsd } from '@shared/modules/currency';
-import { personalInfoEditSchema } from '@shared/schemas/personalInfo';
+import { accountService, useAccountSWR } from '@shared/modules/account';
+import { convertFromUsd, convertToUsd } from '@shared/modules/currency';
+import { PersonalInfoEditData, personalInfoEditSchema } from '@shared/schemas/personalInfo';
 import { Account } from '@shared/types';
 import { useForm, useStore } from '@tanstack/react-form';
-import { ScrollView, View } from 'react-native';
+import { Alert, ScrollView, View } from 'react-native';
 
 type PersonalInfoEditSheetProps = Pick<BottomSheetProps, 'isOpen' | 'onClose'> & {
   account: Account;
 };
 
 export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfoEditSheetProps) {
+  const { invalidateAccount } = useAccountSWR();
+
+  const handleSubmit = async (data: PersonalInfoEditData) => {
+    try {
+      await accountService.update({
+        country: data.countryIso2,
+        display_currency: data.displayCurrency,
+        hourly_wage_usd: convertToUsd(data.hourlyWage, data.wageCurrency),
+        wage_currency: data.wageCurrency,
+        work_hours_per_day: data.workHoursPerDay,
+      });
+
+      invalidateAccount();
+      onClose();
+    } catch (e) {
+      console.error(JSON.stringify(e));
+
+      Alert.alert('Error', "Couldn't edit personal info, please try again later.");
+    }
+  };
+
   const form = useForm({
     defaultValues: {
       countryIso2: account.country,
@@ -30,11 +52,9 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
     },
     validationLogic: defaultFormValidationLogic,
     validators: { onDynamic: personalInfoEditSchema },
-    onSubmit: async () => {
-      // TODO: wire save to Supabase (#121)
-      onClose();
-    },
+    onSubmit: async ({ value }) => handleSubmit(value),
   });
+
   const handleClose = () => {
     form.reset();
     onClose();

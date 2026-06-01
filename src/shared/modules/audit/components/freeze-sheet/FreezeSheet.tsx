@@ -11,7 +11,7 @@ import { defaultFormValidationLogic } from '@shared/constants';
 import { useForm } from '@tanstack/react-form';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import { CustomDurationInput } from './CustomDurationInput';
 import { DurationUnit, predefinedDurations } from './constants';
@@ -92,43 +92,48 @@ export function FreezeSheet({
 
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose} heightMode={0.7}>
-      <View className="flex-1 gap-6 pt-3">
+      <View className="mb-4">
         <SheetHeader title={title} />
-
-        <form.Field name="name">
-          {(field) => <InputFormField field={field} label="Name it" placeholder="What is it?" />}
-        </form.Field>
-
-        <form.Field name="durationMs">
-          {(field) => (
-            <FormField field={field} label="Decide in…">
-              <View className="flex-row flex-wrap gap-2">
-                {predefinedDurations.map((predefinedDuration) => (
-                  <SelectableChip
-                    key={predefinedDuration.label}
-                    label={predefinedDuration.label}
-                    selected={
-                      field.state.value === predefinedDuration.durationMs && !customDurationExpanded
-                    }
-                    onPress={() => handlePredefinedSelect(predefinedDuration.durationMs)}
-                  />
-                ))}
-              </View>
-            </FormField>
-          )}
-        </form.Field>
-
-        <PremiumLockGate>
-          <CustomDurationInput
-            value={customDurationValue}
-            selectedUnit={selectedCustomUnit}
-            expanded={customDurationExpanded}
-            onToggle={handleCustomToggle}
-            onValueChange={handleCustomValueChange}
-            onUnitChange={handleCustomUnitChange}
-          />
-        </PremiumLockGate>
       </View>
+
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+        <View className="gap-6 pb-4">
+          <form.Field name="name">
+            {(field) => <InputFormField field={field} label="Name it" placeholder="What is it?" />}
+          </form.Field>
+
+          <form.Field name="durationMs">
+            {(field) => (
+              <FormField field={field} label="Decide in…">
+                <View className="flex-row flex-wrap gap-2">
+                  {predefinedDurations.map((predefinedDuration) => (
+                    <SelectableChip
+                      key={predefinedDuration.label}
+                      label={predefinedDuration.label}
+                      selected={
+                        field.state.value === predefinedDuration.durationMs &&
+                        !customDurationExpanded
+                      }
+                      onPress={() => handlePredefinedSelect(predefinedDuration.durationMs)}
+                    />
+                  ))}
+                </View>
+              </FormField>
+            )}
+          </form.Field>
+
+          <PremiumLockGate noBadgeOverflowX>
+            <CustomDurationInput
+              value={customDurationValue}
+              selectedUnit={selectedCustomUnit}
+              expanded={customDurationExpanded}
+              onToggle={handleCustomToggle}
+              onValueChange={handleCustomValueChange}
+              onUnitChange={handleCustomUnitChange}
+            />
+          </PremiumLockGate>
+        </View>
+      </ScrollView>
       <SheetActions confirmLabel={actionLabel} onConfirm={form.handleSubmit} />
     </BottomSheet>
   );

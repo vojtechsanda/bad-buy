@@ -4,10 +4,11 @@ import { ShoppingBag, Snowflake } from 'lucide-react-native';
 import { useState } from 'react';
 import { View } from 'react-native';
 
-import { FreezeSheet } from './freeze-sheet/FreezeSheet';
+import { FreezeSheet, FreezeSheetProps } from './freeze-sheet/FreezeSheet';
 
 type AuditStickyFooterProps = {
   freezeLabel?: string;
+  freezeSheetProps?: Omit<FreezeSheetProps, 'isOpen' | 'onClose' | 'onFreeze'>;
   onSkip: () => void;
   onFreeze: (name: string, durationMs: number) => void;
   onBuy: () => void;
@@ -18,6 +19,7 @@ export function AuditStickyFooter({
   onBuy,
   onFreeze,
   freezeLabel = 'Freeze',
+  freezeSheetProps,
 }: AuditStickyFooterProps) {
   const [freezeSheetOpen, setFreezeSheetOpen] = useState(false);
 
@@ -51,6 +53,7 @@ export function AuditStickyFooter({
         isOpen={freezeSheetOpen}
         onClose={() => setFreezeSheetOpen(false)}
         onFreeze={onFreeze}
+        {...freezeSheetProps}
       />
     </View>
   );

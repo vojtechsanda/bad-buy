@@ -6,7 +6,7 @@ import {
   AuditStickyFooter,
   AuditSuggestionListView,
   AuditTimePriceView,
-  useAuditActions,
+  useAuditLateActions,
 } from '@shared/modules/audit';
 import { useConvertFromUsd } from '@shared/modules/currency';
 import { useLocalSearchParams } from 'expo-router';
@@ -20,7 +20,8 @@ export default function VaultItemDetail() {
   const { vaultItem, isLoading: isVaultItemLoading, invalidateVaultItem } = useVaultItemSWR(id);
   const { account, isLoading: isAccountLoading } = useAccountSWR();
 
-  const { handleBuy, handleReFreeze, handleSkip } = useAuditActions({
+  const { handleLateBuy, handleReFreeze, handleLateSkip } = useAuditLateActions({
+    trackedItemId: id,
     onInvalidation: () => invalidateVaultItem(),
   });
 
@@ -40,21 +41,21 @@ export default function VaultItemDetail() {
       stickyBottom={
         <AuditStickyFooter
           onSkip={() =>
-            handleSkip({
+            handleLateSkip({
               price: displayedPrice,
               currency: vaultItem.price_currency,
-              suggestions: vaultItem.suggestions,
             })
           }
-          onBuy={() =>
-            handleBuy({
-              price: displayedPrice,
-              currency: vaultItem.price_currency,
-              suggestions: vaultItem.suggestions,
-            })
+          onBuy={handleLateBuy}
+          onFreeze={(name, durationMs) =>
+            handleReFreeze({ trackedItemId: vaultItem.id, durationMs, name })
           }
-          onFreeze={(_, durationMs) => handleReFreeze({ trackedItemId: vaultItem.id, durationMs })}
           freezeLabel="Re-freeze"
+          freezeSheetProps={{
+            title: 'Re-freeze this decision',
+            actionLabel: 'Re-freeze it',
+            initialName: vaultItem.name ?? '',
+          }}
         />
       }
     >

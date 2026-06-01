@@ -6,7 +6,7 @@ import {
   AuditSuggestionListView,
   AuditTimePriceView,
   mockSuggestions,
-  useAuditActions,
+  useAuditInitialActions,
 } from '@shared/modules/audit';
 import { CurrencyCode } from '@shared/modules/currency';
 import { Redirect, useLocalSearchParams } from 'expo-router';
@@ -17,7 +17,7 @@ export default function AuditScreen() {
 
   const { account, isLoading } = useAccountSWR();
 
-  const { handleBuy, handleFreeze, handleSkip } = useAuditActions();
+  const { handleBuy, handleFreeze, handleSkip } = useAuditInitialActions();
 
   if (isLoading) return <FullSizeSpinner />;
   if (!account) return <FullSizeError message="Unable to load profile, please try again later" />;

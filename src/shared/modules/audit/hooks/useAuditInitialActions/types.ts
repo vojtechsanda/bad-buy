@@ -10,12 +10,7 @@ export type AuditFreezePayload = {
   suggestions: AuditSuggestions;
 };
 
-export type AuditReFreezePayload = {
-  trackedItemId: string;
-  durationMs: number;
-};
-
-export type AuditDecisionPayload = {
+export type AuditInitialDecisionPayload = {
   price: number | string;
   currency: string;
   suggestions?: AuditSuggestions;

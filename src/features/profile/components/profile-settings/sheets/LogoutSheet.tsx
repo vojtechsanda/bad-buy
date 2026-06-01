@@ -10,9 +10,8 @@ export function LogoutSheet({ isOpen, onClose }: LogoutSheetProps) {
 
   const handleLogout = async () => {
     try {
-      mutate(() => true, undefined, { revalidate: false });
-
       await authService.signOut();
+      mutate(() => true, undefined, { revalidate: false });
 
       onClose();
     } catch (e) {

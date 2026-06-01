@@ -83,7 +83,7 @@ export default function VaultItemDetail() {
 
         <AuditSuggestionListView
           currency={vaultItem.price_currency}
-          suggestions={vaultItem.suggestions}
+          staticSuggestions={vaultItem.suggestions}
         />
       </View>
     </ScreenContainer>

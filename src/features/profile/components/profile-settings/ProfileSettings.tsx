@@ -1,6 +1,6 @@
 import { PremiumUpsellSheet, PromoRedemptionSheet } from '@shared/components';
 import { Switch } from '@shared/components/ui';
-import { useHobbiesSWR } from '@shared/swr';
+import { useHobbiesSWR } from '@shared/modules/hobby';
 import { Account } from '@shared/types';
 import { useState } from 'react';
 import { View } from 'react-native';

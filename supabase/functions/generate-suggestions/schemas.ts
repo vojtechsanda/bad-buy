@@ -2,12 +2,12 @@ import { z } from 'https://esm.sh/zod@3';
 
 import { SUGGESTION_COUNT } from './constants.ts';
 
-export const RequestBodySchema = z.object({
+export const requestBodySchema = z.object({
   price_usd: z.number().positive().optional(),
   force_refresh: z.boolean().optional(),
 });
 
-export const GEMINI_RESPONSE_SCHEMA = {
+export const geminiResponseJsonSchema = {
   type: 'array',
   minItems: SUGGESTION_COUNT,
   maxItems: SUGGESTION_COUNT,
@@ -32,16 +32,16 @@ export const GEMINI_RESPONSE_SCHEMA = {
   },
 };
 
-export const GeminiSuggestionSchema = z.object({
+export const geminiSuggestionSchema = z.object({
   hobby_name: z.string().min(1).max(120),
   name: z.string().min(1).max(100),
   item_emoji: z.string().min(1).max(20),
   price_usd: z.number().positive().max(100_000),
 });
 
-export const GeminiResponseSchema = z.array(GeminiSuggestionSchema).min(1).max(SUGGESTION_COUNT);
+export const geminiResponseSchema = z.array(geminiSuggestionSchema).min(1).max(SUGGESTION_COUNT);
 
-export const GeminiEnvelopeSchema = z.object({
+export const geminiEnvelopeSchema = z.object({
   candidates: z
     .array(
       z.object({
@@ -54,4 +54,4 @@ export const GeminiEnvelopeSchema = z.object({
     .min(1),
 });
 
-export type GeminiSuggestion = z.infer<typeof GeminiSuggestionSchema>;
+export type GeminiSuggestion = z.infer<typeof geminiSuggestionSchema>;

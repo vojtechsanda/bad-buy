@@ -1,4 +1,4 @@
-import { usePredefinedHobbiesSWR } from '@shared/swr';
+import { usePredefinedHobbiesSWR } from '@shared/modules/hobby/hooks';
 import { View } from 'react-native';
 
 import { HobbyCategoryGroup } from './HobbyCategoryGroup';

@@ -1,4 +1,3 @@
 export * from './useFrozenItemsSWR';
-export * from './useHobbiesSWR';
-export * from './usePredefinedHobbiesSWR';
+export * from './useSuggestionsSWR';
 export * from './useTrackedItemsSWR';

@@ -1,9 +1,9 @@
 import { GEMINI_BASE_URL, GEMINI_MODEL, GEMINI_TIMEOUT_MS, SUGGESTION_COUNT } from './constants.ts';
 import {
-  GEMINI_RESPONSE_SCHEMA,
-  GeminiEnvelopeSchema,
-  GeminiResponseSchema,
   type GeminiSuggestion,
+  geminiEnvelopeSchema,
+  geminiResponseJsonSchema,
+  geminiResponseSchema,
 } from './schemas.ts';
 
 export type { GeminiSuggestion };
@@ -90,7 +90,7 @@ export async function callGemini(
         contents: [{ parts: [{ text: buildPrompt(country, hobbyNames, budgetUsd) }] }],
         generationConfig: {
           responseMimeType: 'application/json',
-          responseJsonSchema: GEMINI_RESPONSE_SCHEMA,
+          responseJsonSchema: geminiResponseJsonSchema,
         },
       }),
     },
@@ -103,7 +103,7 @@ export async function callGemini(
     throw new Error(`Gemini ${res.status} (${GEMINI_MODEL}): ${detail}`);
   }
 
-  const envelope = GeminiEnvelopeSchema.safeParse(await res.json());
+  const envelope = geminiEnvelopeSchema.safeParse(await res.json());
   if (!envelope.success) {
     console.error(
       '[generate-suggestions] Unexpected Gemini envelope',
@@ -127,7 +127,7 @@ export async function callGemini(
     throw new Error(`Gemini returned malformed JSON: ${rawText.slice(0, 200)}`);
   }
 
-  const parsed = GeminiResponseSchema.safeParse(rawJson);
+  const parsed = geminiResponseSchema.safeParse(rawJson);
   if (!parsed.success) {
     console.error(
       '[generate-suggestions] Gemini response failed validation',

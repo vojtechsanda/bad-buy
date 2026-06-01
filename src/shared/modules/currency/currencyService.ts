@@ -9,10 +9,10 @@ import { type Currency, type CurrencyRate } from '@shared/types';
 import { assertNoError } from '@shared/utils';
 
 import { USD_CODE } from './constants';
-import { mockExchangeRates } from './store';
 import { type CurrencyCode } from './types';
 
 let currencyListCache: Currency[] | null = null;
+let exchangeRatesCache: CurrencyRate[] | null = null;
 
 /**
  * Returns all supported currencies ordered by code.
@@ -30,6 +30,26 @@ async function listCurrencies(): Promise<Currency[]> {
   currencyListCache = data ?? [];
 
   return currencyListCache;
+}
+
+/**
+ * Returns all exchange rates sorted by target currency.
+ *
+ * displayAmount = priceUsd * rate.
+ */
+async function listExchangeRates(): Promise<CurrencyRate[]> {
+  if (exchangeRatesCache) return exchangeRatesCache;
+
+  const { data, error } = await supabase
+    .from('currency_rate')
+    .select('*')
+    .order('target', { ascending: true });
+
+  assertNoError(error);
+
+  exchangeRatesCache = data ?? [];
+
+  return exchangeRatesCache;
 }
 
 /**
@@ -51,14 +71,14 @@ async function getRate(targetCurrency: CurrencyCode): Promise<number> {
 
   if (error) {
     console.warn(
-      `[currencyService.getRate] DB error for ${targetCurrency}, using mock fallback:`,
+      `[currencyService.getRate] DB error for ${targetCurrency}, using "1" as fallback:`,
       error.message,
     );
   }
 
   if (data) return data.rate;
 
-  return mockExchangeRates[targetCurrency] ?? 1;
+  return 1;
 }
 
 /**
@@ -80,6 +100,7 @@ function subscribeToRates(
 
 export const currencyService = {
   listCurrencies,
+  listExchangeRates,
   getRate,
   subscribeToRates,
 };

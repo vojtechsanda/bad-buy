@@ -20,7 +20,7 @@ export function PremiumLockGate({
   const [promoOpen, setPromoOpen] = useState(false);
 
   const hasActivePremium =
-    account?.premium_expires_at != null && new Date(account.premium_expires_at) > new Date();
+    account?.premium_expires_at && new Date(account.premium_expires_at) > new Date();
 
   if (hasActivePremium) {
     return <>{children}</>;

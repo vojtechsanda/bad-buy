@@ -1,3 +1,4 @@
+import { useAccountSWR } from '@shared/modules/account';
 import { currencyService, useConvertToUsd } from '@shared/modules/currency';
 import { trackedItemService } from '@shared/services';
 import { useRouter } from 'expo-router';
@@ -13,6 +14,7 @@ type useAuditInitialActionsParams = {
 export function useAuditInitialActions({ onInvalidation }: useAuditInitialActionsParams = {}) {
   const router = useRouter();
 
+  const { account } = useAccountSWR();
   const { convertToUsd } = useConvertToUsd();
 
   const invalidateSWR = useAuditActionsInvalidateSWR(onInvalidation);
@@ -85,6 +87,7 @@ export function useAuditInitialActions({ onInvalidation }: useAuditInitialAction
         price_currency: currency,
         price_usd: convertToUsd(price, currency, rate),
         suggestions,
+        notificationsEnabled: account?.notifications_enabled ?? true,
       });
 
       await invalidateSWR();

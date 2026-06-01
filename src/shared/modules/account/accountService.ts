@@ -12,7 +12,13 @@ import { SupabaseError, assertNoError, unwrapRow } from '@shared/utils';
 export type CreateAccountPayload = Required<
   Pick<
     Account,
-    'name' | 'birthdate' | 'country' | 'display_currency' | 'wage_currency' | 'hourly_wage_usd'
+    | 'name'
+    | 'birthdate'
+    | 'country'
+    | 'display_currency'
+    | 'wage_currency'
+    | 'hourly_wage_usd'
+    | 'wage_rate_snapshot'
   >
 > &
   Partial<Pick<Account, 'work_hours_per_day'>>;
@@ -26,6 +32,7 @@ export type AccountUpdatePatch = Partial<
     | 'display_currency'
     | 'wage_currency'
     | 'hourly_wage_usd'
+    | 'wage_rate_snapshot'
     | 'work_hours_per_day'
     | 'notifications_enabled'
   >

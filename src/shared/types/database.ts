@@ -22,6 +22,7 @@ export type Database = {
           premium_expires_at: string | null;
           referral_code: string;
           wage_currency: string;
+          wage_rate_snapshot: number;
           work_hours_per_day: number;
         };
         Insert: {
@@ -37,6 +38,7 @@ export type Database = {
           premium_expires_at?: string | null;
           referral_code?: string;
           wage_currency: string;
+          wage_rate_snapshot?: number;
           work_hours_per_day?: number;
         };
         Update: {
@@ -52,6 +54,7 @@ export type Database = {
           premium_expires_at?: string | null;
           referral_code?: string;
           wage_currency?: string;
+          wage_rate_snapshot?: number;
           work_hours_per_day?: number;
         };
         Relationships: [

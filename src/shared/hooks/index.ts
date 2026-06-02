@@ -1,3 +1,2 @@
-export * from './useColdStartNotificationDeepLink';
-export * from './useNotificationResponseDeepLink';
 export * from './useStream';
+export * from './pushNotifications';

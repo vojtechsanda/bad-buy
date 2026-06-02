@@ -1,7 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 
-export function getVaultIdFromNotificationResponse(
+function getVaultIdFromNotificationResponse(
   response: Notifications.NotificationResponse,
 ): string | undefined {
   return response.notification.request.content.data?.vaultId as string | undefined;

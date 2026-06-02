@@ -1,8 +1,7 @@
 import { COLD_START_NOTIFICATION_MAX_AGE_S } from '@shared/constants';
+import { navigateToVaultFromNotification } from '@shared/utils';
 import * as Notifications from 'expo-notifications';
 import { useEffect, useRef } from 'react';
-
-import { navigateToVaultFromNotification } from './notificationDeepLinkUtils';
 
 /** Handles a notification tap that launched a cold start, within a recent time window. */
 export function useColdStartNotificationDeepLink(isReady: boolean): void {

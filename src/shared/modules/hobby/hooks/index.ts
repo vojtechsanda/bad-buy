@@ -1,2 +1,2 @@
 export * from './useHobbiesSWR';
-export * from './usePredefinedHobbiesSWR';
+export * from './usePredefinedHobbiesByCategorySWR';

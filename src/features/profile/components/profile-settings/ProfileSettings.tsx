@@ -1,7 +1,7 @@
 import { PremiumUpsellSheet, PromoRedemptionSheet } from '@shared/components';
 import { Switch } from '@shared/components/ui';
 import { useHobbiesSWR } from '@shared/modules/hobby';
-import { Account } from '@shared/types';
+import { Account, AccountHobby } from '@shared/types';
 import { useState } from 'react';
 import { View } from 'react-native';
 
@@ -10,10 +10,11 @@ import { DeleteAccountSheet, HobbiesSheet, LogoutSheet, PersonalInfoEditSheet } 
 
 type ProfileSettingsProps = {
   account: Account;
+  accountHobbies: AccountHobby[];
 };
 
-export function ProfileSettings({ account }: ProfileSettingsProps) {
-  const { hobbies, invalidateHobbies } = useHobbiesSWR();
+export function ProfileSettings({ account, accountHobbies }: ProfileSettingsProps) {
+  const { invalidateHobbies } = useHobbiesSWR();
 
   const [isPersonalInfoOpen, setIsPersonalInfoOpen] = useState(false);
   const [isHobbiesOpen, setIsHobbiesOpen] = useState(false);
@@ -52,7 +53,7 @@ export function ProfileSettings({ account }: ProfileSettingsProps) {
         isOpen={isHobbiesOpen}
         onClose={() => setIsHobbiesOpen(false)}
         onSaved={invalidateHobbies}
-        initialHobbies={hobbies}
+        initialHobbies={accountHobbies}
       />
       <LogoutSheet isOpen={isLogoutOpen} onClose={() => setIsLogoutOpen(false)} />
       <DeleteAccountSheet

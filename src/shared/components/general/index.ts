@@ -2,7 +2,7 @@ export * from './countdown-pill';
 export * from './illustration-frame';
 export * from './illustration-svg-frame';
 export * from './premium-lock-gate';
-export * from './skeleton-row';
+export * from './skeletons';
 export * from './statistics-card';
 export * from './step-progress-bar';
 export * from './swipe-to-confirm';

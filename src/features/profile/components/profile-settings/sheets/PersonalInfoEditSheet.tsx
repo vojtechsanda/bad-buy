@@ -15,7 +15,7 @@ import { accountService, useAccountSWR } from '@shared/modules/account';
 import { auditService } from '@shared/modules/audit';
 import { useCountriesSWR } from '@shared/modules/country';
 import { useConvertFromUsd, useConvertToUsd } from '@shared/modules/currency';
-import { personalInfoEditSchema } from '@shared/schemas/personalInfo';
+import { PersonalInfoEditData, personalInfoEditSchema } from '@shared/schemas/personalInfo';
 import { Account } from '@shared/types';
 import { useForm, useStore } from '@tanstack/react-form';
 import { Alert, ScrollView, View } from 'react-native';
@@ -29,6 +29,30 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
   const { invalidateAccount } = useAccountSWR();
   const { convertFromUsd } = useConvertFromUsd();
   const { convertToUsd } = useConvertToUsd();
+
+  const handleSubmit = async (data: PersonalInfoEditData) => {
+    try {
+      const countryChanged = data.countryIso2 !== account.country;
+
+      const updated = await accountService.update({
+        country: data.countryIso2,
+        display_currency: data.displayCurrency,
+        hourly_wage_usd: convertToUsd(data.hourlyWage, data.wageCurrency),
+        wage_currency: data.wageCurrency,
+        work_hours_per_day: data.workHoursPerDay,
+      });
+
+      await invalidateAccount(updated, { revalidate: false });
+
+      if (countryChanged) {
+        auditService.triggerBackgroundSuggestionsRefresh();
+      }
+
+      onClose();
+    } catch {
+      Alert.alert('Error', "Couldn't save your info, please try again.");
+    }
+  };
 
   const form = useForm({
     defaultValues: {
@@ -44,29 +68,7 @@ export function PersonalInfoEditSheet({ isOpen, onClose, account }: PersonalInfo
     },
     validationLogic: defaultFormValidationLogic,
     validators: { onDynamic: personalInfoEditSchema },
-    onSubmit: async ({ value }) => {
-      try {
-        const countryChanged = value.countryIso2 !== account.country;
-
-        const updated = await accountService.update({
-          country: value.countryIso2,
-          display_currency: value.displayCurrency,
-          hourly_wage_usd: convertToUsd(value.hourlyWage, value.wageCurrency),
-          wage_currency: value.wageCurrency,
-          work_hours_per_day: value.workHoursPerDay,
-        });
-
-        await invalidateAccount(updated, { revalidate: false });
-
-        if (countryChanged) {
-          auditService.triggerBackgroundSuggestionsRefresh();
-        }
-
-        onClose();
-      } catch {
-        Alert.alert('Error', "Couldn't save your info, please try again.");
-      }
-    },
+    onSubmit: ({ value }) => handleSubmit(value),
   });
 
   const handleClose = () => {

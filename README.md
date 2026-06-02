@@ -15,7 +15,7 @@ BadBuy is a React Native mobile app that reframes prices as **work hours** — s
 - [📦 Installation](#-installation)
 - [🔧 Development](#-development)
 - [📐 Architecture](#-architecture)
-- [🙏 Aknowledgements](#-acknowledgements)
+- [🙏 Acknowledgements](#-acknowledgements)
 
 ---
 
@@ -152,8 +152,8 @@ Locked-in tech decisions as ADRs → [`docs/decisions/`](docs/decisions/)
 
 ---
 
-## 🙏 Acknowledgments
+## 🙏 Acknowledgements
 
 - This app was created as a team project during an **Erasmus+ exchange program**.
-- Developed for the **Native Mobile Development** course at **ISEN Méditerranée, France**.
-- Made with ❤️ by [Mihaila Nicolae-Octavian](https://github.com/minotavi11), [Ema Jasekova](https://github.com/EmaJasekova) and [Vojtech Sanda](https://vojtechsanda.cz)
+- Developed as part of the **Semestral Technical Project** at **ISEN Méditerranée, France**.
+- Made with ❤️ by [Vojtěch Šanda](https://vojtechsanda.cz), [Ema Jašeková](https://github.com/EmaJasekova) and [Mihaila Nicolae-Octavian](https://github.com/minotavi11)

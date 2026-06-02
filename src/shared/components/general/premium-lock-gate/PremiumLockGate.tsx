@@ -22,31 +22,32 @@ export function PremiumLockGate({
   const hasActivePremium =
     account?.premium_expires_at != null && new Date(account.premium_expires_at) > new Date();
 
-  if (hasActivePremium) {
-    return <>{children}</>;
-  }
-
   return (
-    <View className="relative">
-      <Pressable className="inset-0" onPress={() => setUpsellOpen(true)}>
-        <View pointerEvents="none" style={{ opacity: 0.6 }}>
-          {children}
+    <>
+      {hasActivePremium ? (
+        children
+      ) : (
+        <View className="relative">
+          <Pressable className="inset-0" onPress={() => setUpsellOpen(true)}>
+            <View pointerEvents="none" style={{ opacity: 0.6 }}>
+              {children}
+            </View>
+            <View
+              className={`absolute  rounded-full bg-accent-500 px-1.5 py-px ${noBadgeOverflowX ? 'right-0' : '-right-1'} ${noBadgeOverflowY ? 'top-0' : '-top-1'}`}
+            >
+              <Text className="whitespace-nowrap font-nunito-extrabold text-[8px] uppercase tracking-wider text-typography-0">
+                PRO
+              </Text>
+            </View>
+          </Pressable>
         </View>
-        <View
-          className={`absolute  rounded-full bg-accent-500 px-1.5 py-px ${noBadgeOverflowX ? 'right-0' : '-right-1'} ${noBadgeOverflowY ? 'top-0' : '-top-1'}`}
-        >
-          <Text className="whitespace-nowrap font-nunito-extrabold text-[8px] uppercase tracking-wider text-typography-0">
-            PRO
-          </Text>
-        </View>
-      </Pressable>
-
+      )}
       <PremiumUpsellSheet
         isOpen={upsellOpen}
         onClose={() => setUpsellOpen(false)}
         onRedeemPress={() => setPromoOpen(true)}
       />
       <PromoRedemptionSheet isOpen={promoOpen} onClose={() => setPromoOpen(false)} />
-    </View>
+    </>
   );
 }

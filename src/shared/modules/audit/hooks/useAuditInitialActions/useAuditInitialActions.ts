@@ -68,6 +68,7 @@ export function useAuditInitialActions({ onInvalidation }: useAuditInitialAction
   };
 
   const handleFreeze = async ({
+    account,
     price,
     currency,
     name,
@@ -85,6 +86,7 @@ export function useAuditInitialActions({ onInvalidation }: useAuditInitialAction
         price_currency: currency,
         price_usd: convertToUsd(price, currency, rate),
         suggestions,
+        notificationsEnabled: account.notifications_enabled,
       });
 
       await invalidateSWR();

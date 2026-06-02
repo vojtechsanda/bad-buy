@@ -15,6 +15,8 @@ import {
 } from '@shared/types';
 import { assertNoError, unwrapRow } from '@shared/utils';
 
+import { pushNotificationService } from './pushNotificationService';
+
 export type SuggestionInput = {
   name: string;
   item_emoji?: string | null;
@@ -29,12 +31,14 @@ export type FreezeInput = {
   conversion_rate_snapshot: number;
   freeze_until: string;
   suggestions?: SuggestionInput[];
+  notificationsEnabled: boolean;
 };
 
 export type RefreezeInput = {
   freeze_until: string;
   name?: string;
   item_emoji?: string | null;
+  notificationsEnabled: boolean;
 };
 
 /**
@@ -48,23 +52,6 @@ export type NewDecisionInput = {
 };
 
 export type FinalDecisionStatus = Extract<TrackedItemStatus, 'skipped' | 'bought'>;
-
-/**
- * Schedules a server-side push notification for when a freeze timer expires.
- */
-async function mockScheduleFreezeNotification(
-  _itemId: string,
-  _freezeUntil: string,
-): Promise<void> {
-  // TODO: call edge function.
-}
-
-/**
- * Cancels a previously scheduled push notification for a frozen item.
- */
-async function mockCancelFreezeNotification(_itemId: string): Promise<void> {
-  // TODO: call edge function.
-}
 
 async function insertSuggestions(
   trackedItemId: string,
@@ -126,7 +113,9 @@ async function freeze(input: FreezeInput): Promise<TrackedItem> {
   const item = await insertItem(row);
 
   await Promise.all([
-    mockScheduleFreezeNotification(item.id, item.freeze_until!),
+    input.notificationsEnabled
+      ? pushNotificationService.scheduleFreezeNotification(item.id, item.freeze_until!)
+      : Promise.resolve(),
     insertSuggestions(item.id, input.suggestions ?? []),
   ]);
 
@@ -146,8 +135,10 @@ async function refreeze(id: string, input: RefreezeInput): Promise<TrackedItem> 
 
   const item = await updateItem(id, patch, 'trackedItemService.refreeze');
 
-  await mockCancelFreezeNotification(id);
-  await mockScheduleFreezeNotification(item.id, item.freeze_until!);
+  await pushNotificationService.cancelFreezeNotification(id);
+  if (input.notificationsEnabled) {
+    await pushNotificationService.scheduleFreezeNotification(item.id, item.freeze_until!);
+  }
 
   return item;
 }
@@ -189,7 +180,7 @@ async function decide(id: string, status: FinalDecisionStatus): Promise<TrackedI
   };
 
   const item = await updateItem(id, patch, 'trackedItemService.decide');
-  await mockCancelFreezeNotification(id);
+  await pushNotificationService.cancelFreezeNotification(id);
 
   return item;
 }

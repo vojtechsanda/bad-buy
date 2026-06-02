@@ -45,11 +45,20 @@ export function useAuditLateActions({ trackedItemId, onInvalidation }: useAuditL
     }
   };
 
-  const handleReFreeze = async ({ trackedItemId, name, durationMs }: AuditReFreezePayload) => {
+  const handleReFreeze = async ({
+    account,
+    trackedItemId,
+    name,
+    durationMs,
+  }: AuditReFreezePayload) => {
     try {
       const freezeUntil = new Date(Date.now() + durationMs).toISOString();
 
-      await trackedItemService.refreeze(trackedItemId, { freeze_until: freezeUntil, name });
+      await trackedItemService.refreeze(trackedItemId, {
+        freeze_until: freezeUntil,
+        name,
+        notificationsEnabled: account.notifications_enabled,
+      });
 
       await invalidateSWR();
 

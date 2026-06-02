@@ -1,4 +1,7 @@
+import { Account } from '@shared/types';
+
 export type AuditReFreezePayload = {
+  account: Account;
   trackedItemId: string;
   name: string;
   durationMs: number;

@@ -1,18 +1,18 @@
 import { predefinedHobbyService } from '@shared/modules/hobby/predefinedHobbyService';
 import useSWR from 'swr';
 
-export const predefinedHobbiesSWRKey = 'predefined-hobbies';
+export const predefinedHobbiesByCategorySWRKey = 'predefined-hobbies-by-category';
 
-export function usePredefinedHobbiesSWR() {
+export function usePredefinedHobbiesByCategorySWR() {
   const { data, error, isLoading, mutate } = useSWR(
-    predefinedHobbiesSWRKey,
+    predefinedHobbiesByCategorySWRKey,
     predefinedHobbyService.listGroupedByCategory,
   );
 
   return {
-    hobbiesByCategory: data ?? {},
+    predefinedHobbiesByCategory: data,
     isLoading,
     error,
-    invalidatePredefinedHobbies: mutate,
+    invalidatePredefinedHobbiesByCategory: mutate,
   };
 }

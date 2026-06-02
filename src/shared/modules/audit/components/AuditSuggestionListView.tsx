@@ -46,7 +46,7 @@ export function AuditSuggestionListView({
             <Button
               variant="solid"
               action="neutral"
-              size="md"
+              size="sm"
               className="rounded-full"
               onPress={refresh}
               disabled={isLoading}

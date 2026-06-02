@@ -1,4 +1,5 @@
-import { usePredefinedHobbiesSWR } from '@shared/modules/hobby/hooks';
+import { ErrorMessage, Spinner } from '@shared/components';
+import { usePredefinedHobbiesByCategorySWR } from '@shared/modules/hobby/hooks';
 import { View } from 'react-native';
 
 import { HobbyCategoryGroup } from './HobbyCategoryGroup';
@@ -9,11 +10,14 @@ type PredefinedHobbyGridProps = {
 };
 
 export function PredefinedHobbyGrid({ selectedIds, onToggle }: PredefinedHobbyGridProps) {
-  const { hobbiesByCategory } = usePredefinedHobbiesSWR();
+  const { predefinedHobbiesByCategory, isLoading } = usePredefinedHobbiesByCategorySWR();
+
+  if (isLoading) return <Spinner />;
+  if (!predefinedHobbiesByCategory) return <ErrorMessage message="Failed to load hobbies." />;
 
   return (
     <View className="gap-6">
-      {Object.entries(hobbiesByCategory).map(([category, hobbies]) => (
+      {Object.entries(predefinedHobbiesByCategory).map(([category, hobbies]) => (
         <HobbyCategoryGroup
           key={category}
           category={category}
